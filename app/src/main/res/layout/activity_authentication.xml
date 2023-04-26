@@ -29,7 +29,7 @@
             android:id="@+id/etUserEmail"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="@string/user_text" />
+            android:hint="@string/correo_electronico" />
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout
@@ -56,15 +56,15 @@
             android:id="@+id/etUserPassword"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="@string/password_text"
+            android:hint="@string/pass"
             android:inputType="textPassword" />
 
     </com.google.android.material.textfield.TextInputLayout>
 
     <ImageView
         android:id="@+id/ivLogo"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="338dp"
+        android:layout_height="129dp"
         android:contentDescription="@string/app_logo"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -72,7 +72,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.155"
-        app:srcCompat="@drawable/ic_launcher_foreground"
+        app:srcCompat="@drawable/logo2"
         tools:ignore="ImageContrastCheck" />
 
     <Button
@@ -82,7 +82,7 @@
         android:layout_marginStart="32dp"
         android:layout_marginEnd="32dp"
         android:background="@drawable/button_border"
-        android:text="Iniciar Sesión"
+        android:text="@string/accion_iniciar_sesion_corto"
         android:textColor="#000000"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -99,7 +99,7 @@
         android:layout_marginTop="8dp"
         android:layout_marginEnd="32dp"
         android:background="@drawable/button_rounded_border"
-        android:text="Registrate"
+        android:text="@string/crear_cuenta"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"

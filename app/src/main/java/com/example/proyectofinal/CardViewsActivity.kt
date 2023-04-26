@@ -90,7 +90,7 @@ class CardViewsActivity : AppCompatActivity() {
         }
 
         viewModel.currentPlayer.observe(this) { player ->
-            val drawable = ContextCompat.getDrawable(this, R.drawable.user_profile)
+            val drawable = ContextCompat.getDrawable(this, R.drawable.dyb)
             binding.imageView.setImageDrawable(drawable)
 
             binding.textViewName.text = player.name

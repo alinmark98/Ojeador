@@ -22,8 +22,8 @@
         android:layout_marginLeft="15dp"
         android:layout_marginTop="60dp"
         android:layout_marginRight="15dp"
-        app:cardCornerRadius="10dp"
-        app:cardElevation="4dp">
+        app:cardCornerRadius="16dp"
+        app:cardElevation="8dp">
 
         <ImageView
             android:id="@+id/imageView"
@@ -45,7 +45,7 @@
                 android:id="@+id/textViewName"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Nombre del usuario"
+                android:text="@string/txt_nombre_usuario"
                 android:textSize="18sp"
                 android:textStyle="bold" />
 
@@ -54,7 +54,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
-                android:text="Información adicional del usuario"
+                android:text="@string/txt_info_usuario"
                 android:textSize="14sp" />
         </LinearLayout>
 
@@ -83,7 +83,7 @@
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:background="#303030"
-            android:drawableTop="@drawable/ojeador"
+            android:drawableTop="@drawable/eyelogo"
             android:drawablePadding="-6dp"
             android:paddingTop="4dp"
             android:text="Ojeador"

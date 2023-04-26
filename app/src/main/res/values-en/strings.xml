@@ -1,0 +1,37 @@
+<resources>
+    <string name="app_name">Scout</string>
+    <string name="app_logo">Logo</string>
+    <string name="title_activity_login">LoginActivity</string>
+    <string name="accion_iniciar_sesion">Sign in or register</string>
+    <string name="accion_iniciar_sesion_corto">Sign in</string>
+    <string name="mensaje_bienvenido">"Welcome !"</string>
+    <string name="usuario_incorrecto">Not a valid username</string>
+    <string name="txt_nombre_usuario">User name</string>
+    <string name="txt_info_usuario">Additional user information</string>
+    <string name="pass_incorrecta">Password must have more than 5 characters</string>
+    <string name="iniciar_sesion_error">"Login failed"</string>
+    <string name="nombre">Name</string>
+    <string name="apellidos">Surname</string>
+    <string name="edad">Age</string>
+    <string name="iniciar_sesion">Sign in</string>
+    <string name="crear_cuenta">Create account</string>
+    <string name="crear_cuenta_jugador">Create account as player</string>
+    <string name="crear_cuenta_ojeador">Create account as scout</string>
+    <string name="usuario">User</string>
+    <string name="pass">Password</string>
+    <string name="correo_electronico">Email</string>
+    <string name="descripcion">Description</string>
+    <string name="habilidades">Skills</string>
+    <string name="escudo">Badge</string>
+    <string name="peso">Weight</string>
+    <string name="altura">Height</string>
+    <string name="ubicacion">Location</string>
+    <string name="localidad">City</string>
+    <string name="telefono">Phone</string>
+    <string name="categoria">Category</string>
+    <string name="registro">Register</string>
+    <string name="perfil">Profile</string>
+    <string name="ojeador">Scout</string>
+    <string name="start">Start</string>
+    <string name="welcomelogo">welcomeLogo</string>
+</resources>

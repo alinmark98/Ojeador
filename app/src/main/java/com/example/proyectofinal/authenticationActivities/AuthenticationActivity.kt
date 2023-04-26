@@ -105,9 +105,9 @@ class AuthenticationActivity : AppCompatActivity() {
     private fun navigateToSignUp() {
         val email = binding.etUserEmail.text.toString()
         val password = binding.etUserPassword.text.toString()
-        /*val intent = Intent(this, RegisterActivity::class.java)
-        startActivity(intent)*/
-        authViewModel.signUp(email, password)
+        val intent = Intent(this, RegisterActivity::class.java)
+        startActivity(intent)
+        //authViewModel.signUp(email, password)
     }
 
     private fun checkSesion(){

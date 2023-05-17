@@ -15,6 +15,18 @@ class RegisterViewModel : ViewModel() {
     private val _datosParte3Validos = MutableLiveData(false)
     val datosParte3Validos: LiveData<Boolean> = _datosParte3Validos
 
+    private val _showDatePicker = MutableLiveData<Boolean>()
+    val showDatePicker: LiveData<Boolean>
+        get() = _showDatePicker
+
+    fun onBirthdayEditTextClicked() {
+        _showDatePicker.value = true
+    }
+
+    fun onDatePickerDismissed() {
+        _showDatePicker.value = false
+    }
+
     fun guardarDatosParte1(nombre: String, fechaNacimiento: String) {
         // Aquí puedes implementar la lógica para guardar los datos de la primera parte del registro
     }

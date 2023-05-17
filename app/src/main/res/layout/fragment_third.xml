@@ -1,0 +1,208 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="16dp"
+    tools:context=".fragments.ThirdFragment">
+
+    <TextView
+        android:id="@+id/txtPerInfo"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingTop="16dp"
+        android:text="Información personal"
+        android:textSize="24sp"
+        android:textColor="#F5F5F5"
+        android:textStyle="bold"
+        android:layout_alignParentTop="true"
+        android:gravity="center"
+        android:layout_marginBottom="24dp" />
+
+    <LinearLayout
+        android:id="@+id/linSkillsInfo"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/txtPerInfo"
+        android:background="@drawable/rounded_borders_sections"
+        android:padding="16dp"
+        android:layout_marginBottom="24dp"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/txtHabilidades"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/linearPhotos"
+            android:text="Habilidades como jugador"
+            android:textSize="15sp"
+            android:paddingBottom="10dp"/>
+
+        <LinearLayout
+            android:id="@+id/linearDribbling"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:layout_below="@id/txtHabilidades"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="80dp"
+                android:layout_height="wrap_content"
+                android:text="Regate "/>
+
+            <SeekBar
+                android:id="@+id/seekBarDribbling"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:max="5"
+                android:layout_weight="1" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/linearShooting"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/linearDribbling"
+            android:layout_marginTop="16dp"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="80dp"
+                android:layout_height="wrap_content"
+                android:text="Tiro " />
+
+            <SeekBar
+                android:id="@+id/seekBarShooting"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:max="5"
+                android:layout_weight="1" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/linearDefending"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:layout_below="@id/linearShooting"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="80dp"
+                android:layout_height="wrap_content"
+                android:text="Defensa " />
+
+            <SeekBar
+                android:id="@+id/seekBarDefending"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:max="5"
+                android:layout_weight="1" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/linearSpeed"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:layout_below="@id/linearDefending"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="80dp"
+                android:layout_height="wrap_content"
+                android:text="Velocidad " />
+
+            <SeekBar
+                android:id="@+id/seekBarSpeed"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:max="5"
+                android:layout_weight="1" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/linearPassing"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:layout_below="@id/linearSpeed"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="80dp"
+                android:layout_height="wrap_content"
+                android:text="Pase " />
+
+            <SeekBar
+                android:id="@+id/seekBarPassing"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:max="5"
+                android:layout_weight="1" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/linearPhysicality"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="80dp"
+                android:layout_height="wrap_content"
+                android:text="Físico " />
+
+            <SeekBar
+                android:id="@+id/seekBarPhysicality"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:max="5"
+                android:layout_weight="1" />
+
+        </LinearLayout>
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/txtView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Hola"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/txtView"
+        android:gravity="center"
+        android:layout_alignParentBottom="true"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:id="@+id/greenPoint1"
+            android:layout_width="8dp"
+            android:layout_height="8dp"
+            android:background="@drawable/dot_inactive"
+            android:layout_marginEnd="8dp"/>
+
+        <ImageView
+            android:id="@+id/whitePoint"
+            android:layout_width="8dp"
+            android:layout_height="8dp"
+            android:background="@drawable/dot_inactive"
+            android:layout_marginHorizontal="8dp"/>
+
+        <ImageView
+            android:id="@+id/greenPoint2"
+            android:layout_width="8dp"
+            android:layout_height="8dp"
+            android:background="@drawable/dot_active"
+            android:layout_marginStart="8dp"/>
+    </LinearLayout>
+
+</RelativeLayout>

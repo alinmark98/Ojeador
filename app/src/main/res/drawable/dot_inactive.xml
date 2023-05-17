@@ -1,0 +1,6 @@
+<!-- Punto blanco -->
+<shape xmlns:android="http://schemas.android.com/apk/res/android">
+    <solid android:color="#FFFFFF" /> <!-- Color blanco -->
+    <corners android:radius="50dp" /> <!-- Radio para dar forma de círculo -->
+    <size android:width="20dp" android:height="20dp" /> <!-- Tamaño del punto -->
+</shape>

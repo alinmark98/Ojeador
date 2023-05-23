@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="gender_options">
+        <item>Masculino</item>
+        <item>Femenino</item>
+    </string-array>
+
+    <string-array name="position_options">
+        <item>Portero</item>
+        <item>Defensa central</item>
+        <item>Lateral izquierdo</item>
+        <item>Lateral derecho</item>
+        <item>Centrocampista defensivo</item>
+        <item>Centrocampista central</item>
+        <item>Centrocampista ofensivo</item>
+        <item>Extremo izquierdo</item>
+        <item>Extremo derecho</item>
+        <item>Delantero centro</item>
+    </string-array>
+</resources>

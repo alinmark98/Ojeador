@@ -1,4 +1,4 @@
-package com.example.proyectofinal.fragments
+package com.example.proyectofinal.fragments.Register
 
 import android.content.Context
 import android.os.Bundle
@@ -6,13 +6,11 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ArrayAdapter
-import android.widget.Button
-import android.widget.EditText
-import android.widget.Spinner
+import android.widget.*
 import com.example.proyectofinal.R
 import com.example.proyectofinal.databinding.FragmentFirstBinding
 import com.example.proyectofinal.databinding.FragmentSecondBinding
+import kotlin.properties.Delegates
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -28,7 +26,13 @@ class SecondFragment : Fragment() {
     // TODO: Rename and change types of parameters
     private var param1: String? = null
     private var param2: String? = null
-    private lateinit var binding: FragmentSecondBinding
+    private var sendDataFromFragment: SecondFragment.SendDataFromFragment2? = null
+
+    private lateinit var spinGender: String
+    private lateinit var spinPosition: String
+    private var etHeight by Delegates.notNull<Int>()
+    private var etWeight by Delegates.notNull<Int>()
+    private lateinit var etDescription: String
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -36,7 +40,6 @@ class SecondFragment : Fragment() {
             param1 = it.getString(ARG_PARAM1)
             param2 = it.getString(ARG_PARAM2)
         }
-        binding = FragmentSecondBinding.inflate(layoutInflater)
     }
 
     override fun onCreateView(
@@ -44,14 +47,40 @@ class SecondFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         val view = inflater.inflate(R.layout.fragment_second, container, false)
-        val genderSpinner: Spinner = view.findViewById(R.id.genderSpinner)
+        spinGender = view.findViewById<Spinner>(R.id.genderSpinner).selectedItem as String
+        spinPosition = view.findViewById<Spinner>(R.id.positionSpinner).selectedItem as String
+        etHeight = view.findViewById<EditText>(R.id.etHeight).text.toString().toIntOrNull() ?: 0
+        etWeight = view.findViewById<EditText>(R.id.etWeight).text.toString().toIntOrNull() ?: 0
+        etDescription = view.findViewById<EditText>(R.id.etDescription).text.toString()
 
-        val genderOptions = arrayOf("Masculino", "Femenino")
-        val genderAdapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_item, genderOptions)
-        genderAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-
-        genderSpinner.adapter = genderAdapter
         return view
+    }
+
+    interface SendDataFromFragment2 : FirstFragment.SendDataFromFragment1 {
+        fun sendDataSecondFragment(gender: String?, position: String?, height: Int?,
+                                   weight: Int?, description: String?)
+    }
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        try {
+            sendDataFromFragment = activity as SendDataFromFragment2?
+        } catch (e: ClassCastException) {
+            throw ClassCastException("Error in retrieving data. Please try again")
+        }
+    }
+
+    override fun onPause() {
+        super.onPause()
+        if(!emptyCheck()){
+            Toast.makeText(context, "Check fields", Toast.LENGTH_SHORT).show()
+        }else{
+            sendDataFromFragment?.sendDataSecondFragment(spinGender,spinPosition,etHeight,etWeight,etDescription)
+        }
+    }
+
+    private fun emptyCheck(): Boolean{
+        return (etWeight.toString().isEmpty() || etHeight.toString().isEmpty() || etDescription.isEmpty())
     }
 
     companion object {

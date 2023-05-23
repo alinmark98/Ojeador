@@ -20,10 +20,36 @@
         android:layout_marginBottom="24dp" />
 
     <LinearLayout
-        android:id="@+id/linAccInfo"
+        android:id="@+id/linF2Section1"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/txtPerInfo"
+        android:background="@drawable/rounded_borders_sections"
+        android:padding="16dp"
+        android:layout_marginBottom="24dp"
+        android:orientation="vertical">
+
+        <Spinner
+            android:id="@+id/genderSpinner"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:entries="@array/gender_options"
+            android:dropDownVerticalOffset="10dp"/>
+
+        <Spinner
+            android:id="@+id/positionSpinner"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:entries="@array/position_options"
+            android:dropDownVerticalOffset="10dp"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/linF2Section2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/linF2Section1"
         android:background="@drawable/rounded_borders_sections"
         android:padding="16dp"
         android:layout_marginBottom="24dp"
@@ -34,209 +60,55 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="Altura"
-            android:inputType="numberDecimal"/>
+            android:inputType="numberDecimal"
+            android:minHeight="48dp" />
+
         <EditText
             android:id="@+id/etWeight"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="Peso"
-            android:inputType="numberDecimal"/>
-
-        <LinearLayout
-            android:id="@+id/linGender"
-            android:layout_marginTop="16dp"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
-            <TextView
-                android:layout_weight="1"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Gender"/>
-            <Spinner
-                android:id="@+id/genderSpinner"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_weight="0.5"/>
-        </LinearLayout>
-
-
-        <TextView
-            android:id="@+id/txtDescription"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Descripción personal"
-            android:paddingTop="20dp"
-            android:paddingBottom="10dp"/>
-
-        <EditText
-            android:id="@+id/etDescription"
-            android:background="@drawable/button_border"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/txtDescription"
-            android:inputType="textMultiLine"
-            android:padding="10dp"
-            android:lines="5"
-            android:gravity="top|start" />
+            android:inputType="numberDecimal"
+            android:minHeight="48dp" />
     </LinearLayout>
 
+
     <LinearLayout
-        android:id="@+id/linPhotos"
+        android:id="@+id/linF2Section3"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/linAccInfo"
+        android:layout_below="@id/linF2Section2"
         android:background="@drawable/rounded_borders_sections"
         android:padding="16dp"
         android:layout_marginBottom="24dp"
         android:orientation="vertical">
 
         <TextView
-            android:id="@+id/txtGaleria"
+            android:id="@+id/txtDescription"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@id/etHeight"
-            android:text="Galería"
-            android:textSize="20sp"
-            android:paddingBottom="10dp"/>
+            android:paddingBottom="8dp"
+            android:text="Carrera futbolística"
+            android:textSize="18sp" />
 
-        <LinearLayout
-            android:id="@+id/linearPhotos"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:paddingTop="20dp"
-            android:layout_below="@id/etDescription"
-            android:orientation="horizontal">
-
-            <FrameLayout
-                android:layout_width="0dp"
-                android:layout_height="120dp"
-                android:layout_weight="1">
-
-                <androidx.cardview.widget.CardView
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_margin="5dp"
-                    android:elevation="10dp">
-
-                    <ImageView
-                        android:id="@+id/imageView1"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:background="@drawable/rounded_borders"
-                        android:scaleType="centerCrop" />
-
-                    <ImageButton
-                        android:id="@+id/button1"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_gravity="bottom|end"
-                        android:layout_margin="8dp"
-                        android:background="@android:color/transparent"
-                        android:src="@drawable/ic_add"
-                        android:gravity="bottom|end"/>
-                </androidx.cardview.widget.CardView>
-
-            </FrameLayout>
-
-            <FrameLayout
-                android:layout_width="0dp"
-                android:layout_height="120dp"
-                android:layout_weight="1"
-                android:layout_marginStart="8dp"
-                android:layout_marginEnd="8dp">
-
-                <androidx.cardview.widget.CardView
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_margin="5dp"
-                    android:elevation="10dp">
-
-                    <ImageView
-                        android:id="@+id/imageView2"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:background="@drawable/rounded_borders"
-                        android:scaleType="centerCrop" />
-
-                    <ImageButton
-                        android:id="@+id/button2"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_gravity="bottom|end"
-                        android:layout_margin="8dp"
-                        android:background="@android:color/transparent"
-                        android:src="@drawable/ic_add" />
-                </androidx.cardview.widget.CardView>
-            </FrameLayout>
-
-            <FrameLayout
-                android:layout_width="0dp"
-                android:layout_height="120dp"
-                android:layout_weight="1"
-                android:layout_marginStart="8dp"
-                android:layout_marginEnd="8dp">
-
-                <androidx.cardview.widget.CardView
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_margin="5dp"
-                    android:elevation="10dp">
-
-                    <ImageView
-                        android:id="@+id/imageView3"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:background="@drawable/rounded_borders"
-                        android:scaleType="centerCrop" />
-
-                    <ImageButton
-                        android:id="@+id/button3"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_gravity="bottom|end"
-                        android:layout_margin="8dp"
-                        android:background="@android:color/transparent"
-                        android:src="@drawable/ic_add" />
-
-                </androidx.cardview.widget.CardView>
-            </FrameLayout>
-
-            <FrameLayout
-                android:layout_width="0dp"
-                android:layout_height="120dp"
-                android:layout_weight="1">
-
-                <androidx.cardview.widget.CardView
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_margin="5dp"
-                    android:elevation="10dp">
-
-                    <ImageView
-                        android:id="@+id/imageView4"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:background="@drawable/rounded_borders"
-                        android:scaleType="centerCrop" />
-
-                    <ImageButton
-                        android:id="@+id/button4"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_gravity="bottom|end"
-                        android:layout_margin="8dp"
-                        android:background="@android:color/transparent"
-                        android:src="@drawable/ic_add" />
-                </androidx.cardview.widget.CardView>
-            </FrameLayout>
-    </LinearLayout>
+        <EditText
+                android:id="@+id/etDescription"
+                android:background="@drawable/rounded_borders"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Escribe aquí..."
+                android:textSize="14sp"
+                android:layout_below="@id/txtDescription"
+                android:inputType="textMultiLine"
+                android:padding="10dp"
+                android:lines="5"
+                android:gravity="top|start" />
     </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/linPhotos"
+        android:layout_below="@id/linAccInfo"
         android:gravity="center"
         android:orientation="horizontal"
         android:layout_alignParentBottom="true">

@@ -1,0 +1,41 @@
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="16dp"
+    app:cardCornerRadius="24dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="16dp">
+
+        <ImageView
+            android:id="@+id/imageView5"
+            android:layout_width="230dp"
+            android:layout_height="88dp"
+            android:layout_gravity="center"
+            app:srcCompat="@drawable/logo2" />
+
+        <TextView
+            android:id="@+id/dialog_message"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="16dp"
+            android:text="@string/terms_and_conditions"
+            android:textSize="20sp" />
+
+        <Button
+            android:id="@+id/btnConditions"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/fui_transparent"
+            android:text="@string/link_term_and_conditions"
+            android:textColor="@color/GoldColor"
+            android:textIsSelectable="false"
+            android:textStyle="bold" />
+    </LinearLayout>
+
+</androidx.cardview.widget.CardView>

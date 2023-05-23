@@ -9,16 +9,18 @@ import androidx.fragment.app.FragmentPagerAdapter
 import androidx.lifecycle.ViewModelProvider
 import com.example.proyectofinal.R
 import com.example.proyectofinal.databinding.ActivityRegisterBinding
-import com.example.proyectofinal.fragments.FirstFragment
-import com.example.proyectofinal.fragments.SecondFragment
-import com.example.proyectofinal.fragments.ThirdFragment
+import com.example.proyectofinal.fragments.Register.FirstFragment
+import com.example.proyectofinal.fragments.Register.SecondFragment
+import com.example.proyectofinal.fragments.Register.ThirdFragment
 import com.example.proyectofinal.viewmodels.RegisterViewModel
 
 
-class RegisterActivity : AppCompatActivity(), FirstFragment.SendDataFromFragment{
+class RegisterActivity : AppCompatActivity(), FirstFragment.SendDataFromFragment1,
+    SecondFragment.SendDataFromFragment2 {
 
     private lateinit var binding: ActivityRegisterBinding
     private lateinit var registerViewModel: RegisterViewModel
+    private var dataFragment1: String = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -47,17 +49,32 @@ class RegisterActivity : AppCompatActivity(), FirstFragment.SendDataFromFragment
         }
     }
 
-    override fun sendData(name: String?) {
+    override fun sendDataFirstFragment(name: String?, surname: String?,
+                                       birthday: String?, email: String?, password: String?) {
         val tag = "android:switcher:" + R.id.viewPager + ":" + 2
         val fragment = supportFragmentManager.findFragmentByTag(tag)
 
-        if (fragment is ThirdFragment) {
+       /* if (fragment is ThirdFragment) {
             Log.d("LLEGA", "METODO FINAL")
             if(name != null){
                 Log.d("LLEGA", "NOT NULL")
                 fragment.displayReceivedData(name)
             }
-        }
+        }*/
+    }
+
+    override fun sendDataSecondFragment(gender: String?, position: String?, height: Int?,
+                                        weight: Int?, description: String?) {
+        val tag = "android:switcher:" + R.id.viewPager + ":" + 2
+        val fragment = supportFragmentManager.findFragmentByTag(tag)
+
+       /* if (fragment is ThirdFragment) {
+            Log.d("LLEGA", "METODO FINAL")
+            if(name != null){
+                Log.d("LLEGA", "NOT NULL")
+                fragment.displayReceivedData(name)
+            }
+        }*/
     }
 
 }

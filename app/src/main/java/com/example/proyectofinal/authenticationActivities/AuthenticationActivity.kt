@@ -3,13 +3,23 @@ package com.example.proyectofinal.authenticationActivities
 import AuthViewModel
 import android.content.Intent
 import android.os.Bundle
+import android.text.SpannableString
+import android.text.method.LinkMovementMethod
+import android.util.Log
+import android.view.View
+import android.widget.Button
+import android.widget.TextView
 import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import com.example.proyectofinal.CardViewsActivity
 import com.example.proyectofinal.HomeActivity
+import com.example.proyectofinal.R
+import com.example.proyectofinal.TermsAndConditionsActivity
 import com.example.proyectofinal.databinding.ActivityAuthenticationBinding
 import com.google.firebase.auth.FirebaseAuth
+
 
 class AuthenticationActivity : AppCompatActivity() {
 
@@ -103,11 +113,35 @@ class AuthenticationActivity : AppCompatActivity() {
     }
 
     private fun navigateToSignUp() {
-        val email = binding.etUserEmail.text.toString()
+        /*val email = binding.etUserEmail.text.toString()
         val password = binding.etUserPassword.text.toString()
         val intent = Intent(this, RegisterActivity::class.java)
-        startActivity(intent)
+        startActivity(intent)*/
         //authViewModel.signUp(email, password)
+        showDialog()
+    }
+
+    private fun showDialog(){
+        val dialogView = layoutInflater.inflate(R.layout.dialog_signup_layout, null)
+        val btnConditions = dialogView.findViewById<Button>(R.id.btnConditions)
+
+        btnConditions.setOnClickListener {
+            val intent = Intent(this, TermsAndConditionsActivity::class.java)
+            startActivity(intent)
+        }
+
+        val builder = AlertDialog.Builder(this)
+        builder.setView(dialogView)
+            .setPositiveButton("Aceptar y continuar") { dialog, which ->
+                val intent = Intent(this, RegisterActivity::class.java)
+                startActivity(intent)
+            }
+            .setNegativeButton("Cancelar y salir") { dialog, which ->
+                finish()
+            }
+
+        val dialog = builder.create()
+        dialog.show()
     }
 
     private fun checkSesion(){

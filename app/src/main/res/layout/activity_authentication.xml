@@ -7,6 +7,12 @@
     android:background="#202732"
     tools:context=".authenticationActivities.AuthenticationActivity">
 
+    <FrameLayout
+        android:id="@+id/fragmentContainer"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/black"/>
+
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/etUserId"
         android:layout_width="0dp"

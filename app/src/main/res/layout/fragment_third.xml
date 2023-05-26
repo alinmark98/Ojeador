@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:padding="16dp"
-    tools:context=".fragments.ThirdFragment">
+    tools:context=".fragments.Register.ThirdFragment">
 
     <TextView
         android:id="@+id/txtPerInfo"
@@ -325,10 +325,19 @@
         </LinearLayout>
     </LinearLayout>
 
+    <Button
+        android:id="@+id/btnRegister"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/linPhotos"
+        android:text="Register"
+        android:layout_centerInParent="true"/>
+
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/linPhotos"
+        android:layout_below="@id/btnRegister"
         android:gravity="center"
         android:layout_alignParentBottom="true"
         android:orientation="horizontal">

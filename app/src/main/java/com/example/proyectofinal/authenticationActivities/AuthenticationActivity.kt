@@ -1,6 +1,7 @@
 package com.example.proyectofinal.authenticationActivities
 
 import AuthViewModel
+import android.content.ContentValues.TAG
 import android.content.Intent
 import android.os.Bundle
 import android.text.SpannableString
@@ -19,6 +20,7 @@ import com.example.proyectofinal.R
 import com.example.proyectofinal.TermsAndConditionsActivity
 import com.example.proyectofinal.databinding.ActivityAuthenticationBinding
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FirebaseFirestore
 
 
 class AuthenticationActivity : AppCompatActivity() {
@@ -27,6 +29,7 @@ class AuthenticationActivity : AppCompatActivity() {
     private lateinit var authViewModel: AuthViewModel
     private lateinit var authStateListener: FirebaseAuth.AuthStateListener
     private lateinit var auth: FirebaseAuth
+    private val db = FirebaseFirestore.getInstance()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -89,8 +92,8 @@ class AuthenticationActivity : AppCompatActivity() {
     private fun setupListeners() {
         binding.btnSignIn.setOnClickListener {
             //signIn()
-            val intent = Intent(this, CardViewsActivity::class.java)
-            startActivity(intent)
+            /*val intent = Intent(this, CardViewsActivity::class.java)
+            startActivity(intent)*/
         }
 
         binding.btnSignUp.setOnClickListener {

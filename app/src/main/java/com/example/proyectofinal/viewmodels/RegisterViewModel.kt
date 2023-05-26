@@ -1,21 +1,41 @@
 package com.example.proyectofinal.viewmodels
 
+import android.graphics.Bitmap
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.example.proyectofinal.modelos.Player
+import com.example.proyectofinal.repositories.PlayerRepository
 
 class RegisterViewModel : ViewModel() {
 
-    private val _datosParte1Validos = MutableLiveData(false)
-    val datosParte1Validos: LiveData<Boolean> = _datosParte1Validos
-
-    private val _datosParte2Validos = MutableLiveData(false)
-    val datosParte2Validos: LiveData<Boolean> = _datosParte2Validos
-
-    private val _datosParte3Validos = MutableLiveData(false)
-    val datosParte3Validos: LiveData<Boolean> = _datosParte3Validos
-
     private val _showDatePicker = MutableLiveData<Boolean>()
+    private val playerRepository: PlayerRepository = PlayerRepository()
+
+    fun registerPlayer(player: Player, bitmaps: List<Bitmap>,) {
+        // Realiza las validaciones necesarias en los datos del jugador antes de llamar al repositorio
+        Log.d("REGISTERPLAYER", "REGISTERPLAYER")
+        playerRepository.registerPlayer(player,bitmaps, object : PlayerRepository.OnPlayerRegisteredListener {
+            override fun onPlayerRegistered() {
+                Log.d("REGISTRO", "REGISTRO CORRECTO")
+                // AQUI QUE TE LLEVE A OTA ACTIVIDAD
+            }
+
+            override fun onRegistrationError(errorMessage: String?) {
+                if (errorMessage != null) {
+                    Log.d("REGISTRO", errorMessage)
+                }else{
+                    Log.d("REGISTRO", "ERROR REGISTRO")
+                }
+            }
+        })
+    }
+
+    fun checkEmailExists(email: String, onComplete: (Boolean) -> Unit) {
+        playerRepository.checkEmailExists(email, onComplete)
+    }
+
     val showDatePicker: LiveData<Boolean>
         get() = _showDatePicker
 
@@ -27,15 +47,4 @@ class RegisterViewModel : ViewModel() {
         _showDatePicker.value = false
     }
 
-    fun guardarDatosParte1(nombre: String, fechaNacimiento: String) {
-        // Aquí puedes implementar la lógica para guardar los datos de la primera parte del registro
-    }
-
-    fun guardarDatosParte2(email: String, pass: String) {
-        // Aquí puedes implementar la lógica para guardar los datos de la segunda parte del registro
-    }
-
-    fun guardarDatosParte3() {
-        // Aquí puedes implementar la lógica para guardar los datos de la tercera parte del registro
-    }
 }

@@ -1,7 +1,11 @@
 package com.example.proyectofinal.fragments.Register
 
+import android.app.Activity
 import android.app.DatePickerDialog
 import android.content.Context
+import android.content.Intent
+import android.graphics.drawable.Drawable
+import android.os.Build
 import android.os.Bundle
 import android.text.Editable
 import android.util.Log
@@ -11,11 +15,22 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
+import androidx.annotation.RequiresApi
+import androidx.core.content.ContextCompat
+import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.example.proyectofinal.R
 import com.example.proyectofinal.databinding.FragmentFirstBinding
 import com.example.proyectofinal.viewmodels.RegisterViewModel
+import com.google.android.libraries.places.api.Places
+import com.google.android.libraries.places.api.model.Place
+import com.google.android.libraries.places.api.model.TypeFilter
+import com.google.android.libraries.places.widget.Autocomplete
+import com.google.android.libraries.places.widget.model.AutocompleteActivityMode
+import java.time.LocalDate
+import java.time.Period
+import java.time.format.DateTimeFormatter
 import java.util.*
 
 
@@ -33,9 +48,11 @@ class FirstFragment : Fragment() {
     // TODO: Rename and change types of parameters
     private var param1: String? = null
     private var param2: String? = null
+    private val AUTOCOMPLETE_REQUEST_CODE = 1
 
     private lateinit var registerViewModel: RegisterViewModel
     private var sendDataFromFragment: SendDataFromFragment1? = null
+    private lateinit var etLocation: EditText
     private lateinit var etName: EditText
     private lateinit var etSurname: EditText
     private lateinit var etBirthdate: EditText
@@ -50,6 +67,7 @@ class FirstFragment : Fragment() {
             param2 = it.getString(ARG_PARAM2)
         }
         registerViewModel = ViewModelProvider(this)[RegisterViewModel::class.java]
+        Places.initialize(requireContext(), "AIzaSyD426D1LFfQP1GV5oTygR87sO_vcxTU_cs")
     }
 
     override fun onCreateView(
@@ -58,8 +76,12 @@ class FirstFragment : Fragment() {
     ): View? {
         // Inflate the layout for this fragment
         val view = inflater.inflate(R.layout.fragment_first, container, false)
+        val icon_check: Drawable? = ContextCompat.getDrawable(requireContext(), R.drawable.ic_check)
+        val icon_error: Drawable? = ContextCompat.getDrawable(requireContext(), R.drawable.ic_error)
+
+        etLocation = view.findViewById(R.id.etLocation)
         etName = view.findViewById(R.id.etName)
-        etSurname = view.findViewById(R.id.etName)
+        etSurname = view.findViewById(R.id.etSurname)
         etBirthdate = view.findViewById(R.id.etBirthdate)
         etEmail = view.findViewById(R.id.etEmail)
         etPassword = view.findViewById(R.id.etPassword)
@@ -71,6 +93,30 @@ class FirstFragment : Fragment() {
             }
         }
 
+        etLocation.setOnClickListener {
+            val fields = listOf(Place.Field.ADDRESS, Place.Field.LAT_LNG)
+            val intent = Autocomplete.IntentBuilder(AutocompleteActivityMode.OVERLAY, fields)
+                .setTypeFilter(TypeFilter.ADDRESS)
+                .build(requireContext())
+            startActivityForResult(intent, AUTOCOMPLETE_REQUEST_CODE)
+        }
+
+        etEmail.addTextChangedListener { email ->
+            val emailString = email.toString().trim()
+            registerViewModel.checkEmailExists(emailString) { emailExists ->
+                if (emailExists) {
+                    etEmail.setCompoundDrawablesWithIntrinsicBounds(null, null, icon_error, null)
+                } else {
+                    if(emailCheckPattern()){
+                        etEmail.setCompoundDrawablesWithIntrinsicBounds(null, null, icon_check, null)
+                    }else{
+                        etEmail.setCompoundDrawablesWithIntrinsicBounds(null, null, icon_error, null)
+                    }
+                }
+            }
+        }
+
+
         etBirthdate.setOnClickListener {
             registerViewModel.onBirthdayEditTextClicked()
         }
@@ -80,7 +126,9 @@ class FirstFragment : Fragment() {
 
     interface SendDataFromFragment1 {
         fun sendDataFirstFragment(name: String?, surname: String?,
-                                  birthday: String?, email: String?, password: String?)
+                                  birthday: String?, email: String?,
+                                  password: String?, location: String?,
+                                  firstFragConfirmed: Boolean)
     }
 
     override fun onAttach(context: Context) {
@@ -118,25 +166,50 @@ class FirstFragment : Fragment() {
 
     override fun onPause() {
         super.onPause()
-        if(emptyCheck() && !emailCheck() && !passCheck()){
-            Toast.makeText(context, "Check fields", Toast.LENGTH_SHORT).show()
+        Log.d("PAUSA", "PAUSA")
+        //!emailCheck() && passCheck()
+        if(!emptyCheck()){
+            if(emailCheckPattern()) {
+                if (passCheck()) {
+                    sendDataFromFragment?.sendDataFirstFragment(etName.text.toString(),etSurname.text.toString(),
+                        etBirthdate.text.toString(),etEmail.text.toString(),etPassword.text.toString(),
+                        etLocation.text.toString(), true)
+                }else{
+                    Toast.makeText(context, "Contraseñas no coinciden", Toast.LENGTH_SHORT).show()
+                }
+            }else{
+                Toast.makeText(context, "El correo no es válido", Toast.LENGTH_SHORT).show()
+            }
         }else{
-            sendDataFromFragment?.sendDataFirstFragment(etName.text.toString(),etSurname.text.toString(),
-                etBirthdate.text.toString(),etEmail.text.toString(),etPassword.text.toString())
+            Toast.makeText(context, "Rellena todos los campos", Toast.LENGTH_SHORT).show()
         }
+
+        /*
+        Toast.makeText(context, "Check fields", Toast.LENGTH_SHORT).show()
+        Log.d("FIRST1FRAGMENT", "CAMPOS VACIO")*/
     }
 
     private fun emptyCheck(): Boolean{
         return (etEmail.text.isEmpty() || etPassword.text.isEmpty() || etPasswordCheck.text.isEmpty() ||
-                etBirthdate.text.isEmpty() || etName.text.isEmpty() || etSurname.text.isEmpty())
+                etBirthdate.text.isEmpty() || etName.text.isEmpty() || etSurname.text.isEmpty() ||
+                etLocation.text.isEmpty())
     }
 
     private fun passCheck(): Boolean{
         return etPassword.text.toString().trim() == etPasswordCheck.text.toString().trim()
+                && etPassword.text.toString().trim().length >= 8
     }
 
-    private fun emailCheck(): Boolean{
+    private fun emailCheckPattern(): Boolean{
         return android.util.Patterns.EMAIL_ADDRESS.matcher(etEmail.text.toString()).matches()
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == AUTOCOMPLETE_REQUEST_CODE && resultCode == Activity.RESULT_OK) {
+            val place = Autocomplete.getPlaceFromIntent(data!!)
+            etLocation.setText(place.address)
+        }
     }
 
     companion object {

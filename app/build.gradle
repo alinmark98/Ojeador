@@ -27,6 +27,8 @@ android {
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
+        sourceCompatibility = 1.8
+        targetCompatibility = 1.8
     }
     kotlinOptions {
         jvmTarget = '1.8'
@@ -37,12 +39,14 @@ android {
 }
 
 dependencies {
-    implementation platform('com.google.firebase:firebase-bom:31.3.0')
-    implementation 'com.google.firebase:firebase-firestore-ktx:24.4.5'
+    implementation 'com.google.android.libraries.places:places:3.1.0'
+    implementation 'com.google.firebase:firebase-storage-ktx'
+    implementation platform('com.google.firebase:firebase-bom:32.0.0')
+    implementation 'com.google.firebase:firebase-firestore-ktx:24.6.0'
     implementation 'com.firebaseui:firebase-ui-auth:7.2.0'
     implementation 'com.google.firebase:firebase-auth-ktx'
     implementation 'com.google.firebase:firebase-analytics-ktx'
-    implementation 'com.google.android.material:material:1.8.0'
+    implementation 'com.google.android.material:material:1.9.0'
     implementation "com.squareup.retrofit2:retrofit:2.9.0"
     implementation "com.squareup.retrofit2:converter-gson:2.9.0"
     implementation fileTree(dir: 'libs', include: ['*.jar'])
@@ -53,7 +57,6 @@ dependencies {
     implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
     implementation 'androidx.annotation:annotation:<latest_version>'
     implementation 'com.google.android.gms:play-services-base:18.2.0'
-    implementation 'com.google.firebase:firebase-auth-ktx:21.2.0'
     implementation 'com.google.android.gms:play-services-auth:20.5.0'
     implementation 'androidx.lifecycle:lifecycle-livedata-ktx:2.5.1'
     implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.5.1'

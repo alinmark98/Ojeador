@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:padding="16dp"
-    tools:context=".fragments.FirstFragment">
+    tools:context=".fragments.Register.FirstFragment">
 
     <TextView
         android:id="@+id/txtPerInfo"
@@ -79,7 +79,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@id/etEmail"
-            android:hint="Contraseña"
+            android:hint="Contraseña con 8 o más carácteres"
             android:inputType="textPassword"
             android:minHeight="48dp" />
 
@@ -93,11 +93,35 @@
             android:minHeight="48dp" />
     </LinearLayout>
 
+    <LinearLayout
+        android:id="@+id/linLocation"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/linAccInfo"
+        android:background="@drawable/rounded_borders_sections"
+        android:padding="16dp"
+        android:layout_marginBottom="24dp"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_location"
+            android:contentDescription="Icono de ubicación" />
+
+        <EditText
+            android:id="@+id/etLocation"
+            android:layout_marginLeft="8dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Ingrese su ubicación" />
+    </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="64dp"
-        android:layout_below="@id/linAccInfo"
+        android:layout_below="@id/linLocation"
         android:layout_alignParentBottom="true"
         android:gravity="center"
         android:orientation="horizontal">

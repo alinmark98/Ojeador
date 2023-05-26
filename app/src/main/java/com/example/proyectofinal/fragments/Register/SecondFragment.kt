@@ -2,6 +2,7 @@ package com.example.proyectofinal.fragments.Register
 
 import android.content.Context
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -26,13 +27,14 @@ class SecondFragment : Fragment() {
     // TODO: Rename and change types of parameters
     private var param1: String? = null
     private var param2: String? = null
-    private var sendDataFromFragment: SecondFragment.SendDataFromFragment2? = null
+    private var sendDataFromFragment: SendDataFromFragment2? = null
 
-    private lateinit var spinGender: String
-    private lateinit var spinPosition: String
-    private var etHeight by Delegates.notNull<Int>()
-    private var etWeight by Delegates.notNull<Int>()
-    private lateinit var etDescription: String
+    private lateinit var spinGender: Spinner
+    private lateinit var spinPosition: Spinner
+    private lateinit var etHeight: EditText
+    private lateinit var etWeight: EditText
+    private lateinit var etDescription: EditText
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -47,18 +49,20 @@ class SecondFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         val view = inflater.inflate(R.layout.fragment_second, container, false)
-        spinGender = view.findViewById<Spinner>(R.id.genderSpinner).selectedItem as String
-        spinPosition = view.findViewById<Spinner>(R.id.positionSpinner).selectedItem as String
-        etHeight = view.findViewById<EditText>(R.id.etHeight).text.toString().toIntOrNull() ?: 0
-        etWeight = view.findViewById<EditText>(R.id.etWeight).text.toString().toIntOrNull() ?: 0
-        etDescription = view.findViewById<EditText>(R.id.etDescription).text.toString()
+        spinGender = view.findViewById(R.id.genderSpinner)
+        spinPosition = view.findViewById(R.id.positionSpinner)
+
+        etHeight = view.findViewById(R.id.etHeight)
+        etWeight = view.findViewById(R.id.etWeight)
+        etDescription = view.findViewById(R.id.etDescription)
 
         return view
     }
 
     interface SendDataFromFragment2 : FirstFragment.SendDataFromFragment1 {
-        fun sendDataSecondFragment(gender: String?, position: String?, height: Int?,
-                                   weight: Int?, description: String?)
+        fun sendDataSecondFragment(gender: String?, position: String?,
+                                   height: Int?, weight: Int?,
+                                   description: String?, secondFragConfirmed: Boolean)
     }
 
     override fun onAttach(context: Context) {
@@ -73,14 +77,20 @@ class SecondFragment : Fragment() {
     override fun onPause() {
         super.onPause()
         if(!emptyCheck()){
-            Toast.makeText(context, "Check fields", Toast.LENGTH_SHORT).show()
+            sendDataFromFragment?.sendDataSecondFragment(spinGender.selectedItem.toString(),
+                spinPosition.selectedItem.toString(),etHeight.toString().toIntOrNull() ?: 0,
+                etWeight.toString().toIntOrNull() ?: 0,etDescription.toString(),true)
+            Log.d("DENTRO", "DENTRO")
         }else{
-            sendDataFromFragment?.sendDataSecondFragment(spinGender,spinPosition,etHeight,etWeight,etDescription)
+            Log.d("FUERA", "FUERA")
+            Toast.makeText(context, "Check fields", Toast.LENGTH_SHORT).show()
         }
     }
 
-    private fun emptyCheck(): Boolean{
-        return (etWeight.toString().isEmpty() || etHeight.toString().isEmpty() || etDescription.isEmpty())
+    private fun emptyCheck(): Boolean {
+        return etDescription.text.toString().isEmpty()
+                || etWeight.text.toString().isEmpty()
+                || etHeight.text.toString().isEmpty()
     }
 
     companion object {

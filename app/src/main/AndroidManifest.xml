@@ -18,14 +18,14 @@
         android:theme="@style/Theme.AppCompat.NoActionBar"
         tools:targetApi="tiramisu">
         <activity
-            android:name=".TermsAndConditionsActivity"
+            android:name=".activities.terms.TermsAndConditionsActivity"
             android:exported="false">
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />
         </activity>
         <activity
-            android:name=".WelcomeActivity"
+            android:name=".activities.authentication.HomeActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -34,7 +34,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".CardViewsActivity"
+            android:name=".activities.main.MainActivity"
             android:exported="false"
             android:screenOrientation="portrait">
             <meta-data
@@ -42,33 +42,30 @@
                 android:value="" />
         </activity>
         <activity
-            android:name=".authenticationActivities.AuthenticationActivity"
+            android:name=".activities.authentication.AuthenticationActivity"
             android:exported="false">
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />
         </activity>
         <activity
-            android:name=".authenticationActivities.RegisterActivity"
+            android:name=".activities.authentication.RegisterActivity"
             android:exported="false">
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />
         </activity>
         <activity
-            android:name=".authenticationActivities.WaitingActivity"
+            android:name=".activities.authentication.WaitingActivity"
             android:exported="false">
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />
         </activity>
-        <activity
-            android:name=".HomeActivity"
-            android:exported="false">
-            <meta-data
-                android:name="android.app.lib_name"
-                android:value="" />
-        </activity>
+
+        <meta-data
+            android:name="com.google.android.gms.ads.APPLICATION_ID"
+            android:value="ca-app-pub-3940256099942544~3347511713" />
     </application>
 
 </manifest>

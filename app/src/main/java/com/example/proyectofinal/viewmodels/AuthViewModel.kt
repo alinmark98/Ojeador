@@ -1,11 +1,17 @@
+import android.app.Activity
 import android.content.ContentValues
+import android.content.Context
 import android.content.Intent
 import android.util.Log
-import android.widget.Toast
+import android.view.LayoutInflater
+import android.widget.Button
+import androidx.appcompat.app.AlertDialog
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import com.example.proyectofinal.HomeActivity
+import com.example.proyectofinal.R
+import com.example.proyectofinal.activities.authentication.RegisterActivity
+import com.example.proyectofinal.activities.terms.TermsAndConditionsActivity
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 
@@ -49,37 +55,27 @@ class AuthViewModel : ViewModel() {
             }
     }
 
-    fun signUp(email: String, password: String) {
-        auth.createUserWithEmailAndPassword(email, password)
-            .addOnSuccessListener { authResult ->
-                _signUpSuccess.value = true
-                Log.w(ContentValues.TAG, "createUserWithEmail:success")
+    fun showDialog(context: Context) {
+        val dialogView = LayoutInflater.from(context).inflate(R.layout.dialog_signup_layout, null)
+        val btnConditions = dialogView.findViewById<Button>(R.id.btnConditions)
+
+        btnConditions.setOnClickListener {
+            val intent = Intent(context, TermsAndConditionsActivity::class.java)
+            context.startActivity(intent)
+        }
+
+        val builder = AlertDialog.Builder(context)
+        builder.setView(dialogView)
+            .setPositiveButton("Aceptar y continuar") { dialog, which ->
+                val intent = Intent(context, RegisterActivity::class.java)
+                context.startActivity(intent)
             }
-            .addOnFailureListener { exception ->
-                Log.w(ContentValues.TAG, "createUserWithEmail:failure", exception)
-                _errorMessage.value = "Authentication failed: ${exception.message}"
+            .setNegativeButton("Cancelar y salir") { dialog, which ->
+                (context as? Activity)?.finish()
             }
+
+        val dialog = builder.create()
+        dialog.show()
     }
 
-    fun sendVerificationEmail() {
-        val user = auth.currentUser
-        user?.sendEmailVerification()
-            ?.addOnSuccessListener {
-                _sendVerificationEmailSuccess.value = true
-                Log.w(ContentValues.TAG, "Verification email sent to ${user.email}")
-            }
-            ?.addOnFailureListener { exception ->
-                Log.w(ContentValues.TAG, "sendEmailVerification:failure", exception)
-                _errorMessage.value = "Error sending verification email: ${exception.message}"
-            }
-    }
-
-    fun getCurrentUser(): FirebaseUser? {
-        return auth.currentUser
-    }
-
-    override fun onCleared() {
-        super.onCleared()
-        // Limpieza de recursos si es necesario
-    }
 }

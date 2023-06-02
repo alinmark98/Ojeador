@@ -1,8 +1,9 @@
-package com.example.proyectofinal
+package com.example.proyectofinal.activities.terms
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.ImageButton
+import com.example.proyectofinal.R
 
 class TermsAndConditionsActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {

@@ -1,12 +1,10 @@
-package com.example.proyectofinal.fragments.Register
+package com.example.proyectofinal.fragments.register
 
 import android.app.Activity.RESULT_OK
-import android.content.ContentValues.TAG
 import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
-import android.graphics.drawable.BitmapDrawable
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -15,15 +13,7 @@ import android.view.ViewGroup
 import android.widget.*
 import androidx.fragment.app.Fragment
 import com.example.proyectofinal.R
-import com.example.proyectofinal.databinding.FragmentFirstBinding
-import com.example.proyectofinal.databinding.FragmentThirdBinding
-import com.google.firebase.FirebaseApp
-import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.firestore.ktx.firestore
-import com.google.firebase.ktx.Firebase
-import com.google.firebase.storage.FirebaseStorage
-import org.w3c.dom.Text
-import java.io.ByteArrayOutputStream
+import com.example.proyectofinal.activities.authentication.WaitingActivity
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -64,6 +54,7 @@ open class ThirdFragment : Fragment() {
         // Inflate the layout for this fragment
         val view = inflater.inflate(R.layout.fragment_third, container, false)
         val registerButton =  view.findViewById<Button>(R.id.btnRegister)
+        val intent = Intent(requireActivity(), WaitingActivity::class.java)
 
         imageViews[0] = view.findViewById(R.id.imageView1)
         imageViews[1] = view.findViewById(R.id.imageView2)
@@ -88,38 +79,17 @@ open class ThirdFragment : Fragment() {
                 imageButtons[i]?.setImageDrawable(null)
             }
         }
+
         registerButton.setOnClickListener(){
-           /* if(imageViews[0]?.drawable != null || imageViews[1]?.drawable != null ||
+            if(imageViews[0]?.drawable != null || imageViews[1]?.drawable != null ||
                 imageViews[2]?.drawable != null || imageViews[3]?.drawable != null){
 
                 sendDataFromFragment?.checkThirdFragment()
                 sendDataFromFragment?.sendDataThirdFragment(images, addSkillsToHashMap())
-
-                /*if(allDataChecked){
-                }else{
-                    Toast.makeText(context, "Check fields", Toast.LENGTH_SHORT).show()
-                }*/
-                Log.d("IMAGEN", "CONTIENE")
+                requireActivity().finish()
+                startActivity(intent)
             }else{
                 Toast.makeText(context, "Select at least 1 image", Toast.LENGTH_SHORT).show()
-            }*/
-            // Get the data from an ImageView as bytes
-            // Create a storage reference from our app
-            val storage = FirebaseStorage.getInstance()
-            val storageRef = storage.reference.child("users/9Q84WY5l2InH6c1pHDA2/profilePhoto.jpg")
-            imageViews[0]?.isDrawingCacheEnabled = true
-            imageViews[0]?.buildDrawingCache()
-            val bitmap = (imageViews[0]?.drawable as BitmapDrawable).bitmap
-            val baos = ByteArrayOutputStream()
-            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos)
-            val data = baos.toByteArray()
-
-            var uploadTask = storageRef.putBytes(data)
-            uploadTask.addOnFailureListener {
-                // Handle unsuccessful uploads
-            }.addOnSuccessListener { taskSnapshot ->
-                // taskSnapshot.metadata contains file metadata such as size, content-type, etc.
-                // ...
             }
         }
         return view
@@ -157,7 +127,7 @@ open class ThirdFragment : Fragment() {
             })
             imageViews[imageViewIndex]?.setImageBitmap(bitmap)
             imageButtons[imageViewIndex]?.setImageDrawable(null)
-            images.plus(bitmap)
+            images = images.plus(bitmap) as MutableList<Bitmap>
         }
     }
 

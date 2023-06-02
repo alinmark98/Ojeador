@@ -1,4 +1,4 @@
-package com.example.proyectofinal.fragments.Register
+package com.example.proyectofinal.fragments.register
 
 import android.content.Context
 import android.os.Bundle
@@ -8,10 +8,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
+import androidx.appcompat.widget.AppCompatEditText
 import com.example.proyectofinal.R
-import com.example.proyectofinal.databinding.FragmentFirstBinding
-import com.example.proyectofinal.databinding.FragmentSecondBinding
-import kotlin.properties.Delegates
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -33,7 +31,7 @@ class SecondFragment : Fragment() {
     private lateinit var spinPosition: Spinner
     private lateinit var etHeight: EditText
     private lateinit var etWeight: EditText
-    private lateinit var etDescription: EditText
+    private lateinit var etDescription: AppCompatEditText
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -60,9 +58,10 @@ class SecondFragment : Fragment() {
     }
 
     interface SendDataFromFragment2 : FirstFragment.SendDataFromFragment1 {
-        fun sendDataSecondFragment(gender: String?, position: String?,
-                                   height: Int?, weight: Int?,
-                                   description: String?, secondFragConfirmed: Boolean)
+        fun sendDataSecondFragment(
+            gender: String?, position: String?,
+            height: Double?, weight: Double?,
+            description: String?, secondFragConfirmed: Boolean)
     }
 
     override fun onAttach(context: Context) {
@@ -78,8 +77,8 @@ class SecondFragment : Fragment() {
         super.onPause()
         if(!emptyCheck()){
             sendDataFromFragment?.sendDataSecondFragment(spinGender.selectedItem.toString(),
-                spinPosition.selectedItem.toString(),etHeight.toString().toIntOrNull() ?: 0,
-                etWeight.toString().toIntOrNull() ?: 0,etDescription.toString(),true)
+                spinPosition.selectedItem.toString(),etHeight.text.toString().toDoubleOrNull(),
+                etHeight.text.toString().toDoubleOrNull(),etDescription.text.toString(),true)
             Log.d("DENTRO", "DENTRO")
         }else{
             Log.d("FUERA", "FUERA")

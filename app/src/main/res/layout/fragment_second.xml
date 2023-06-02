@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:padding="16dp"
-    tools:context=".fragments.Register.SecondFragment">
+    tools:context=".fragments.register.SecondFragment">
 
     <TextView
         android:id="@+id/txtPerInfo"
@@ -108,7 +108,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/linAccInfo"
+        android:layout_below="@id/linF2Section3"
         android:gravity="center"
         android:orientation="horizontal"
         android:layout_alignParentBottom="true">

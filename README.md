@@ -32,7 +32,10 @@ Actualmente, no se aceptan contribuciones externas para este proyecto. Sin embar
 
 ## Licencia
 
-Este proyecto está bajo la [Licencia MIT](https://opensource.org/licenses/MIT).
+Este proyecto está protegido por una Licencia de Software Propietario. Todos los derechos están reservados y no se concede ningún permiso para usar, copiar, modificar o distribuir el código fuente o los activos asociados a este proyecto sin la autorización expresa y por escrito del titular de los derechos de autor.
+
+Para obtener más información sobre la licencia y para solicitar permisos adicionales, comunícate con Alin Marian Iftodie a través de alin.iftomar@gmail.com
+[VER LICENCIA](LICENSE)
 
 ## Contacto
 

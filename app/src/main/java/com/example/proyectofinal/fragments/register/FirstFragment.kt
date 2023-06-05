@@ -17,6 +17,7 @@ import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.example.proyectofinal.R
+import com.example.proyectofinal.api.ConfigReader
 import com.example.proyectofinal.viewmodels.RegisterViewModel
 import com.google.android.libraries.places.api.Places
 import com.google.android.libraries.places.api.model.Place
@@ -51,6 +52,8 @@ class FirstFragment : Fragment() {
     private lateinit var etEmail: EditText
     private lateinit var etPassword: EditText
     private lateinit var etPasswordCheck: EditText
+    private val configReader = ConfigReader()
+    private val apiKey = configReader.getGooglePlacesApiKey()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -59,7 +62,12 @@ class FirstFragment : Fragment() {
             param2 = it.getString(ARG_PARAM2)
         }
         registerViewModel = ViewModelProvider(this)[RegisterViewModel::class.java]
-        Places.initialize(requireContext(), "AIzaSyD426D1LFfQP1GV5oTygR87sO_vcxTU_cs")
+
+        if (apiKey != null) {
+            Places.initialize(requireContext(), apiKey)
+        } else {
+            Log.e("FIRST-FRAGMENT", "API PLACES ERROR")
+        }
     }
 
     override fun onCreateView(

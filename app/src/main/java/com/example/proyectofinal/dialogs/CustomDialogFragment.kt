@@ -1,4 +1,4 @@
-package com.example.proyectofinal.activities.dialogs
+package com.example.proyectofinal.dialogs
 
 import android.app.Dialog
 import android.content.Context

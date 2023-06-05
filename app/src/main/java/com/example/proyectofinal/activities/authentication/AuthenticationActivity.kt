@@ -12,7 +12,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import com.example.proyectofinal.activities.main.MainActivity
 import com.example.proyectofinal.R
-import com.example.proyectofinal.activities.dialogs.CustomDialogFragment
+import com.example.proyectofinal.dialogs.CustomDialogFragment
 import com.example.proyectofinal.databinding.ActivityAuthenticationBinding
 import com.example.proyectofinal.repositories.UserRepository
 

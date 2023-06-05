@@ -59,7 +59,7 @@ class FirstFragment : Fragment() {
             param2 = it.getString(ARG_PARAM2)
         }
         registerViewModel = ViewModelProvider(this)[RegisterViewModel::class.java]
-        Places.initialize(requireContext(), "AIzaSyD426D1LFfQP1GV5oTygR87sO_vcxTU_cs")
+        Places.initialize(requireContext(), "[GOOGLE API KEY]")
     }
 
     override fun onCreateView(

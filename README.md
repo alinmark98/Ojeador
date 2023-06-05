@@ -36,6 +36,6 @@ Este proyecto está bajo la [Licencia MIT](https://opensource.org/licenses/MIT).
 
 ## Contacto
 
-Si tienes alguna pregunta o sugerencia relacionada con Ojeador, no dudes en ponerte en contacto con nuestro equipo de soporte a través de support@ojeador.com.
+Si tienes alguna pregunta o sugerencia relacionada con Ojeador, no dudes en ponerte en contacto con nuestro equipo de soporte a través de alin.iftomar@gmail.com.
 
 ¡Esperamos que disfrutes usando Ojeador y encuentres grandes oportunidades para mostrar tu talento futbolístico!

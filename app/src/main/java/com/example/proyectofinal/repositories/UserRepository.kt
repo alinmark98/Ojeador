@@ -5,20 +5,24 @@ import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.util.Log
 import com.example.proyectofinal.modelos.User
+import com.google.android.gms.tasks.Tasks
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.GoogleAuthProvider
+import com.google.firebase.firestore.FieldPath
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.QuerySnapshot
 import com.google.firebase.storage.FirebaseStorage
 import java.io.ByteArrayOutputStream
 
 class UserRepository {
     private val db = FirebaseFirestore.getInstance()
     private val storage = FirebaseStorage.getInstance()
-    private val usersCollection = db.collection("players")
+    private val playersCollection = db.collection("players")
+    private val scoutsCollection = db.collection("scouts")
     private val auth = FirebaseAuth.getInstance()
     private var ONE_MEGABYTE: Long = 1024 * 1024
 
-    private fun addCollection(docID: String, user: User, bitmaps: List<Bitmap>) {
+    private fun createPlayerDocument(docID: String, user: User, bitmaps: List<Bitmap>) {
         db.collection("players")
             .document(docID) // Especifica el ID personalizado del documento
             .set(user)
@@ -44,7 +48,7 @@ class UserRepository {
                         signInWithEmail(user.email, password){ success ->
                             if(success){
                                 sendEmailVerification()
-                                addCollection(docID,user,bitmaps)
+                                createPlayerDocument(docID,user,bitmaps)
                             }else{
                                 Log.d("USREP-SIGNIN", "ERROR")
                             }
@@ -94,7 +98,7 @@ class UserRepository {
     }
 
     private fun updatePhotoAtIndex(user: String?, index: Int, photoUrl: String, onSuccess: () -> Unit, onFailure: (Exception) -> Unit) {
-        val userDocRef = user?.let { usersCollection.document(it) }
+        val userDocRef = user?.let { playersCollection.document(it) }
 
         val photoField = when (index) {
             0 -> "photos.photo0"
@@ -159,7 +163,7 @@ class UserRepository {
     }
 
     fun checkEmailExists(email: String, onComplete: (Boolean) -> Unit) {
-        usersCollection
+        playersCollection
             .whereEqualTo("email", email)
             .get()
             .addOnCompleteListener { task ->
@@ -195,11 +199,20 @@ class UserRepository {
         onSuccess: (List<User>) -> Unit,
         onFailure: (Exception) -> Unit
     ) {
-        usersCollection.get()
+        val currentUserID = getCurrentUserId()
+
+        playersCollection.get()
             .addOnSuccessListener { result ->
                 val users = mutableListOf<User>()
 
                 for (document in result) {
+                    val userId = document.id
+
+                    // Omitir el usuario actual
+                    if (userId == currentUserID) {
+                        continue
+                    }
+
                     val name = document.getString("name")
                     val surname = document.getString("surname")
                     val born = document.getString("born")
@@ -223,10 +236,6 @@ class UserRepository {
                         val speed = skillsData?.get("speed")?.toString()?.toIntOrNull() ?: 0
                         val passing = skillsData?.get("passing")?.toString()?.toIntOrNull() ?: 0
                         val physicality = skillsData?.get("physicality")?.toString()?.toIntOrNull() ?: 0
-
-
-                        Log.e("USER-REP", dribbling.toString())
-                        Log.e("USER-REP", photo0)
 
                         val skills = User.Skills(
                             dribbling = dribbling,
@@ -254,7 +263,6 @@ class UserRepository {
                     }
                 }
 
-                Log.d("USREP", users.count().toString())
                 onSuccess(users)
             }
             .addOnFailureListener { exception ->
@@ -274,6 +282,36 @@ class UserRepository {
                     Log.e(ContentValues.TAG, "signInWithCredential:failure", task.exception)
                     callback.onAuthenticationFailure()
                 }
+            }
+    }
+
+    fun checkDocumentExists(parametro: String, onSuccess: (Boolean) -> Unit, onFailure: (Exception) -> Unit) {
+        val playersQuery = playersCollection.whereEqualTo(FieldPath.documentId(), parametro)
+        val scoutsQuery = scoutsCollection.whereEqualTo(FieldPath.documentId(), parametro)
+
+        val playersTask = playersQuery.get()
+        val scoutsTask = scoutsQuery.get()
+
+        Tasks.whenAllComplete(playersTask, scoutsTask)
+            .addOnSuccessListener { tasks ->
+                var documentExists = false
+
+                for (task in tasks) {
+                    if (task.isSuccessful) {
+                        val querySnapshot = task.result as QuerySnapshot
+                        if (!querySnapshot.isEmpty) {
+                            documentExists = true
+                            break
+                        }
+                    } else {
+                        onFailure(task.exception as Exception)
+                        return@addOnSuccessListener
+                    }
+                }
+                onSuccess(documentExists)
+            }
+            .addOnFailureListener { exception ->
+                onFailure(exception)
             }
     }
 

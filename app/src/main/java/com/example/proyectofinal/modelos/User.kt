@@ -12,7 +12,8 @@ data class User(
     var height: Double = 0.0,
     var weight: Double = 0.0,
     var description: String = "",
-    var rol: Int = 0,
+    var rol: String= "",
+    var visibility: Int = 0,
     var skills: Skills = Skills(),
     var photos: Photos = Photos()
 ) {

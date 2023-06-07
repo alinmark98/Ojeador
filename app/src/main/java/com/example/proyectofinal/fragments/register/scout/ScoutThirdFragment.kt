@@ -1,4 +1,4 @@
-package com.example.proyectofinal.fragments.register
+package com.example.proyectofinal.fragments.register.scout
 
 import android.app.Activity.RESULT_OK
 import android.content.Context
@@ -25,7 +25,7 @@ private const val ARG_PARAM2 = "param2"
  * Use the [skillsFragment.newInstance] factory method to
  * create an instance of this fragment.
  */
-open class ThirdFragment : Fragment() {
+open class ScoutThirdFragment : Fragment() {
     // TODO: Rename and change types of parameters
     private var param1: String? = null
     private var param2: String? = null
@@ -34,7 +34,7 @@ open class ThirdFragment : Fragment() {
     private var imageViews: Array<ImageView?> = arrayOfNulls(4)
     private var imageButtons: Array<ImageButton?> = arrayOfNulls(4)
     private var seekBars: Array<SeekBar?> = arrayOfNulls(6)
-    private var sendDataFromFragment: SendDataFromFragment3? = null
+    private var sendDataFromFragment: ScoutSendDataFromF3? = null
     private var allDataChecked: Boolean = false
     private var images: MutableList<Bitmap> = mutableListOf()
     private var skillsValues: HashMap<String, Int> = HashMap()
@@ -52,7 +52,7 @@ open class ThirdFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        val view = inflater.inflate(R.layout.fragment_third, container, false)
+        val view = inflater.inflate(R.layout.fragment_scout_third, container, false)
         val registerButton =  view.findViewById<Button>(R.id.btnRegister)
         val intent = Intent(requireActivity(), WaitingActivity::class.java)
 
@@ -84,8 +84,8 @@ open class ThirdFragment : Fragment() {
             if(imageViews[0]?.drawable != null || imageViews[1]?.drawable != null ||
                 imageViews[2]?.drawable != null || imageViews[3]?.drawable != null){
 
-                sendDataFromFragment?.checkThirdFragment()
-                sendDataFromFragment?.sendDataThirdFragment(images, addSkillsToHashMap())
+                sendDataFromFragment?.scoutCheckThirdFragment()
+                sendDataFromFragment?.scoutSendDataThirdFragment(images, addSkillsToHashMap())
                 requireActivity().finish()
                 startActivity(intent)
             }else{
@@ -131,15 +131,15 @@ open class ThirdFragment : Fragment() {
         }
     }
 
-    interface SendDataFromFragment3 : FirstFragment.SendDataFromFragment1 {
-        fun checkThirdFragment()
-        fun sendDataThirdFragment(images: List<Bitmap>,skills: HashMap<String, Int>)
+    interface ScoutSendDataFromF3 : ScoutFirstFragment.ScoutSendDataFromF1 {
+        fun scoutCheckThirdFragment()
+        fun scoutSendDataThirdFragment(images: List<Bitmap>,skills: HashMap<String, Int>)
     }
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
         try {
-            sendDataFromFragment = activity as SendDataFromFragment3?
+            sendDataFromFragment = activity as ScoutSendDataFromF3?
         } catch (e: ClassCastException) {
             throw ClassCastException("Error in retrieving data. Please try again")
         }
@@ -167,7 +167,7 @@ open class ThirdFragment : Fragment() {
         // TODO: Rename and change types and number of parameters
         @JvmStatic
         fun newInstance(param1: String, param2: String) =
-            ThirdFragment().apply {
+            ScoutThirdFragment().apply {
                 arguments = Bundle().apply {
                     putString(ARG_PARAM1, param1)
                     putString(ARG_PARAM2, param2)

@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="16dp"
+    tools:context=".fragments.register.scout.ScoutSecondFragment">
+
+    <TextView
+        android:id="@+id/txtPerInfo"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingTop="16dp"
+        android:text="Información personal"
+        android:textSize="24sp"
+        android:textColor="#F5F5F5"
+        android:textStyle="bold"
+        android:layout_alignParentTop="true"
+        android:gravity="center"
+        android:layout_marginBottom="24dp" />
+
+    <LinearLayout
+        android:id="@+id/linF2Section1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/txtPerInfo"
+        android:background="@drawable/rounded_borders_sections"
+        android:padding="16dp"
+        android:layout_marginBottom="24dp"
+        android:orientation="vertical">
+
+        <Spinner
+            android:id="@+id/genderSpinner"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:entries="@array/gender_options"
+            android:dropDownVerticalOffset="10dp"/>
+
+        <Spinner
+            android:id="@+id/positionSpinner"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:entries="@array/position_options"
+            android:dropDownVerticalOffset="10dp"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/linF2Section2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/linF2Section1"
+        android:background="@drawable/rounded_borders_sections"
+        android:padding="16dp"
+        android:layout_marginBottom="24dp"
+        android:orientation="vertical">
+
+        <EditText
+            android:id="@+id/etHeight"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Altura"
+            android:inputType="numberDecimal"
+            android:minHeight="48dp" />
+
+        <EditText
+            android:id="@+id/etWeight"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Peso"
+            android:inputType="numberDecimal"
+            android:minHeight="48dp" />
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:id="@+id/linF2Section3"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/linF2Section2"
+        android:background="@drawable/rounded_borders_sections"
+        android:padding="16dp"
+        android:layout_marginBottom="24dp"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/txtDescription"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingBottom="8dp"
+            android:text="Carrera futbolística"
+            android:textSize="18sp" />
+
+        <EditText
+                android:id="@+id/etDescription"
+                android:background="@drawable/rounded_borders"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Escribe aquí..."
+                android:textSize="14sp"
+                android:layout_below="@id/txtDescription"
+                android:inputType="textMultiLine"
+                android:padding="10dp"
+                android:lines="5"
+                android:gravity="top|start" />
+    </LinearLayout>
+
+</RelativeLayout>

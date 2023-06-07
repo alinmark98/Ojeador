@@ -40,7 +40,7 @@ class HomeActivity : AppCompatActivity(){
             startActivity(intent)
         }
 
-        binding.btnGoogleSignIn.setOnClickListener{
+        binding.btnContinueGoogle.setOnClickListener{
             signInWithGoogle()
         }
     }

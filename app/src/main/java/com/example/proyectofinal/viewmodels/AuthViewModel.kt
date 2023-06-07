@@ -10,6 +10,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.example.proyectofinal.R
+import com.example.proyectofinal.activities.authentication.AccountSelectionActivity
 import com.example.proyectofinal.activities.authentication.RegisterActivity
 import com.example.proyectofinal.activities.terms.TermsAndConditionsActivity
 import com.google.firebase.auth.FirebaseAuth
@@ -41,20 +42,6 @@ class AuthViewModel : ViewModel() {
         _sendVerificationEmailSuccess.value = false
     }
 
-    fun signIn(email: String, password: String, function: () -> Unit) {
-        auth.signInWithEmailAndPassword(email, password)
-            .addOnSuccessListener { authResult ->
-                _signInSuccess.value = true
-                Log.w(ContentValues.TAG, "signInWithEmail:success")
-                // Llama a la función lambda proporcionada después del inicio de sesión exitoso
-                function()
-            }
-            .addOnFailureListener { exception ->
-                Log.w(ContentValues.TAG, "signInWithEmail:failure", exception)
-                _errorMessage.value = "Authentication failed: ${exception.message}"
-            }
-    }
-
     fun showDialog(context: Context) {
         val dialogView = LayoutInflater.from(context).inflate(R.layout.dialog_signup_layout, null)
         val btnConditions = dialogView.findViewById<Button>(R.id.btnConditions)
@@ -67,7 +54,7 @@ class AuthViewModel : ViewModel() {
         val builder = AlertDialog.Builder(context)
         builder.setView(dialogView)
             .setPositiveButton("Aceptar y continuar") { dialog, which ->
-                val intent = Intent(context, RegisterActivity::class.java)
+                val intent = Intent(context, AccountSelectionActivity::class.java)
                 context.startActivity(intent)
             }
             .setNegativeButton("Cancelar y salir") { dialog, which ->

@@ -18,6 +18,13 @@
         android:theme="@style/Theme.AppCompat.NoActionBar"
         tools:targetApi="tiramisu">
         <activity
+            android:name=".activities.authentication.AccountSelectionActivity"
+            android:exported="false">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
+        <activity
             android:name=".activities.terms.TermsAndConditionsActivity"
             android:exported="false">
             <meta-data

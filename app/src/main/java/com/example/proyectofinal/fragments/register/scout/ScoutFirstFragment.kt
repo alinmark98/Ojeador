@@ -1,4 +1,4 @@
-package com.example.proyectofinal.fragments.register
+package com.example.proyectofinal.fragments.register.scout
 
 import android.app.Activity
 import android.app.DatePickerDialog
@@ -37,14 +37,14 @@ private const val ARG_PARAM2 = "param2"
  * Use the [accInfo.newInstance] factory method to
  * create an instance of this fragment.
  */
-class FirstFragment : Fragment() {
+class ScoutFirstFragment : Fragment() {
     // TODO: Rename and change types of parameters
     private var param1: String? = null
     private var param2: String? = null
     private val AUTOCOMPLETE_REQUEST_CODE = 1
 
     private lateinit var registerViewModel: RegisterViewModel
-    private var sendDataFromFragment: SendDataFromFragment1? = null
+    private var sendDataFromFragment: ScoutSendDataFromF1? = null
     private lateinit var etLocation: EditText
     private lateinit var etName: EditText
     private lateinit var etSurname: EditText
@@ -75,7 +75,7 @@ class FirstFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        val view = inflater.inflate(R.layout.fragment_first, container, false)
+        val view = inflater.inflate(R.layout.fragment_scout_first, container, false)
         val icon_check: Drawable? = ContextCompat.getDrawable(requireContext(), R.drawable.ic_check)
         val icon_error: Drawable? = ContextCompat.getDrawable(requireContext(), R.drawable.ic_error)
 
@@ -124,8 +124,8 @@ class FirstFragment : Fragment() {
         return view
     }
 
-    interface SendDataFromFragment1 {
-        fun sendDataFirstFragment(name: String?, surname: String?,
+    interface ScoutSendDataFromF1 {
+        fun scoutSendDataFirstFragment(name: String?, surname: String?,
                                   birthday: String?, email: String?,
                                   password: String?, location: String?,
                                   firstFragConfirmed: Boolean)
@@ -134,7 +134,7 @@ class FirstFragment : Fragment() {
     override fun onAttach(context: Context) {
         super.onAttach(context)
         try {
-            sendDataFromFragment = activity as SendDataFromFragment1?
+            sendDataFromFragment = activity as ScoutSendDataFromF1?
         } catch (e: ClassCastException) {
             throw ClassCastException("Error in retrieving data. Please try again")
         }
@@ -171,7 +171,7 @@ class FirstFragment : Fragment() {
         if(!emptyCheck()){
             if(emailCheckPattern()) {
                 if (passCheck()) {
-                    sendDataFromFragment?.sendDataFirstFragment(etName.text.toString(),etSurname.text.toString(),
+                    sendDataFromFragment?.scoutSendDataFirstFragment(etName.text.toString(),etSurname.text.toString(),
                         etBirthdate.text.toString(),etEmail.text.toString(),etPassword.text.toString(),
                         etLocation.text.toString(), true)
                 }else{
@@ -224,7 +224,7 @@ class FirstFragment : Fragment() {
         // TODO: Rename and change types and number of parameters
         @JvmStatic
         fun newInstance(param1: String, param2: String) =
-            FirstFragment().apply {
+            ScoutFirstFragment().apply {
                 arguments = Bundle().apply {
                     putString(ARG_PARAM1, param1)
                     putString(ARG_PARAM2, param2)

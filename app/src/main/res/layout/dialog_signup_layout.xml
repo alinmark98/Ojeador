@@ -33,7 +33,7 @@
             android:layout_height="match_parent"
             android:background="@color/fui_transparent"
             android:text="@string/link_term_and_conditions"
-            android:textColor="@color/GoldColor"
+            android:textColor="@color/gold_home"
             android:textIsSelectable="false"
             android:textStyle="bold" />
     </LinearLayout>

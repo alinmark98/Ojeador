@@ -9,7 +9,10 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.*
 import androidx.appcompat.widget.AppCompatEditText
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
 import com.example.proyectofinal.R
+import com.example.proyectofinal.viewmodels.TeamsViewModel
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -27,11 +30,10 @@ class ScoutSecondFragment : Fragment() {
     private var param2: String? = null
     private var sendDataFromFragment: ScoutSendDataFromF2? = null
 
-    private lateinit var spinGender: Spinner
-    private lateinit var spinPosition: Spinner
-    private lateinit var etHeight: EditText
-    private lateinit var etWeight: EditText
-    private lateinit var etDescription: AppCompatEditText
+    private lateinit var spinRegion: Spinner
+    private lateinit var spinCity: Spinner
+    private lateinit var spinTeam: Spinner
+    private lateinit var teamsViewModel: TeamsViewModel
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -40,6 +42,7 @@ class ScoutSecondFragment : Fragment() {
             param1 = it.getString(ARG_PARAM1)
             param2 = it.getString(ARG_PARAM2)
         }
+        teamsViewModel = ViewModelProvider(this)[TeamsViewModel::class.java]
     }
 
     override fun onCreateView(
@@ -47,15 +50,55 @@ class ScoutSecondFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         val view = inflater.inflate(R.layout.fragment_scout_second, container, false)
-        spinGender = view.findViewById(R.id.genderSpinner)
-        spinPosition = view.findViewById(R.id.positionSpinner)
+        spinRegion = view.findViewById(R.id.regionSpinner)
+        spinCity = view.findViewById(R.id.citySpinner)
+        spinTeam = view.findViewById(R.id.teamSpinner)
 
-        etHeight = view.findViewById(R.id.etHeight)
-        etWeight = view.findViewById(R.id.etWeight)
-        etDescription = view.findViewById(R.id.etDescription)
+        val regionsObserver = Observer<List<String>> { regions ->
+            // Configurar el primer spinner con las regiones obtenidas
+            val regionsAdapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_item, regions)
+            spinRegion.adapter = regionsAdapter
+        }
+
+        val citiesObserver = Observer<List<String>> { cities ->
+            // Configurar el segundo spinner con las ciudades obtenidas
+            val citiesAdapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_item, cities)
+            spinCity.adapter = citiesAdapter
+        }
+
+        val teamsObserver = Observer<List<String>> { teams ->
+            // Configurar el tercer spinner con los equipos obtenidos
+            val teamsAdapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_item, teams)
+            spinTeam.adapter = teamsAdapter
+        }
+
+        teamsViewModel.getRegions().observe(viewLifecycleOwner, regionsObserver)
+
+        spinRegion.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(parent: AdapterView<*>, view: View?, position: Int, id: Long) {
+                val selectedRegion = parent.getItemAtPosition(position) as String
+                teamsViewModel.getCities(selectedRegion).observe(viewLifecycleOwner, citiesObserver)
+            }
+
+            override fun onNothingSelected(parent: AdapterView<*>) {
+                // Manejar la selección vacía del primer spinner
+            }
+        }
+        spinCity.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(parent: AdapterView<*>, view: View?, position: Int, id: Long) {
+                val selectedRegion = spinRegion.selectedItem as String
+                val selectedCity = parent.getItemAtPosition(position) as String
+                teamsViewModel.getTeams(selectedRegion, selectedCity).observe(viewLifecycleOwner, teamsObserver)
+            }
+
+            override fun onNothingSelected(parent: AdapterView<*>) {
+                // Manejar la selección vacía del segundo spinner
+            }
+        }
 
         return view
     }
+
 
     interface ScoutSendDataFromF2 : ScoutFirstFragment.ScoutSendDataFromF1 {
         fun scoutSendDataSecondFragment(
@@ -75,7 +118,7 @@ class ScoutSecondFragment : Fragment() {
 
     override fun onPause() {
         super.onPause()
-        if(!emptyCheck()){
+        /*if(!emptyCheck()){
             sendDataFromFragment?.scoutSendDataSecondFragment(spinGender.selectedItem.toString(),
                 spinPosition.selectedItem.toString(),etHeight.text.toString().toDoubleOrNull(),
                 etHeight.text.toString().toDoubleOrNull(),etDescription.text.toString(),true)
@@ -83,14 +126,14 @@ class ScoutSecondFragment : Fragment() {
         }else{
             Log.d("FUERA", "FUERA")
             Toast.makeText(context, "Check fields", Toast.LENGTH_SHORT).show()
-        }
+        }*/
     }
 
-    private fun emptyCheck(): Boolean {
+    /*private fun emptyCheck(): Boolean {
         return etDescription.text.toString().isEmpty()
                 || etWeight.text.toString().isEmpty()
                 || etHeight.text.toString().isEmpty()
-    }
+    }*/
 
     companion object {
         /**

@@ -41,11 +41,9 @@ class ScoutFirstFragment : Fragment() {
     // TODO: Rename and change types of parameters
     private var param1: String? = null
     private var param2: String? = null
-    private val AUTOCOMPLETE_REQUEST_CODE = 1
 
     private lateinit var registerViewModel: RegisterViewModel
     private var sendDataFromFragment: ScoutSendDataFromF1? = null
-    private lateinit var etLocation: EditText
     private lateinit var etName: EditText
     private lateinit var etSurname: EditText
     private lateinit var etBirthdate: EditText
@@ -80,7 +78,6 @@ class ScoutFirstFragment : Fragment() {
         val icon_check: Drawable? = ContextCompat.getDrawable(requireContext(), R.drawable.ic_check)
         val icon_error: Drawable? = ContextCompat.getDrawable(requireContext(), R.drawable.ic_error)
 
-        etLocation = view.findViewById(R.id.etLocation)
         etName = view.findViewById(R.id.etName)
         etSurname = view.findViewById(R.id.etSurname)
         etBirthdate = view.findViewById(R.id.etBirthdate)
@@ -92,14 +89,6 @@ class ScoutFirstFragment : Fragment() {
             if (showDatePicker) {
                 showDatePickerDialog()
             }
-        }
-
-        etLocation.setOnClickListener {
-            val fields = listOf(Place.Field.ADDRESS, Place.Field.LAT_LNG)
-            val intent = Autocomplete.IntentBuilder(AutocompleteActivityMode.OVERLAY, fields)
-                .setTypeFilter(TypeFilter.ADDRESS)
-                .build(requireContext())
-            startActivityForResult(intent, AUTOCOMPLETE_REQUEST_CODE)
         }
 
         etEmail.addTextChangedListener { email ->
@@ -128,8 +117,7 @@ class ScoutFirstFragment : Fragment() {
     interface ScoutSendDataFromF1 {
         fun scoutSendDataFirstFragment(name: String?, surname: String?,
                                   birthday: String?, email: String?,
-                                  password: String?, location: String?,
-                                  firstFragConfirmed: Boolean)
+                                  password: String?, firstFragConfirmed: Boolean)
     }
 
     override fun onAttach(context: Context) {
@@ -174,7 +162,7 @@ class ScoutFirstFragment : Fragment() {
                 if (passCheck()) {
                     sendDataFromFragment?.scoutSendDataFirstFragment(etName.text.toString(),etSurname.text.toString(),
                         etBirthdate.text.toString(),etEmail.text.toString(),etPassword.text.toString(),
-                        etLocation.text.toString(), true)
+                         true)
                 }else{
                     Toast.makeText(context, "Contraseñas no coinciden", Toast.LENGTH_SHORT).show()
                 }
@@ -184,16 +172,11 @@ class ScoutFirstFragment : Fragment() {
         }else{
             Toast.makeText(context, "Rellena todos los campos", Toast.LENGTH_SHORT).show()
         }
-
-        /*
-        Toast.makeText(context, "Check fields", Toast.LENGTH_SHORT).show()
-        Log.d("FIRST1FRAGMENT", "CAMPOS VACIO")*/
     }
 
     private fun emptyCheck(): Boolean{
         return (etEmail.text.isEmpty() || etPassword.text.isEmpty() || etPasswordCheck.text.isEmpty() ||
-                etBirthdate.text.isEmpty() || etName.text.isEmpty() || etSurname.text.isEmpty() ||
-                etLocation.text.isEmpty())
+                etBirthdate.text.isEmpty() || etName.text.isEmpty() || etSurname.text.isEmpty())
     }
 
     private fun passCheck(): Boolean{
@@ -203,14 +186,6 @@ class ScoutFirstFragment : Fragment() {
 
     private fun emailCheckPattern(): Boolean{
         return android.util.Patterns.EMAIL_ADDRESS.matcher(etEmail.text.toString()).matches()
-    }
-
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        if (requestCode == AUTOCOMPLETE_REQUEST_CODE && resultCode == Activity.RESULT_OK) {
-            val place = Autocomplete.getPlaceFromIntent(data!!)
-            etLocation.setText(place.address)
-        }
     }
 
     companion object {

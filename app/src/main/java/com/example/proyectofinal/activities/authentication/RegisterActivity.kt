@@ -150,8 +150,7 @@ class RegisterActivity : AppCompatActivity(), PlayerFirstFragment.PlayerSendData
     }
     override fun scoutSendDataFirstFragment(name: String?, surname: String?,
                                              birthday: String?, email: String?,
-                                             password: String?, location: String?,
-                                             firstFragConfirmed: Boolean) {
+                                             password: String?, firstFragConfirmed: Boolean) {
         if(accountType == "scout"){
 
         }else{

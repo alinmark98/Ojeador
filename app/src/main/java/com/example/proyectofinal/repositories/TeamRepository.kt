@@ -1,231 +1,75 @@
 package com.example.proyectofinal.repositories
 
-import android.util.Log
-import com.example.proyectofinal.models.Team
-import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.*
 
-class TeamRepository {
-    private val equipos = mutableListOf<Team>()
+class TeamsRepository {
+    private val database: FirebaseDatabase = FirebaseDatabase.getInstance()
+    private val teamsRef: DatabaseReference = database.getReference("teams")
 
-    init {
-        equipos.add(Team("C.F. Alovera", "Alovera",  "Guadalajara", "HH", "Nuevo Tomillar"))
-        equipos.add(Team("C.D. Azuqueca \"B\"", "Azuqueca de Henares", "Guadalajara", "HH", "Campo de Fútbol San Miguel"))
-        equipos.add(Team("C.D. Balona Conquense", "Cuenca", "Cuenca", "HH", "La Fuensanta"))
-        /*equipos.add(Team("C.D. Bargas", "Bargas", "Toledo", "", "Municipal de Bargas"))
-        equipos.add(Team("C.D. Cazalegas", "Cazalegas", "Toledo", "", "Ciudad Deportiva Ebora Formación"))
-        equipos.add(Team("A.D. Hogar Alcarreño", "Guadalajara", "Guadalajara", "", "Municipal Fuente de la Niña"))
-        equipos.add(Team("C.D. Madridejos", "Madridejos", "Toledo", "", "Campo de Fútbol Nuevo"))
-        equipos.add(Team("Mora C.F.", "Mora", "Toledo", "", "Las Delicias"))
-        equipos.add(Team("C.D. Noblejas", "Noblejas", "Toledo", "", "Municipal Ángel Luengo"))
-        equipos.add(Team("Orgaceño C.F.", "Orgaz", "Toledo", "", "Municipal del Socorro"))
-        equipos.add(Team("C.D. Quintanar", "Quintanar de la Orden", "Toledo", "", "Alfonso Viller García"))
-        equipos.add(Team("A.D. San José Obrero", "Cuenca", "Cuenca", "", "Obispo Laplana"))
-        equipos.add(Team("A.D. Seseña C.F.", "Seseña", "Toledo", "", "Fernando Jiménez Serrano"))
-        equipos.add(Team("Sporting Cabanillas C.F.", "Cabanillas del Campo", "Guadalajara", "", "Municipal Ramiro Almendros"))
-
-        equipos.add(Team("Sporting de Alcázar C.F.", "Alcázar de San Juan", "Ciudad Real", "", "Polideportivo Municipal Manuel Delgado Meco"))
-        equipos.add(Team("C.D. Toledo \"B\"", "Toledo", "Toledo", "", "Anexo Salto del Caballo"))
-        equipos.add(Team("C.D. Villa", "La Villa de Don Fadrique", "Toledo", "", "Municipal Gregorio Vela"))
-        equipos.add(Team("C.D. Yuncos", "Yuncos", "Toledo", "", "Complejo Villa de Yuncos"))
-        equipos.add(Team("U.D. La Fuente", "Fuente el Fresno", "Ciudad Real", "", "Municipal Fuente el Fresno"))
-        equipos.add(Team("U.D. Carrión", "Carrión de Calatrava", "Ciudad Real", "", "Nuestra Señora de la Encarnación"))
-        equipos.add(Team("U.D. Almansa", "Almansa", "Albacete", "", "Municipal Paco Simón"))
-        equipos.add(Team("Motilla C.F.", "Motilla del Palancar", "Cuenca", "", "El Carrascal"))
-        equipos.add(Team("Membrilla C.F.", "Membrilla", "Ciudad Real", "", "Municipal de Membrilla"))
-        equipos.add(Team("Manzanares C.F.", "Manzanares", "Ciudad Real", "", "José Camacho"))
-        equipos.add(Team("La Roda C.F.", "La Roda", "Albacete", "", "Municipal Nuevo Maracañi"))
-        equipos.add(Team("E.M.F.A.D. San Clemente", "San Clemente", "Cuenca", "", "Polideportivo Municipal San Clemente"))
-        equipos.add(Team("E.F.B. La Roda Rodacal Beyem", "La Roda", "Albacete", "", "Municipal Nuevo Maracañi"))
-        equipos.add(Team("C.D.U. Criptanense Tierra de Gigantes", "Campo de Criptana", "Ciudad Real", "", "Agustín de la Fuente"))
-        equipos.add(Team("C.D. Pedroñeras", "Las Pedroñeras", "Cuenca", "", "Municipal de Las Pedroñeras"))
-        equipos.add(Team("C.D. Miguelturreño", "Miguelturra", "Ciudad Real", "", "Municipal de Miguelturra"))
-
-        equipos.add(Team("C.D. Huracán de Balazote", "Balazote", "Albacete", "", "Municipal de Balazote"))
-        equipos.add(Team("C.D. E.F.B. Valdepeñas", "Valdepeñas", "Ciudad Real", "", "La Molineta"))
-        equipos.add(Team("Atlético Teresiano", "Malagón", "Ciudad Real", "", "Félix Barrero"))
-        equipos.add(Team("Atlético Pedro Muñoz C.F.", "Pedro Muñoz", "Ciudad Real", "", "Municipal Juande Ramos"))
-        equipos.add(Team("Atlético Ibañés", "Casas-Ibáñez", "Albacete", "", "Municipal de Casas-Ibáñez"))
-        equipos.add(Team("Atlético Albacete", "Albacete", "Albacete", "", "Ciudad Deportiva Andrés Iniesta"))
-        equipos.add(Team("A.D. Campillo", "Campillo de Altobuey", "Cuenca", "", "Virgen de la Loma"))
-        equipos.add(Team("C.D.E. Al-Basit", "Albacete", "", "Albacete", ""))
-        equipos.add(Team("U.D. Alpera", "Alpera", "", "Albacete", ""))
-        equipos.add(Team("Atlético Jareño", "Villanueva de la Jara", "", "Cuenca", ""))
-        equipos.add(Team("C.D.E. Atlético Mahora", "Mahora", "", "Albacete", ""))
-        equipos.add(Team("Tintoralba Higueruela", "Higueruela", "", "Albacete", ""))
-        equipos.add(Team("C.D.E. Las Mesas", "Las Mesas", "", "Cuenca", ""))
-        equipos.add(Team("U.D. Casasimarro", "Casasimarro", "", "Cuenca", ""))
-        equipos.add(Team("Deportivo Barrax C.F.", "Barrax", "", "Albacete", ""))
-        equipos.add(Team("C.D.E. Imperial de Bonete", "Bonete", "", "Albacete", ""))
-        equipos.add(Team("C.D. Manchego Canforrales Provencio", "El Provencio", "", "Cuenca", ""))
-        equipos.add(Team("Munera C.F.", "Munera", "", "Albacete", ""))
-
-        equipos.add(Team("Olímpico Madrigueras C.F.", "Madrigueras", "", "Albacete", ""))
-        equipos.add(Team("C.D.E. Santísimo Cristo Minglanilla", "Minglanilla", "", "Cuenca", ""))
-        equipos.add(Team("U.D. Socuéllamos C.F. \"B\"", "Socuéllamos", "", "Ciudad Real", ""))
-        equipos.add(Team("C.D.Caudetano", "Caudete", "", "Albacete", ""))
-        equipos.add(Team("Club Atlético Tarazona", "Tarazona de la Mancha", "", "Albacete", ""))
-        equipos.add(Team("C.D. Almoradiel", "La Puebla de Almoradiel", "", "Toledo", ""))
-        equipos.add(Team("Atlético Cervantino", "Argamasilla de Alba", "", "Ciudad Real", ""))
-        equipos.add(Team("Atlético Consuegra", "Consuegra", "", "Toledo", ""))
-        equipos.add(Team("C.D.B. F.B. Atlético Puertollano", "Puertollano", "", "Ciudad Real", ""))
-        equipos.add(Team("Atlético Teresiano", "Malagón", "", "Ciudad Real", ""))
-        equipos.add(Team("C.F. Calatrava", "Argamasilla de Calatrava", "", "Ciudad Real", ""))
-        equipos.add(Team("C.D.B. Calzada C.F.", "Calzada de Calatrava", "", "Ciudad Real", ""))
-        equipos.add(Team("Castillo de Calatrava Aldea del Rey Balompié", "Aldea del Rey", "", "Ciudad Real", ""))
-        equipos.add(Team("Ciudad Real C.F.", "Ciudad Real", "", "Ciudad Real", ""))
-        equipos.add(Team("Daimiel R.C.", "Daimiel", "", "Ciudad Real", "Municipal de Daimiel / Nuestra Señora del Carmen"))
-        equipos.add(Team("Membrilla C.F.", "Membrilla", "", "Ciudad Real", ""))
-        equipos.add(Team("C.D.F. Miguel Esteban", "Miguel Esteban", "", "Toledo", ""))
-        equipos.add(Team("Patrimonio Almadén C.F.", "Almadén", "", "Ciudad Real", ""))
-        equipos.add(Team("Pozuelo C.F.", "Pozuelo de Calatrava", "", "Ciudad Real", ""))
-        equipos.add(Team("C.D. Urda", "Urda", "", "Toledo", ""))
-        equipos.add(Team("C.F. C.D. Villanueva de Alcardete", "Villanueva de Alcardete", "", "Toledo", ""))
-
-        equipos.add(Team("C.D. Argés Fútbol", "Argés", "Bandera de la provincia de Toledo.svg", "Toledo", ""))
-        equipos.add(Team("C.D. Bargas", "Bargas", "Bandera de la provincia de Toledo.svg", "Toledo", ""))
-        equipos.add(Team("C.F. Benquerencia Toledo", "Toledo", "Bandera de la provincia de Toledo.svg", "Toledo", ""))
-        equipos.add(Team("C.D. Calera", "Calera y Chozas", "Bandera de la provincia de Toledo.svg", "Toledo", ""))
-        equipos.add(Team("C.D.E. Corazón Titán", "Ajofrín", "Bandera de la provincia de Toledo.svg", "Toledo", ""))
-        equipos.add(Team("C.D.E. Fuensalida", "Fuensalida", "Bandera de la provincia de Toledo.svg", "Toledo", "Municipal Alejandro González"))
-        equipos.add(Team("C.D. Guadamur", "Guadamur", "Bandera de la provincia de Toledo.svg", "Toledo", ""))
-        equipos.add(Team("C.F. Méntrida", "Méntrida", "Bandera de la provincia de Toledo.svg", "Toledo", ""))
-        equipos.add(Team("Mora C.F. \"B\"", "Mora", "Bandera de la provincia de Toledo.svg", "Toledo", ""))
-        equipos.add(Team("C.D.B. Novés", "Novés", "Bandera de la provincia de Toledo.svg", "Toledo", ""))
-        equipos.add(Team("C.D.E. E.F. Patrocinio", "Talavera de la Reina", "Bandera de la provincia de Toledo.svg", "Toledo", ""))
-        equipos.add(Team("C.D. Paz Santa Cruz de Retamar", "Santa Cruz del Retamar", "Bandera de la provincia de Toledo.svg", "Toledo", ""))
-        equipos.add(Team("C.D. Puebla", "La Puebla de Montalbán", "Bandera de la provincia de Toledo.svg", "Toledo", ""))
-        equipos.add(Team("C.D. Sonseca", "Sonseca", "Bandera de la provincia de Toledo.svg", "Toledo", ""))
-        equipos.add(Team("C.D. Talavera la Nueva", "Talavera de la Reina", "Bandera de la provincia de Toledo.svg", "Toledo", ""))
-        equipos.add(Team("C.D.E. Villaseca de la Sagra", "Villaseca de la Sagra", "Bandera de la provincia de Toledo.svg", "Toledo", ""))
-
-        equipos.add(Team("Academia Albiceleste", "Guadalajara", "Bandera de la Provincia de Guadalajara.png", "Guadalajara", ""))
-        equipos.add(Team("C.F. Alovera", "Alovera", "Bandera de la Provincia de Guadalajara.png", "Guadalajara", ""))
-        equipos.add(Team("C.D. Azuqueca \"B\"", "Azuqueca de Henares", "Bandera de la Provincia de Guadalajara.png", "Guadalajara", ""))
-        equipos.add(Team("C.D. Balona Conquense", "Cuenca", "Flag Cuenca Province.svg", "Cuenca", ""))
-        equipos.add(Team("C.D.E. Casarrubios Balompié", "Casarrubios del Monte", "Bandera de la provincia de Toledo.svg", "Toledo", ""))
-        equipos.add(Team("C.D.E. Cedillo del Condado", "Cedillo del Condado", "Bandera de la provincia de Toledo.svg", "Toledo", ""))
-        equipos.add(Team("A.D. Dínamo Guadalajara", "Guadalajara", "Bandera de la Provincia de Guadalajara.png", "Guadalajara", ""))
-        equipos.add(Team("C.D. El Casar", "El Casar", "Bandera de la Provincia de Guadalajara.png", "Guadalajara", ""))
-        equipos.add(Team("E.F.B. Jesús de la Ossa", "Tarancón", "Flag Cuenca Province.svg", "Cuenca", ""))
-        equipos.add(Team("C.D. Mandayona", "Mandayona", "Bandera de la Provincia de Guadalajara.png", "Guadalajara", ""))
-        equipos.add(Team("A.D. Numancia", "Numancia de la Sagra", "Bandera de la provincia de Toledo.svg", "Toledo", ""))
-        equipos.add(Team("C.D. Sagreño", "Yuncler", "Bandera de la provincia de Toledo.svg", "Toledo", ""))
-        equipos.add(Team("C.D.E. Salesianos Guadalajara", "Guadalajara", "Bandera de la Provincia de Guadalajara.png", "Guadalajara", ""))
-        equipos.add(Team("Santa Cruz UJAF C.F.", "Santa Cruz de la Zarza", "Bandera de la provincia de Toledo.svg", "Toledo", ""))
-        equipos.add(Team("C.D. Sigüenza", "Sigüenza", "Bandera de la Provincia de Guadalajara.png", "Guadalajara", ""))
-        equipos.add(Team("Yepes C.F.", "Yepes", "Bandera de la provincia de Toledo.svg", "Toledo", ""))
-
-        equipos.add(Team("C.C.D. Aguas Nuevas", "Albacete", "Bandera provincia Albacete.svg", "Albacete", "Municipal de Aguas Nuevas"))
-        equipos.add(Team("C.D.E. Alatoz C.F.", "Alatoz", "Bandera provincia Albacete.svg", "Albacete", "Municipal de Alatoz"))
-        equipos.add(Team("A.D. Alumni", "Albacete", "Bandera provincia Albacete.svg", "Albacete", "José Copete"))
-        equipos.add(Team("C. Atlético Tarazona", "Tarazona de la Mancha", "Bandera provincia Albacete.svg", "Albacete", "Faustino Alvarruiz"))
-        equipos.add(Team("C.D. Casas de Haro", "Casas de Haro", "Flag Cuenca Province.svg", "Cuenca", "El Pino"))
-        equipos.add(Team("Chinchilla C.F.", "Chinchilla de Monte-Aragón", "Bandera provincia Albacete.svg", "Albacete", "San Miguel"))
-        equipos.add(Team("C.P. Cultural Valdeganga", "Valdeganga", "Bandera provincia Albacete.svg", "Albacete", "Municipal de Valdeganga"))
-        equipos.add(Team("Deportivo Villarrobledo C.F.", "Villarrobledo", "Bandera provincia Albacete.svg", "Albacete", "Virgen de la Caridad"))
-        equipos.add(Team("El Bonillo C.F. Vega Sotuélamos", "El Bonillo", "Bandera provincia Albacete.svg", "Albacete", "Santísimo Cristo de los Milagros"))
-        equipos.add(Team("El Herrumblar C.F.", "El Herrumblar", "Flag Cuenca Province.svg", "Cuenca", "Liborio Torres"))
-        equipos.add(Team("C.D. Iniestense", "Iniesta", "Flag Cuenca Province.svg", "Cuenca", "Antonio López Alfaro"))
-        equipos.add(Team("C.F. La Santa Cruz", "La Alberca de Záncara", "Flag Cuenca Province.svg", "Cuenca", "Polideportivo municipal"))
-        equipos.add(Team("C.D. Olímpico Villarrobledo", "Villarrobledo", "Bandera provincia Albacete.svg", "Albacete", ""))
-        equipos.add(Team("Teatinos C.F.", "Casas de Fernando Alonso", "Flag Cuenca Province.svg", "Cuenca", "Las Palomas"))
-        equipos.add(Team("Tintoralba Higueruela", "Higueruela", "Bandera provincia Albacete.svg", "Albacete", "Municipal de Higueruela"))
-        equipos.add(Team("C.D. Valera", "Las Valeras", "Flag Cuenca Province.svg", "Cuenca", "Municipal de las Valeras"))
-        equipos.add(Team("C.F. Villalpardo", "Villalpardo", "Flag Cuenca Province.svg", "Cuenca", "Los Olivos"))
-        equipos.add(Team("U.D. Villamalea", "Villamalea", "Bandera provincia Albacete.svg", "Albacete", "La Pedriza"))
-
-        equipos.add(Team("Almagro C.F. \"B\"", "Almagro", "Flag Ciudad Real Province.svg", "Ciudad Real", ""))
-        equipos.add(Team("C.F. Almodóvar \"B\"", "Almodóvar del Campo", "Flag Ciudad Real Province.svg", "Ciudad Real", "Miguel Hernández"))
-        equipos.add(Team("C.D. Bolañego", "Bolaños de Calatrava", "Flag Ciudad Real Province.svg", "Ciudad Real", "Municipal de Bolaños"))
-        equipos.add(Team("C.F. Corraleño", "Corral de Calatrava", "Flag Ciudad Real Province.svg", "Ciudad Real", "Municipal de Corral de Calatrava"))
-        equipos.add(Team("C.F. Infantes", "Villanueva de los Infantes", "Flag Ciudad Real Province.svg", "Ciudad Real", "San Miguel"))
-        equipos.add(Team("C.D. La Estrella", "Miguelturra", "Flag Ciudad Real Province.svg", "Ciudad Real", "Candelario León Rivas"))
-        equipos.add(Team("C.D. Las Casas", "Ciudad Real", "Flag Ciudad Real Province.svg", "Ciudad Real", "El ejido de Las Casas"))
-        equipos.add(Team("C.D. Piedrabuena", "Piedrabuena", "Flag Ciudad Real Province.svg", "Ciudad Real", "El Olivar"))
-        equipos.add(Team("U.D. Poblete", "Poblete", "Flag Ciudad Real Province.svg", "Ciudad Real", "Sacramento González"))
-        equipos.add(Team("C.D.E. C.F. Porzuna", "Porzuna", "Flag Ciudad Real Province.svg", "Ciudad Real", "Campo 11 de julio de 2010"))
-        equipos.add(Team("U.D. Santa Cruz", "Santa Cruz de Mudela", "Flag Ciudad Real Province.svg", "Ciudad Real", "San José"))
-        equipos.add(Team("Sporting Torrenueva", "Torrenueva", "Flag Ciudad Real Province.svg", "Ciudad Real", "Municipal de Torrenueva"))
-        equipos.add(Team("A.D. Valenzuela", "Valenzuela de Calatrava", "Flag Ciudad Real Province.svg", "Ciudad Real", "Municipal de Valenzuela"))
-        equipos.add(Team("C.F. Villafranca", "Villafranca de los Caballeros", "Bandera de la provincia de Toledo.svg", "Toledo", "Campo 11 de julio de 2010"))
-        equipos.add(Team("Formac Villarrubia C.F. \"B\"", "Villarrubia de los Ojos", "Flag Ciudad Real Province.svg", "Ciudad Real", "Nuevo Campo"))
-        equipos.add(Team("C.F. Villartense", "Villarta de San Juan", "Flag Ciudad Real Province.svg", "Ciudad Real", "Estadio municipal Tomás Pina"))
-
-        equipos.add(Team("C.F. Almaguer", "Corral de Almaguer", "Bandera de la provincia de Toledo.svg", "Toledo", "Municipal de Corral de Almaguer"))
-        equipos.add(Team("F.C. Añover de Tajo", "Añover de Tajo", "Bandera de la provincia de Toledo.svg", "Toledo", "Municipal de Añover de Tajo"))
-        equipos.add(Team("C.D. Belmonte", "Belmonte", "Flag Cuenca Province.svg", "Cuenca", "Municipal de Belmonte"))
-        equipos.add(Team("Cobeja C.F.", "Cobeja", "Bandera de la provincia de Toledo.svg", "Toledo", "Pedro Galán"))
-        equipos.add(Team("U.B. Conquense \"B\"", "Cuenca", "Flag Cuenca Province.svg", "Cuenca", "Joaquín Caparrós"))
-        equipos.add(Team("Dancos Lillo C.F.", "Lillo", "Bandera de la provincia de Toledo.svg", "Toledo", "Municipal de Lillo"))
-        equipos.add(Team("C.D.E. El Toboso", "El Toboso", "Bandera de la provincia de Toledo.svg", "Toledo", "Lozano Montoya"))
-        equipos.add(Team("C.D. Esquivias", "Esquivias", "Bandera de la provincia de Toledo.svg", "Toledo", "Campo de fútbol municipal de Esquivias"))
-        equipos.add(Team("C.D. La Inmaculada", "Horcajo de Santiago", "Flag Cuenca Province.svg", "Cuenca", "Municipal de Horcajo de Santiago"))
-        equipos.add(Team("A.C.D.E.F. Las Mesas", "Las Mesas", "Flag Cuenca Province.svg", "Cuenca", "José María Perona"))
-        equipos.add(Team("U.D. Mota del Cuervo", "Mota del Cuervo", "Flag Cuenca Province.svg", "Cuenca", "Municipal de Mota del Cuervo"))
-        equipos.add(Team("C.D. Numancia", "Numancia de la Sagra", "Bandera de la provincia de Toledo.svg", "Toledo", ""))
-        equipos.add(Team("C.D. Optense", "Huete", "Flag Cuenca Province.svg", "Cuenca", "La Chopera"))
-        equipos.add(Team("C.D.F. Rayo Villasequilla", "Villasequilla", "Bandera de la provincia de Toledo.svg", "Toledo", ""))
-        equipos.add(Team("C.D. Triana Tresjuncos", "Tresjuncos", "Flag Cuenca Province.svg", "Cuenca", "Francisco Hermosilla"))
-        equipos.add(Team("C.D. A.D. Yeles", "Yeles", "Bandera de la provincia de Toledo.svg", "Toledo", "Municipal de Yeles"))
-        equipos.add(Team("C.D.E. Alcabón F.C.", "Alcabón", "Bandera de la provincia de Toledo.svg", "Toledo", "Municipal de Alcabón"))
-        equipos.add(Team("C.D. A.D. Ancla Gerindote", "Gerindote", "Bandera de la provincia de Toledo.svg", "Toledo", "Instalaciones deportivas de Gerindote"))
-        equipos.add(Team("Ayuntamiento de Nambroca", "Nambroca", "Bandera de la provincia de Toledo.svg", "Toledo", "Municipal de Nambroca"))
-        equipos.add(Team("C.D. Camarena", "Camarena", "Bandera de la provincia de Toledo.svg", "Toledo", "Victoriano Alonso"))
-        equipos.add(Team("C.D. Ebora Formación - Levante", "Cazalegas", "Bandera de la provincia de Toledo.svg", "Toledo", "Ciudad deportiva Ebora Formación"))
-        equipos.add(Team("C.D. Escalona", "Escalona", "Bandera de la provincia de Toledo.svg", "Toledo", "Sánchez Cabezudo"))
-        equipos.add(Team("A.C.D. Juventud Torreña", "La Torre de Esteban Hambrán", "Bandera de la provincia de Toledo.svg", "Toledo", "Municipal Adolfo Suárez"))
-        equipos.add(Team("F.C. Navalcán", "Navalcán", "Bandera de la provincia de Toledo.svg", "Toledo", "Municipal de Navalcán"))
-        equipos.add(Team("C.D. Oropesa", "Oropesa", "Bandera de la provincia de Toledo.svg", "Toledo", "Rufino Pozo"))
-        equipos.add(Team("C.D. Polán", "Polán", "Bandera de la provincia de Toledo.svg", "Toledo", "El Castillo"))
-        equipos.add(Team("C.F. Polígono Toledo", "Toledo", "Bandera de la provincia de Toledo.svg", "Toledo", "Polígono"))
-        equipos.add(Team("C.D. Pueblanueva", "La Pueblanueva", "Bandera de la provincia de Toledo.svg", "Toledo", "Municipal de Valdegansos"))
-        equipos.add(Team("Recas C.F.", "Recas", "Bandera de la provincia de Toledo.svg", "Toledo", "Fernando Sánchez"))
-        equipos.add(Team("Sporting de Gálvez", "Gálvez", "Bandera de la provincia de Toledo.svg", "Toledo", "Municipal de Gálvez"))
-        equipos.add(Team("C.D. Ugena E.F.M.", "Ugena", "Bandera de la provincia de Toledo.svg", "Toledo", "Guillermo Díaz"))
-        equipos.add(Team("C.D. Valmojado C.F.", "Valmojado", "Bandera de la provincia de Toledo.svg", "Toledo", "La Cañada"))
-        equipos.add(Team("U.D. Villaluenga", "Villaluenga de la Sagra", "Bandera de la provincia de Toledo.svg", "Toledo", "El Prado"))
-
-        equipos.add(Team("Almoguera C.F.", "Almoguera", "Bandera de la Provincia de Guadalajara.png", "Guadalajara", "Mirabueno"))
-        equipos.add(Team("C.D. Atlético Guadalajara", "Guadalajara", "Bandera de la Provincia de Guadalajara.png", "Guadalajara", "Jerónimo Morena"))
-        equipos.add(Team("C.D. Cifontino", "Cifuentes", "Bandera de la Provincia de Guadalajara.png", "Guadalajara", "Municipal de Cifuentes"))
-        equipos.add(Team("C.D. Cultural Espinosa", "Espinosa de Henares", "Bandera de la Provincia de Guadalajara.png", "Guadalajara", "El Henares"))
-        equipos.add(Team("C.R. Fontanar", "Fontanar", "Bandera de la Provincia de Guadalajara.png", "Guadalajara", "El Palacio"))
-        equipos.add(Team("C.D. Guadalajara Promesas", "Guadalajara", "Bandera de la Provincia de Guadalajara.png", "Guadalajara", "Fuente de la niña"))
-        equipos.add(Team("A.D. Hogar Alcarreño \"B\"", "Guadalajara", "Bandera de la Provincia de Guadalajara.png", "Guadalajara", "Fuente de la niña"))
-        equipos.add(Team("A.C.D.M. Horche \"B\"", "Horche", "Bandera de la Provincia de Guadalajara.png", "Guadalajara", "San Roque"))
-        equipos.add(Team("C.D. Íbero Sport C.F.", "Guadalajara", "Bandera de la Provincia de Guadalajara.png", "Guadalajara", "Fuente de la niña"))
-        equipos.add(Team("C.D. Jadraque", "Jadraque", "Bandera de la Provincia de Guadalajara.png", "Guadalajara", "El Parque"))
-        equipos.add(Team("C.D. Marchamalo \"B\"", "Marchamalo", "Bandera de la Provincia de Guadalajara.png", "Guadalajara", "La Solana"))
-        equipos.add(Team("Rayo Arriacense", "Guadalajara", "Bandera de la Provincia de Guadalajara.png", "Guadalajara", "Jerónimo Morena"))
-        equipos.add(Team("Sporting Cabanillas F.C. \"B\"", "Cabanillas del Campo", "Bandera de la Provincia de Guadalajara.png", "Guadalajara", "Ramiro Almedros"))
-        equipos.add(Team("C.D. Torrejón del Rey", "Torrejón del Rey", "Bandera de la Provincia de Guadalajara.png", "Guadalajara", "Las Margaritas"))
-        equipos.add(Team("C.F. Tórtola", "Tórtola de Henares", "Bandera de la Provincia de Guadalajara.png", "Guadalajara", "La Alameda"))
-        equipos.add(Team("C.D. Trillo", "Trillo", "Bandera de la Provincia de Guadalajara.png", "Guadalajara", ""))
-        equipos.add(Team("Usanos C.F.", "Guadalajara", "Bandera de la Provincia de Guadalajara.png", "Guadalajara", "Municipal de Usanos"))
-        equipos.add(Team("C.D. Yebra", "Yebra", "Bandera de la Provincia de Guadalajara.png", "Guadalajara", "La Chopera"))*/
-    }
-
-    fun agregarEquiposAEstadoRealtimeDatabase(equipos: List<Team>) {
-        val database = FirebaseDatabase.getInstance()
-        val equiposRef = database.getReference("teams")
-
-        var contador = 0
-
-        for (equipo in equipos) {
-            val equipoId = contador.toString() // Convertir el contador a una cadena de texto
-            equiposRef.child(equipoId).setValue(equipo)
-                .addOnSuccessListener {
-                    contador++
-                    Log.e("TEAM-REP", "SUCCESS")
+    fun getRegions(callback: (List<String>) -> Unit) {
+        teamsRef.addListenerForSingleValueEvent(object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                val regions = mutableListOf<String>()
+                for (teamSnapshot in snapshot.children) {
+                    val region = teamSnapshot.child("region").getValue(String::class.java)
+                    region?.let {
+                        if (!regions.contains(it)) {
+                            regions.add(it)
+                        }
+                    }
                 }
-                .addOnFailureListener { error ->
-                    Log.e("TEAM-REP", error.toString())
+                callback(regions)
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+                // Manejar el error de consulta a la base de datos
+            }
+        })
+    }
+
+    fun getCities(region: String, callback: (List<String>) -> Unit) {
+        teamsRef.orderByChild("region").equalTo(region)
+            .addListenerForSingleValueEvent(object : ValueEventListener {
+                override fun onDataChange(snapshot: DataSnapshot) {
+                    val cities = mutableListOf<String>()
+                    for (teamSnapshot in snapshot.children) {
+                        val city = teamSnapshot.child("city").getValue(String::class.java)
+                        city?.let {
+                            if (!cities.contains(it)) {
+                                cities.add(it)
+                            }
+                        }
+                    }
+                    callback(cities)
                 }
-        }
+
+                override fun onCancelled(error: DatabaseError) {
+                    // Manejar el error de consulta a la base de datos
+                }
+            })
     }
 
-    fun getTeamList(): List<Team> {
-        return equipos
-    }
+    fun getTeams(region: String, city: String, callback: (List<String>) -> Unit) {
+        teamsRef.orderByChild("region").equalTo(region)
+            .addListenerForSingleValueEvent(object : ValueEventListener {
+                override fun onDataChange(snapshot: DataSnapshot) {
+                    val teams = mutableListOf<String>()
+                    for (teamSnapshot in snapshot.children) {
+                        val teamRegion = teamSnapshot.child("region").getValue(String::class.java)
+                        val teamCity = teamSnapshot.child("city").getValue(String::class.java)
+                        if (teamRegion == region && teamCity == city) {
+                            val teamName = teamSnapshot.child("name").getValue(String::class.java)
+                            teamName?.let {
+                                teams.add(it)
+                            }
+                        }
+                    }
+                    callback(teams)
+                }
 
+                override fun onCancelled(error: DatabaseError) {
+                    // Manejar el error de consulta a la base de datos
+                }
+            })
+    }
 }

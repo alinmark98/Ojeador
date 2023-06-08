@@ -33,11 +33,10 @@ open class ScoutThirdFragment : Fragment() {
     private val PICK_IMAGE_REQUEST = 1
     private var imageViews: Array<ImageView?> = arrayOfNulls(4)
     private var imageButtons: Array<ImageButton?> = arrayOfNulls(4)
-    private var seekBars: Array<SeekBar?> = arrayOfNulls(6)
     private var sendDataFromFragment: ScoutSendDataFromF3? = null
     private var allDataChecked: Boolean = false
     private var images: MutableList<Bitmap> = mutableListOf()
-    private var skillsValues: HashMap<String, Int> = HashMap()
+    private lateinit var etAddInfo: EditText
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -56,17 +55,12 @@ open class ScoutThirdFragment : Fragment() {
         val registerButton =  view.findViewById<Button>(R.id.btnRegister)
         val intent = Intent(requireActivity(), WaitingActivity::class.java)
 
+        etAddInfo = view.findViewById(R.id.etDescription)
+
         imageViews[0] = view.findViewById(R.id.imageView1)
         imageViews[1] = view.findViewById(R.id.imageView2)
         imageViews[2] = view.findViewById(R.id.imageView3)
         imageViews[3] = view.findViewById(R.id.imageView4)
-
-        seekBars[0] = view.findViewById(R.id.seekBarDribbling)
-        seekBars[1] = view.findViewById(R.id.seekBarShooting)
-        seekBars[2] = view.findViewById(R.id.seekBarDefending)
-        seekBars[3] = view.findViewById(R.id.seekBarSpeed)
-        seekBars[4] = view.findViewById(R.id.seekBarPassing)
-        seekBars[5] = view.findViewById(R.id.seekBarPhysicality)
 
         imageButtons[0] = view.findViewById(R.id.button1)
         imageButtons[1] = view.findViewById(R.id.button2)
@@ -85,25 +79,14 @@ open class ScoutThirdFragment : Fragment() {
                 imageViews[2]?.drawable != null || imageViews[3]?.drawable != null){
 
                 sendDataFromFragment?.scoutCheckThirdFragment()
-                sendDataFromFragment?.scoutSendDataThirdFragment(images, addSkillsToHashMap())
+                sendDataFromFragment?.scoutSendDataThirdFragment(images,etAddInfo.text.toString())
                 requireActivity().finish()
                 startActivity(intent)
             }else{
-                Toast.makeText(context, "Select at least 1 image", Toast.LENGTH_SHORT).show()
+                Toast.makeText(context, "Selecciona al menos una imágen", Toast.LENGTH_SHORT).show()
             }
         }
         return view
-    }
-
-    private fun addSkillsToHashMap(): HashMap<String, Int>{
-        skillsValues["dribbling"] = seekBars[0]?.progress ?: 0
-        skillsValues["shooting"] = seekBars[1]?.progress ?: 0
-        skillsValues["defending"] = seekBars[2]?.progress ?: 0
-        skillsValues["speed"] = seekBars[3]?.progress ?: 0
-        skillsValues["passing"] = seekBars[4]?.progress ?: 0
-        skillsValues["physicality"] = seekBars[5]?.progress ?: 0
-
-        return skillsValues
     }
 
     private fun chooseImage(imageViewIndex: Int) {
@@ -133,7 +116,7 @@ open class ScoutThirdFragment : Fragment() {
 
     interface ScoutSendDataFromF3 : ScoutFirstFragment.ScoutSendDataFromF1 {
         fun scoutCheckThirdFragment()
-        fun scoutSendDataThirdFragment(images: List<Bitmap>,skills: HashMap<String, Int>)
+        fun scoutSendDataThirdFragment(images: List<Bitmap>, addInfo: String?)
     }
 
     override fun onAttach(context: Context) {

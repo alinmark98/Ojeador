@@ -67,6 +67,7 @@ class ScoutFirstFragment : Fragment() {
         } else {
             Log.e("FIRST-FRAGMENT", "API PLACES ERROR")
         }
+
     }
 
     override fun onCreateView(

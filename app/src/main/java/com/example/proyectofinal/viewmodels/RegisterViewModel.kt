@@ -13,10 +13,10 @@ class RegisterViewModel : ViewModel() {
     private val _showDatePicker = MutableLiveData<Boolean>()
     private val userRepository: UserRepository = UserRepository()
 
-    fun registerUser(player: Player, pwd: String, bitmaps: List<Bitmap>,) {
+    fun registerUser(user: Any, email: String, pwd: String, bitmaps: List<Bitmap>) {
         // Realiza las validaciones necesarias en los datos del jugador antes de llamar al repositorio
         Log.d("REGISTERPLAYER", "REGISTERPLAYER")
-        userRepository.registerUser(player, pwd, bitmaps, object : UserRepository.OnRegistrationCompleteListener {
+        userRepository.registerUser(user, email, pwd, bitmaps, object : UserRepository.OnRegistrationCompleteListener {
             override fun onRegistrationSuccess() {
                 Log.d("REGISTRO", "REGISTRO CORRECTO")
                 // AQUI QUE TE LLEVE A OTA ACTIVIDAD

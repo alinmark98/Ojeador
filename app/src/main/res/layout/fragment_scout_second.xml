@@ -11,7 +11,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:paddingTop="16dp"
-        android:text="Información personal"
+        android:text="Información del club"
         android:textSize="24sp"
         android:textColor="#F5F5F5"
         android:textStyle="bold"
@@ -73,38 +73,6 @@
             android:dropDownVerticalOffset="10dp"/>
 
     </LinearLayout>
-
-    <!--<LinearLayout
-        android:id="@+id/linF2Section4"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/linF2Section3"
-        android:background="@drawable/rounded_borders_sections"
-        android:padding="16dp"
-        android:layout_marginBottom="24dp"
-        android:orientation="vertical">
-
-        <TextView
-            android:id="@+id/txtDescription"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:paddingBottom="8dp"
-            android:text="Información adicional"
-            android:textSize="18sp" />
-
-        <EditText
-                android:id="@+id/etDescription"
-                android:background="@drawable/rounded_borders"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="Escribe aquí..."
-                android:textSize="14sp"
-                android:layout_below="@id/txtDescription"
-                android:inputType="textMultiLine"
-                android:padding="10dp"
-                android:lines="5"
-                android:gravity="top|start" />
-    </LinearLayout>-->
 
     <LinearLayout
         android:id="@+id/linF2Section4"

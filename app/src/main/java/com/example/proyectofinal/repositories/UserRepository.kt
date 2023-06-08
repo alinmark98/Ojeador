@@ -5,13 +5,16 @@ import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.util.Log
 import com.example.proyectofinal.models.Player
+import com.example.proyectofinal.models.Scout
 import com.google.android.gms.tasks.Tasks
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.GoogleAuthProvider
+import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.FieldPath
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.QuerySnapshot
 import com.google.firebase.storage.FirebaseStorage
+import kotlinx.coroutines.tasks.await
 import java.io.ByteArrayOutputStream
 
 class UserRepository {
@@ -21,11 +24,19 @@ class UserRepository {
     private val scoutsCollection = db.collection("scouts")
     private val auth = FirebaseAuth.getInstance()
     private var ONE_MEGABYTE: Long = 1024 * 1024
+    private var userType: String = ""
 
-    private fun createPlayerDocument(docID: String, player: Player, bitmaps: List<Bitmap>) {
-        db.collection("players")
+    private fun createUserDocument(docID: String, user: Any, bitmaps: List<Bitmap>) {
+
+        if(user is Player){
+            userType = "players"
+        }else if (user is Scout){
+            userType = "scouts"
+        }
+
+        db.collection(userType)
             .document(docID) // Especifica el ID personalizado del documento
-            .set(player)
+            .set(user)
             .addOnSuccessListener {
                 Log.d("ADDSUCCESS", "Documento creado con ID: $docID")
                 uploadPhotos(bitmaps)
@@ -37,18 +48,18 @@ class UserRepository {
             }
     }
 
-    fun registerUser(player: Player, password: String, bitmaps: List<Bitmap>, listener: OnRegistrationCompleteListener) {
-        auth.createUserWithEmailAndPassword(player.email, password)
+    fun registerUser(user: Any, email: String, password: String, bitmaps: List<Bitmap>, listener: OnRegistrationCompleteListener) {
+        auth.createUserWithEmailAndPassword(email, password)
             .addOnCompleteListener { task ->
                 if (task.isSuccessful) {
                     val firebaseUser = auth.currentUser
                     val docID = firebaseUser?.uid
 
                     if (docID != null) {
-                        signInWithEmail(player.email, password){ success ->
+                        signInWithEmail(email, password){ success ->
                             if(success){
                                 sendEmailVerification()
-                                createPlayerDocument(docID,player,bitmaps)
+                                createUserDocument(docID,user,bitmaps)
                             }else{
                                 Log.d("USREP-SIGNIN", "ERROR")
                             }
@@ -73,7 +84,14 @@ class UserRepository {
                 val baos = ByteArrayOutputStream()
                 bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos)
                 val data = baos.toByteArray()
-                val uri = "players/$actualUser/photo$index.jpg"
+                var uri: String = ""
+
+                uri = if(userType == "players"){
+                    "players/$actualUser/photo$index.jpg"
+                }else{
+                    "scouts/$actualUser/photo$index.jpg"
+                }
+
                 val photoRef = storageRef.child(uri)
 
                 updatePhotoAtIndex(actualUser,index,uri,
@@ -98,7 +116,12 @@ class UserRepository {
     }
 
     private fun updatePhotoAtIndex(user: String?, index: Int, photoUrl: String, onSuccess: () -> Unit, onFailure: (Exception) -> Unit) {
-        val userDocRef = user?.let { playersCollection.document(it) }
+        val userDocRef: DocumentReference?
+        if(userType == "players"){
+            userDocRef = user?.let { playersCollection.document(it) }
+        }else{
+            userDocRef = user?.let { scoutsCollection.document(it) }
+        }
 
         val photoField = when (index) {
             0 -> "photos.photo0"
@@ -195,7 +218,7 @@ class UserRepository {
             }
     }
 
-    fun fetchUsers(
+    fun fetchPlayerUsers(
         onSuccess: (List<Player>) -> Unit,
         onFailure: (Exception) -> Unit
     ) {
@@ -270,6 +293,61 @@ class UserRepository {
             }
     }
 
+    fun fetchScoutsUsers(
+        onSuccess: (List<Scout>) -> Unit,
+        onFailure: (Exception) -> Unit
+    ) {
+        val currentUserID = getCurrentUserId()
+
+        scoutsCollection.get()
+            .addOnSuccessListener { result ->
+                val scouts = mutableListOf<Scout>()
+
+                for (document in result) {
+                    val userId = document.id
+
+                    // Omitir el usuario actual
+                    if (userId == currentUserID) {
+                        continue
+                    }
+
+                    val name = document.getString("name")
+                    val surname = document.getString("surname")
+                    val born = document.getString("born")
+                    val location = document.getString("location")
+                    val category = document.getString("category")
+                    val description = document.getString("description")
+                    val team = document.getString("teamID")
+
+                    if (name != null && description != null && surname != null &&
+                        born != null && location != null && team != null && category != null) {
+
+                        val photosData = document.get("photos") as? HashMap<*, *>
+                        val photo0 = photosData?.get("photo0") as? String ?: ""
+
+                        val scout = Scout(
+                            name = name,
+                            surname = surname,
+                            born = born,
+                            location = location,
+                            description = description,
+                            teamID = team,
+                            category = category,
+                            photos = Scout.Photos(photo0 = photo0),
+
+                        )
+
+                        scouts.add(scout)
+                    }
+                }
+
+                onSuccess(scouts)
+            }
+            .addOnFailureListener { exception ->
+                onFailure(exception)
+            }
+    }
+
     fun firebaseAuthWithGoogle(idToken: String?, callback: AuthCallback) {
         val credential = GoogleAuthProvider.getCredential(idToken, null)
         FirebaseAuth.getInstance().signInWithCredential(credential)
@@ -315,6 +393,30 @@ class UserRepository {
             }
     }
 
+    suspend fun checkUserCollection(): String {
+        val firebaseUser = auth.currentUser
+        val uid = firebaseUser?.uid
+
+        if (uid != null) {
+            val playersCollection = db.collection("players").document(uid)
+            val scoutsCollection = db.collection("scouts").document(uid)
+
+            val playerSnapshot = playersCollection.get().await()
+            if (playerSnapshot.exists()) {
+                // El usuario pertenece a la colección "players"
+                return "players"
+            } else {
+                val scoutSnapshot = scoutsCollection.get().await()
+                if (scoutSnapshot.exists()) {
+                    // El usuario pertenece a la colección "scouts"
+                    return "scouts"
+                }
+            }
+        }
+        // El usuario no pertenece a ninguna colección
+        return ""
+    }
+
     fun isUserSignedOut(): Boolean {
         val currentUser = auth.currentUser
         return currentUser == null
@@ -332,5 +434,9 @@ class UserRepository {
     interface OnRegistrationCompleteListener {
         fun onRegistrationSuccess()
         fun onRegistrationFailure(exception: Exception?)
+    }
+
+    interface OnUserCollectionCheckListener {
+        fun onUserCollectionCheck(isInCollection: Boolean, collectionName: String)
     }
 }

@@ -1,6 +1,8 @@
 package com.example.proyectofinal.fragments.register.scout
 
+import android.app.Activity
 import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
@@ -12,7 +14,12 @@ import androidx.appcompat.widget.AppCompatEditText
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.example.proyectofinal.R
+import com.example.proyectofinal.viewmodels.RegisterViewModel
 import com.example.proyectofinal.viewmodels.TeamsViewModel
+import com.google.android.libraries.places.api.model.Place
+import com.google.android.libraries.places.api.model.TypeFilter
+import com.google.android.libraries.places.widget.Autocomplete
+import com.google.android.libraries.places.widget.model.AutocompleteActivityMode
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -29,8 +36,11 @@ class ScoutSecondFragment : Fragment() {
     private var param1: String? = null
     private var param2: String? = null
     private var sendDataFromFragment: ScoutSendDataFromF2? = null
+    private val AUTOCOMPLETE_REQUEST_CODE = 1
 
+    private lateinit var registerViewModel: RegisterViewModel
     private lateinit var spinRegion: Spinner
+    private lateinit var etLocation: EditText
     private lateinit var spinCity: Spinner
     private lateinit var spinTeam: Spinner
     private lateinit var teamsViewModel: TeamsViewModel
@@ -53,6 +63,7 @@ class ScoutSecondFragment : Fragment() {
         spinRegion = view.findViewById(R.id.regionSpinner)
         spinCity = view.findViewById(R.id.citySpinner)
         spinTeam = view.findViewById(R.id.teamSpinner)
+        etLocation = view.findViewById(R.id.etLocation)
 
         val regionsObserver = Observer<List<String>> { regions ->
             // Configurar el primer spinner con las regiones obtenidas
@@ -96,15 +107,23 @@ class ScoutSecondFragment : Fragment() {
             }
         }
 
+
+        etLocation.setOnClickListener {
+            val fields = listOf(Place.Field.ADDRESS, Place.Field.LAT_LNG)
+            val intent = Autocomplete.IntentBuilder(AutocompleteActivityMode.OVERLAY, fields)
+                .setTypeFilter(TypeFilter.ADDRESS)
+                .build(requireContext())
+            startActivityForResult(intent, AUTOCOMPLETE_REQUEST_CODE)
+        }
+
         return view
     }
 
 
     interface ScoutSendDataFromF2 : ScoutFirstFragment.ScoutSendDataFromF1 {
         fun scoutSendDataSecondFragment(
-            gender: String?, position: String?,
-            height: Double?, weight: Double?,
-            description: String?, secondFragConfirmed: Boolean)
+            team: String?, location: String?,
+            secondFragConfirmed: Boolean)
     }
 
     override fun onAttach(context: Context) {
@@ -118,22 +137,24 @@ class ScoutSecondFragment : Fragment() {
 
     override fun onPause() {
         super.onPause()
-        /*if(!emptyCheck()){
-            sendDataFromFragment?.scoutSendDataSecondFragment(spinGender.selectedItem.toString(),
-                spinPosition.selectedItem.toString(),etHeight.text.toString().toDoubleOrNull(),
-                etHeight.text.toString().toDoubleOrNull(),etDescription.text.toString(),true)
-            Log.d("DENTRO", "DENTRO")
+        if(!isLocationEmpty()){
+            sendDataFromFragment?.scoutSendDataSecondFragment(spinTeam.selectedItem.toString(),etLocation.text.toString(), true)
+            Log.d("SC-FRAG2", "LOCATION NOT EMPTY")
         }else{
-            Log.d("FUERA", "FUERA")
+            Log.d("SC-FRAG2", "LOCATION EMPTY")
             Toast.makeText(context, "Check fields", Toast.LENGTH_SHORT).show()
-        }*/
+        }
     }
-
-    /*private fun emptyCheck(): Boolean {
-        return etDescription.text.toString().isEmpty()
-                || etWeight.text.toString().isEmpty()
-                || etHeight.text.toString().isEmpty()
-    }*/
+    private fun isLocationEmpty(): Boolean{
+        return etLocation.text.toString().isEmpty()
+    }
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == AUTOCOMPLETE_REQUEST_CODE && resultCode == Activity.RESULT_OK) {
+            val place = Autocomplete.getPlaceFromIntent(data!!)
+            etLocation.setText(place.address)
+        }
+    }
 
     companion object {
         /**

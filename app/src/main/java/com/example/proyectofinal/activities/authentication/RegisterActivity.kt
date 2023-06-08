@@ -14,6 +14,7 @@ import com.example.proyectofinal.databinding.ActivityRegisterBinding
 import com.example.proyectofinal.fragments.register.player.*
 import com.example.proyectofinal.fragments.register.scout.*
 import com.example.proyectofinal.models.Player
+import com.example.proyectofinal.models.Scout
 import com.example.proyectofinal.viewmodels.RegisterViewModel
 
 
@@ -25,7 +26,9 @@ class RegisterActivity : AppCompatActivity(), PlayerFirstFragment.PlayerSendData
     private lateinit var binding: ActivityRegisterBinding
     private lateinit var registerViewModel: RegisterViewModel
     private lateinit var player: Player
-    private var pwd: String = ""
+    private lateinit var scout: Scout
+    private var toSendPwd: String = ""
+    private var toSendEmail: String = ""
     private var firstFragChecked: Boolean = false
     private var secondFragChecked: Boolean = false
     private var accountType: String = ""
@@ -47,6 +50,7 @@ class RegisterActivity : AppCompatActivity(), PlayerFirstFragment.PlayerSendData
         Toast.makeText(this, accountType, Toast.LENGTH_SHORT).show()
 
         player = Player()
+        scout = Scout()
     }
 
     private inner class ViewPagerAdapter(fm: FragmentManager) :
@@ -99,7 +103,8 @@ class RegisterActivity : AppCompatActivity(), PlayerFirstFragment.PlayerSendData
             player.photos.photo2 = ""
             player.photos.photo3 = ""
 
-            pwd = password ?: ""
+            toSendPwd = password ?: ""
+            toSendEmail = email ?: ""
         }else{
             Log.e("REGISTER-A" ,"SE ESTA REGISTRANDO UN OJEADOR")
         }
@@ -143,7 +148,7 @@ class RegisterActivity : AppCompatActivity(), PlayerFirstFragment.PlayerSendData
             player.skills.passing = skills["passing"]!!
             player.skills.physicality = skills["physicality"]!!
 
-            registerViewModel.registerUser(player,pwd,images)
+            registerViewModel.registerUser(player,toSendEmail,toSendPwd,images)
         }else{
             Log.e("REGISTER-A" ,"SE ESTA REGISTRANDO UN OJEADOR")
         }
@@ -152,31 +157,51 @@ class RegisterActivity : AppCompatActivity(), PlayerFirstFragment.PlayerSendData
                                              birthday: String?, email: String?,
                                              password: String?, firstFragConfirmed: Boolean) {
         if(accountType == "scout"){
+            firstFragChecked = firstFragConfirmed
+            scout.name = name ?: ""
+            scout.surname = surname ?: ""
+            scout.born = birthday ?: ""
+            scout.email = email ?: ""
 
+            scout.photos.photo0 = ""
+            scout.photos.photo1 = ""
+            scout.photos.photo2 = ""
+            scout.photos.photo3 = ""
+
+            toSendPwd = password ?: ""
+            toSendEmail = email ?: ""
         }else{
             Log.e("REGISTER-A" ,"SE ESTA REGISTRANDO UN PLAYER")
         }
     }
 
-    override fun scoutSendDataSecondFragment(
-        gender: String?, position: String?, height: Double?,
-        weight: Double?, description: String?,
-        secondFragConfirmed: Boolean) {
+    override fun scoutSendDataSecondFragment(team: String?,
+        location: String?, secondFragConfirmed: Boolean) {
 
         if(accountType == "scout"){
-
+            scout.teamID = team ?: ""
+            scout.location = location ?: ""
+            scout.visibility = 1
         }else{
             Log.e("REGISTER-A" ,"SE ESTA REGISTRANDO UN PLAYER")
         }
     }
 
     override fun scoutCheckThirdFragment() {
+        val tag = "android:switcher:" + R.id.viewPager + ":" + 2
+        val fragment = supportFragmentManager.findFragmentByTag(tag)
 
+        if (fragment is ScoutThirdFragment) {
+            fragment.dataReceived(firstFragChecked, secondFragChecked)
+        }
     }
 
-    override fun scoutSendDataThirdFragment(images: List<Bitmap>, skills: HashMap<String, Int>) {
+    override fun scoutSendDataThirdFragment(images: List<Bitmap>, info: String?) {
         if(accountType == "scout"){
-
+            if (info != null) {
+                scout.description = info
+            }
+            registerViewModel.registerUser(scout,toSendEmail,toSendPwd,images)
         }else{
             Log.e("REGISTER-A" ,"SE ESTA REGISTRANDO UN PLAYER")
         }

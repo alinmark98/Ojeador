@@ -86,6 +86,18 @@ class MainActivity : AppCompatActivity() {
             binding.dataHeight.text = player.height.toString()
         }
 
+        viewModel.currentScout.observe(this) { scout ->
+            viewModel.imageHandler(scout.photos.photo0)
+
+            viewModel.imageLiveData.observe(this) { bitmap ->
+                binding.imageView.setImageBitmap(bitmap)
+            }
+            binding.dataUserName.text = scout.name +" "+ scout.surname
+            binding.dataUserPosition.text = scout.teamID
+            binding.dataAge.text = scout.born
+        }
+
+
     }
 
     private fun expandCardView() {

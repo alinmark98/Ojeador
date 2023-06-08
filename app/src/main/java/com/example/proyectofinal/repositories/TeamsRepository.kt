@@ -1,6 +1,9 @@
 package com.example.proyectofinal.repositories
 
+import androidx.lifecycle.MutableLiveData
+import com.example.proyectofinal.models.Team
 import com.google.firebase.database.*
+
 
 class TeamsRepository {
     private val database: FirebaseDatabase = FirebaseDatabase.getInstance()
@@ -71,5 +74,30 @@ class TeamsRepository {
                     // Manejar el error de consulta a la base de datos
                 }
             })
+    }
+
+    fun getTeamId(teamName: String): MutableLiveData<String?> {
+        val teamIdLiveData = MutableLiveData<String?>()
+
+        val teamsQuery = teamsRef.orderByChild("name").equalTo(teamName)
+
+        teamsQuery.addListenerForSingleValueEvent(object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                if (snapshot.exists()) {
+                    val teamSnapshot = snapshot.children.first()
+                    val teamId = teamSnapshot.key
+                    teamIdLiveData.postValue(teamId)
+                } else {
+                    // No se encontró el equipo
+                    teamIdLiveData.postValue(null)
+                }
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+                // Manejar el error
+                teamIdLiveData.postValue(null)
+            }
+        })
+        return teamIdLiveData
     }
 }

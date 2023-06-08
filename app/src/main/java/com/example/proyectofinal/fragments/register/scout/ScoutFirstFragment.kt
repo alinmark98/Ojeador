@@ -63,6 +63,7 @@ class ScoutFirstFragment : Fragment() {
         }
         registerViewModel = ViewModelProvider(this)[RegisterViewModel::class.java]
 
+
         if (apiKey != null) {
             Places.initialize(requireContext(), apiKey)
         } else {

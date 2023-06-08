@@ -5,9 +5,11 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.widget.Toast
 import com.example.proyectofinal.R
 import com.example.proyectofinal.activities.main.MainActivity
 import com.example.proyectofinal.databinding.ActivityHomeBinding
+import com.example.proyectofinal.repositories.TeamRepository
 import com.example.proyectofinal.repositories.UserRepository
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
@@ -18,6 +20,7 @@ class HomeActivity : AppCompatActivity(){
 
     private lateinit var binding: ActivityHomeBinding
     private lateinit var userRepository: UserRepository
+    private lateinit var tm: TeamRepository
 
     private val googleSignInClient: GoogleSignInClient by lazy {
         val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
@@ -31,6 +34,12 @@ class HomeActivity : AppCompatActivity(){
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        tm = TeamRepository()
+        tm.agregarEquiposAEstadoRealtimeDatabase(tm.getTeamList())
+        for (equipo in tm.getTeamList()) {
+            val nombre = equipo.name
+            Toast.makeText(this, nombre, Toast.LENGTH_SHORT).show()
+        }
         binding = ActivityHomeBinding.inflate(layoutInflater)
         setContentView(binding.root)
         userRepository = UserRepository()

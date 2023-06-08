@@ -17,4 +17,81 @@
         <item>Extremo derecho</item>
         <item>Delantero centro</item>
     </string-array>
+
+    <string-array name="category_options">
+        <item>Primera autonómica preferente</item>
+        <item>Primera división autonómica</item>
+        <item>Segunda división autonómica</item>
+    </string-array>
+
+    <string-array name="team_0_options">
+        <item>U.D. Almansa</item>
+        <item>Atlético Albacete</item>
+        <item>Atlético Ibañés</item>
+        <item>Atlético Pedro Muñoz C.F.</item>
+        <item>Atlético Teresiano</item>
+        <item>A.D. Campillo</item>
+        <item>U.D. Carrión</item>
+        <item>C.D.U. Criptanense Tierra de Gigantes</item>
+        <item>C.D. Huracán de Balazote</item>
+        <item>U.D. La Fuente</item>
+        <item>La Roda C.F.</item>
+        <item>E.F.B. La Roda Rodacal Beyem</item>
+        <item>Manzanares C.F.</item>
+        <item>Membrilla C.F.</item>
+        <item>C.D. Miguelturreño</item>
+        <item>Motilla C.F.</item>
+        <item>C.D. Pedroñeras</item>
+        <item>E.M.F.A.D. San Clemente</item>
+        <item>C.D. E.F.B. Valdepeñas</item>
+    </string-array>
+
+    <string-array name="city_options">
+        <item>Almansa</item>
+        <item>Albacete</item>
+        <item>Casas-Ibáñez</item>
+        <item>Pedro Muñoz</item>
+        <item>Malagón</item>
+        <item>Campillo de Altobuey</item>
+        <item>Carrión de Calatrava</item>
+        <item>Campo de Criptana</item>
+        <item>Balazote</item>
+        <item>Fuente el Fresno</item>
+        <item>La Roda</item>
+        <item>Manzanares</item>
+        <item>Membrilla</item>
+        <item>Miguelturra</item>
+        <item>Motilla del Palancar</item>
+        <item>Las Pedroñeras</item>
+        <item>San Clemente</item>
+        <item>Valdepeñas</item>
+    </string-array>
+
+    <string-array name="region_options">
+        <item>Albacete</item>
+        <item>Ciudad Real</item>
+        <item>Cuenca</item>
+    </string-array>
+
+    <string-array name="stadium_options">
+        <item>Municipal Paco Simón</item>
+        <item>Ciudad Deportiva Andrés Iniesta</item>
+        <item>Municipal de Casas-Ibáñez</item>
+        <item>Municipal Juande Ramos</item>
+        <item>Félix Barrero</item>
+        <item>Virgen de la Loma</item>
+        <item>Nuestra Señora de la Encarnación</item>
+        <item>Agustín de la Fuente</item>
+        <item>Municipal de Balazote</item>
+        <item>Municipal Fuente el Fresno</item>
+        <item>Municipal Nuevo Maracañi</item>
+        <item>Municipal Nuevo Maracañi</item>
+        <item>José Camacho</item>
+        <item>Municipal de Membrilla</item>
+        <item>Municipal de Miguelturra</item>
+        <item>El Carrascal</item>
+        <item>Municipal de Las Pedroñeras</item>
+        <item>Polideportivo Municipal San Clemente</item>
+        <item>La Molineta</item>
+    </string-array>
 </resources>

@@ -35,14 +35,6 @@
             android:layout_height="40dp"
             android:entries="@array/gender_options"
             android:dropDownVerticalOffset="10dp"/>
-
-        <Spinner
-            android:id="@+id/positionSpinner"
-            android:layout_width="match_parent"
-            android:layout_height="40dp"
-            android:entries="@array/position_options"
-            android:dropDownVerticalOffset="10dp"/>
-
     </LinearLayout>
 
     <LinearLayout
@@ -55,23 +47,13 @@
         android:layout_marginBottom="24dp"
         android:orientation="vertical">
 
-        <EditText
-            android:id="@+id/etHeight"
+        <Spinner
+            android:id="@+id/positionSpinner"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="Altura"
-            android:inputType="numberDecimal"
-            android:minHeight="48dp" />
-
-        <EditText
-            android:id="@+id/etWeight"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="Peso"
-            android:inputType="numberDecimal"
-            android:minHeight="48dp" />
+            android:layout_height="40dp"
+            android:entries="@array/position_options"
+            android:dropDownVerticalOffset="10dp"/>
     </LinearLayout>
-
 
     <LinearLayout
         android:id="@+id/linF2Section3"
@@ -88,7 +70,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:paddingBottom="8dp"
-            android:text="Carrera futbolística"
+            android:text="Información adicional"
             android:textSize="18sp" />
 
         <EditText
@@ -105,4 +87,58 @@
                 android:gravity="top|start" />
     </LinearLayout>
 
+    <LinearLayout
+        android:id="@+id/linF2Section4"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/linF2Section3"
+        android:background="@drawable/rounded_borders_sections"
+        android:padding="16dp"
+        android:layout_marginBottom="24dp"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_location"
+            android:contentDescription="Icono de ubicación" />
+
+        <EditText
+            android:id="@+id/etLocation"
+            android:layout_marginLeft="8dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Ingresa ubicación del club" />
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="64dp"
+        android:layout_alignParentBottom="true"
+        android:gravity="center"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:id="@+id/whitePoint1"
+            android:layout_width="8dp"
+            android:layout_height="8dp"
+            android:layout_marginEnd="8dp"
+            android:background="@drawable/dot_inactive" />
+
+        <ImageView
+            android:id="@+id/greenPoint"
+            android:layout_width="8dp"
+            android:layout_height="8dp"
+            android:layout_marginHorizontal="8dp"
+            android:background="@drawable/dot_active" />
+
+        <ImageView
+            android:id="@+id/whitePoint2"
+            android:layout_width="8dp"
+            android:layout_height="8dp"
+            android:layout_marginHorizontal="8dp"
+            android:background="@drawable/dot_inactive" />
+    </LinearLayout>
 </RelativeLayout>

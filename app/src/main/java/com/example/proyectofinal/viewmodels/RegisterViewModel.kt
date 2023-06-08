@@ -5,7 +5,7 @@ import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.example.proyectofinal.modelos.User
+import com.example.proyectofinal.models.Player
 import com.example.proyectofinal.repositories.UserRepository
 
 class RegisterViewModel : ViewModel() {
@@ -13,10 +13,10 @@ class RegisterViewModel : ViewModel() {
     private val _showDatePicker = MutableLiveData<Boolean>()
     private val userRepository: UserRepository = UserRepository()
 
-    fun registerUser(user: User, pwd: String, bitmaps: List<Bitmap>,) {
+    fun registerUser(player: Player, pwd: String, bitmaps: List<Bitmap>,) {
         // Realiza las validaciones necesarias en los datos del jugador antes de llamar al repositorio
         Log.d("REGISTERPLAYER", "REGISTERPLAYER")
-        userRepository.registerUser(user, pwd, bitmaps, object : UserRepository.OnRegistrationCompleteListener {
+        userRepository.registerUser(player, pwd, bitmaps, object : UserRepository.OnRegistrationCompleteListener {
             override fun onRegistrationSuccess() {
                 Log.d("REGISTRO", "REGISTRO CORRECTO")
                 // AQUI QUE TE LLEVE A OTA ACTIVIDAD
@@ -47,5 +47,6 @@ class RegisterViewModel : ViewModel() {
     fun onDatePickerDismissed() {
         _showDatePicker.value = false
     }
+
 
 }

@@ -1,4 +1,4 @@
-package com.example.proyectofinal.modelos
+package com.example.proyectofinal.models
 
 data class Subscription(
     val userId: Int,

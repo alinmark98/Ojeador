@@ -73,7 +73,6 @@
             android:inputType="textEmailAddress"
             android:minHeight="48dp" />
 
-
         <EditText
             android:id="@+id/etPassword"
             android:layout_width="match_parent"
@@ -94,28 +93,31 @@
     </LinearLayout>
 
     <LinearLayout
-        android:id="@+id/linLocation"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/linAccInfo"
-        android:background="@drawable/rounded_borders_sections"
-        android:padding="16dp"
-        android:layout_marginBottom="24dp"
-        android:gravity="center_vertical"
+        android:layout_height="64dp"
+        android:layout_alignParentBottom="true"
+        android:gravity="center"
         android:orientation="horizontal">
 
         <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/ic_location"
-            android:contentDescription="Icono de ubicación" />
+            android:id="@+id/greenPoint"
+            android:layout_width="8dp"
+            android:layout_height="8dp"
+            android:layout_marginEnd="8dp"
+            android:background="@drawable/dot_active" />
 
-        <EditText
-            android:id="@+id/etLocation"
-            android:layout_marginLeft="8dp"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="Ingrese su ubicación" />
+        <ImageView
+            android:id="@+id/whitePoint1"
+            android:layout_width="8dp"
+            android:layout_height="8dp"
+            android:layout_marginHorizontal="8dp"
+            android:background="@drawable/dot_inactive" />
+
+        <ImageView
+            android:id="@+id/whitePoint2"
+            android:layout_width="8dp"
+            android:layout_height="8dp"
+            android:layout_marginHorizontal="8dp"
+            android:background="@drawable/dot_inactive" />
     </LinearLayout>
-
 </RelativeLayout>

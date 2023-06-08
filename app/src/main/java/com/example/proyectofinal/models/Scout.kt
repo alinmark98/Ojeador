@@ -1,19 +1,19 @@
-package com.example.proyectofinal.modelos
+package com.example.proyectofinal.models
 
 
-data class User(
+data class Scout(
     var name: String = "",
     var surname: String = "",
-    var born: String = "",
     var email: String = "",
-    var location: String = "",
     var gender: String = "",
-    var position: String = "",
-    var height: Double = 0.0,
-    var weight: Double = 0.0,
+    var location: String = "",
+    var team: String = "",
+    var category: String = "",
+    var shield: String = "",
     var description: String = "",
     var rol: String= "",
     var visibility: Int = 0,
+    var subscription: Int = 0,
     var skills: Skills = Skills(),
     var photos: Photos = Photos()
 ) {

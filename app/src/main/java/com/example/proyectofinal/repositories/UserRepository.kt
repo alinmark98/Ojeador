@@ -4,7 +4,7 @@ import android.content.ContentValues
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.util.Log
-import com.example.proyectofinal.modelos.User
+import com.example.proyectofinal.models.Player
 import com.google.android.gms.tasks.Tasks
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.GoogleAuthProvider
@@ -22,10 +22,10 @@ class UserRepository {
     private val auth = FirebaseAuth.getInstance()
     private var ONE_MEGABYTE: Long = 1024 * 1024
 
-    private fun createPlayerDocument(docID: String, user: User, bitmaps: List<Bitmap>) {
+    private fun createPlayerDocument(docID: String, player: Player, bitmaps: List<Bitmap>) {
         db.collection("players")
             .document(docID) // Especifica el ID personalizado del documento
-            .set(user)
+            .set(player)
             .addOnSuccessListener {
                 Log.d("ADDSUCCESS", "Documento creado con ID: $docID")
                 uploadPhotos(bitmaps)
@@ -37,18 +37,18 @@ class UserRepository {
             }
     }
 
-    fun registerUser(user: User, password: String, bitmaps: List<Bitmap>, listener: OnRegistrationCompleteListener) {
-        auth.createUserWithEmailAndPassword(user.email, password)
+    fun registerUser(player: Player, password: String, bitmaps: List<Bitmap>, listener: OnRegistrationCompleteListener) {
+        auth.createUserWithEmailAndPassword(player.email, password)
             .addOnCompleteListener { task ->
                 if (task.isSuccessful) {
                     val firebaseUser = auth.currentUser
                     val docID = firebaseUser?.uid
 
                     if (docID != null) {
-                        signInWithEmail(user.email, password){ success ->
+                        signInWithEmail(player.email, password){ success ->
                             if(success){
                                 sendEmailVerification()
-                                createPlayerDocument(docID,user,bitmaps)
+                                createPlayerDocument(docID,player,bitmaps)
                             }else{
                                 Log.d("USREP-SIGNIN", "ERROR")
                             }
@@ -196,14 +196,14 @@ class UserRepository {
     }
 
     fun fetchUsers(
-        onSuccess: (List<User>) -> Unit,
+        onSuccess: (List<Player>) -> Unit,
         onFailure: (Exception) -> Unit
     ) {
         val currentUserID = getCurrentUserId()
 
         playersCollection.get()
             .addOnSuccessListener { result ->
-                val users = mutableListOf<User>()
+                val players = mutableListOf<Player>()
 
                 for (document in result) {
                     val userId = document.id
@@ -237,7 +237,7 @@ class UserRepository {
                         val passing = skillsData?.get("passing")?.toString()?.toIntOrNull() ?: 0
                         val physicality = skillsData?.get("physicality")?.toString()?.toIntOrNull() ?: 0
 
-                        val skills = User.Skills(
+                        val skills = Player.Skills(
                             dribbling = dribbling,
                             shooting = shooting,
                             defending = defending,
@@ -246,7 +246,7 @@ class UserRepository {
                             physicality = physicality
                         )
 
-                        val user = User(
+                        val player = Player(
                             name = name,
                             surname = surname,
                             position = position,
@@ -255,15 +255,15 @@ class UserRepository {
                             height = height,
                             weight = weight,
                             description = description,
-                            photos = User.Photos(photo0 = photo0),
+                            photos = Player.Photos(photo0 = photo0),
                             skills = skills
                         )
 
-                        users.add(user)
+                        players.add(player)
                     }
                 }
 
-                onSuccess(users)
+                onSuccess(players)
             }
             .addOnFailureListener { exception ->
                 onFailure(exception)

@@ -1,6 +1,6 @@
 package com.example.proyectofinal.repositories
 
-import com.example.proyectofinal.modelos.Subscription
+import com.example.proyectofinal.models.Subscription
 
 class SubscriptionRepository {
     // Lista mutable de Suscripciones almacenadas en memoria

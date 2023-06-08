@@ -119,14 +119,6 @@
             android:layout_marginEnd="8dp"
             android:background="@drawable/dot_inactive" />
 
-
-        <ImageView
-            android:id="@+id/whitePoint2"
-            android:layout_width="8dp"
-            android:layout_height="8dp"
-            android:layout_marginHorizontal="8dp"
-            android:background="@drawable/dot_inactive" />
-
         <ImageView
             android:id="@+id/greenPoint"
             android:layout_width="8dp"
@@ -135,10 +127,10 @@
             android:background="@drawable/dot_active" />
 
         <ImageView
-            android:id="@+id/whitePoint3"
+            android:id="@+id/whitePoint2"
             android:layout_width="8dp"
             android:layout_height="8dp"
-            android:layout_marginStart="8dp"
+            android:layout_marginHorizontal="8dp"
             android:background="@drawable/dot_inactive" />
     </LinearLayout>
 

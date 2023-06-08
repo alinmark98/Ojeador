@@ -5,9 +5,8 @@ import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.example.proyectofinal.modelos.User
+import com.example.proyectofinal.models.Player
 import com.example.proyectofinal.repositories.UserRepository
-import com.google.firebase.firestore.FirebaseFirestore
 
 class CardsViewModel : ViewModel() {
     private val userRepository = UserRepository()
@@ -16,11 +15,11 @@ class CardsViewModel : ViewModel() {
     val imageLiveData: LiveData<Bitmap> = _imageLiveData
 
     private var currentIndex = 0
-    private val users = mutableListOf<User>()
+    private val players = mutableListOf<Player>()
 
-    private val _currentUser = MutableLiveData<User>()
-    val currentUser: LiveData<User>
-        get() = _currentUser
+    private val _currentPlayer = MutableLiveData<Player>()
+    val currentPlayer: LiveData<Player>
+        get() = _currentPlayer
 
     init {
         fetchUsers()
@@ -29,12 +28,12 @@ class CardsViewModel : ViewModel() {
    private fun fetchUsers() {
        userRepository.fetchUsers(
            onSuccess = { players ->
-               users.clear()
-               users.addAll(players)
-               Log.e("CRD-VIEW", users[currentIndex].skills.dribbling.toString())
+               this.players.clear()
+               this.players.addAll(players)
+               Log.e("CRD-VIEW", this.players[currentIndex].skills.dribbling.toString())
 
-               if (users.isNotEmpty()) {
-                   _currentUser.value = users[currentIndex]
+               if (this.players.isNotEmpty()) {
+                   _currentPlayer.value = this.players[currentIndex]
                }
            },
            onFailure = { exception ->
@@ -55,20 +54,20 @@ class CardsViewModel : ViewModel() {
     }
 
     fun onSwipeLeft() {
-        if (currentIndex == users.size - 1) {
+        if (currentIndex == players.size - 1) {
             currentIndex = 0
         } else {
             currentIndex++
         }
-        _currentUser.value = users[currentIndex]
+        _currentPlayer.value = players[currentIndex]
     }
 
     fun onSwipeRight() {
         if (currentIndex == 0) {
-            currentIndex = users.size - 1
+            currentIndex = players.size - 1
         } else {
             currentIndex--
         }
-        _currentUser.value = users[currentIndex]
+        _currentPlayer.value = players[currentIndex]
     }
 }

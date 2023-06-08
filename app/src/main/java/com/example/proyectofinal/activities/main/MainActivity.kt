@@ -12,7 +12,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import com.example.proyectofinal.R
 import com.example.proyectofinal.databinding.ActivityMainBinding
-import com.example.proyectofinal.modelos.User
+import com.example.proyectofinal.models.Player
 import com.example.proyectofinal.viewmodels.CardsViewModel
 import com.github.mikephil.charting.components.AxisBase
 import com.github.mikephil.charting.components.XAxis
@@ -71,7 +71,7 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
-        viewModel.currentUser.observe(this) { player ->
+        viewModel.currentPlayer.observe(this) { player ->
             viewModel.imageHandler(player.photos.photo0)
 
             viewModel.imageLiveData.observe(this) { bitmap ->
@@ -168,17 +168,17 @@ class MainActivity : AppCompatActivity() {
         })
     }
 
-    private fun createRadar (user: User) {
+    private fun createRadar (player: Player) {
         val labels = arrayOf("DRIBBLING", "SHOOTING", "DEFENDING",
             "SPEED", "PASSING", "PHYSICALITY")
 
         val entries = listOf(
-            RadarEntry(user.skills.dribbling.toFloat()),
-            RadarEntry(user.skills.shooting.toFloat()),
-            RadarEntry(user.skills.defending.toFloat()),
-            RadarEntry(user.skills.speed.toFloat()),
-            RadarEntry(user.skills.passing.toFloat()),
-            RadarEntry(user.skills.physicality.toFloat())
+            RadarEntry(player.skills.dribbling.toFloat()),
+            RadarEntry(player.skills.shooting.toFloat()),
+            RadarEntry(player.skills.defending.toFloat()),
+            RadarEntry(player.skills.speed.toFloat()),
+            RadarEntry(player.skills.passing.toFloat()),
+            RadarEntry(player.skills.physicality.toFloat())
         )
 
         val radarDataSet = RadarDataSet(entries, "Datos")

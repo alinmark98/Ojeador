@@ -1,8 +1,10 @@
 package com.example.proyectofinal.activities.main
 
 import android.annotation.SuppressLint
+import android.content.IntentFilter
 import android.graphics.Color
 import android.graphics.Typeface
+import android.net.ConnectivityManager
 import android.os.Bundle
 import android.view.*
 import android.view.animation.Animation
@@ -12,6 +14,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import com.example.proyectofinal.R
 import com.example.proyectofinal.databinding.ActivityMainBinding
+import com.example.proyectofinal.handlers.InternetHandler
 import com.example.proyectofinal.models.Player
 import com.example.proyectofinal.viewmodels.CardsViewModel
 import com.github.mikephil.charting.components.AxisBase
@@ -48,6 +51,10 @@ class MainActivity : AppCompatActivity() {
         val adRequest = AdRequest.Builder().build()
         mAdView.loadAd(adRequest)*/
 
+        val connectivityReceiver = InternetHandler()
+        val intentFilter = IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION)
+        registerReceiver(connectivityReceiver, intentFilter)
+
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
@@ -72,29 +79,29 @@ class MainActivity : AppCompatActivity() {
         }
 
         viewModel.currentPlayer.observe(this) { player ->
-            viewModel.imageHandler(player.photos.photo0)
+            viewModel.imageHandler(player.getPhotos().getPhoto0())
 
             viewModel.imageLiveData.observe(this) { bitmap ->
                 binding.imageView.setImageBitmap(bitmap)
             }
 
             createRadar(player)
-            binding.dataUserName.text = player.name +" "+ player.surname
-            binding.dataUserPosition.text = player.position
-            binding.dataAge.text = player.born
-            binding.dataWeight.text = player.weight.toString()
-            binding.dataHeight.text = player.height.toString()
+            binding.dataUserName.text = player.getName() + " " + player.getSurname()
+            binding.dataUserPosition.text = player.getPosition()
+            binding.dataAge.text = player.getBorn()
+            binding.dataWeight.text = player.getWeight().toString()
+            binding.dataHeight.text = player.getHeight().toString()
         }
 
         viewModel.currentScout.observe(this) { scout ->
-            viewModel.imageHandler(scout.photos.photo0)
+            viewModel.imageHandler(scout.getPhotos().getPhoto0())
 
             viewModel.imageLiveData.observe(this) { bitmap ->
                 binding.imageView.setImageBitmap(bitmap)
             }
-            binding.dataUserName.text = scout.name +" "+ scout.surname
-            binding.dataUserPosition.text = scout.teamID
-            binding.dataAge.text = scout.born
+            binding.dataUserName.text = scout.getName() + " " + scout.getSurname()
+            binding.dataUserPosition.text = scout.getTeamID()
+            binding.dataAge.text = scout.getBorn()
         }
 
 
@@ -185,12 +192,12 @@ class MainActivity : AppCompatActivity() {
             "SPEED", "PASSING", "PHYSICALITY")
 
         val entries = listOf(
-            RadarEntry(player.skills.dribbling.toFloat()),
-            RadarEntry(player.skills.shooting.toFloat()),
-            RadarEntry(player.skills.defending.toFloat()),
-            RadarEntry(player.skills.speed.toFloat()),
-            RadarEntry(player.skills.passing.toFloat()),
-            RadarEntry(player.skills.physicality.toFloat())
+            RadarEntry(player.getSkills().getDribbling().toFloat()),
+            RadarEntry(player.getSkills().getShooting().toFloat()),
+            RadarEntry(player.getSkills().getDefending().toFloat()),
+            RadarEntry(player.getSkills().getSpeed().toFloat()),
+            RadarEntry(player.getSkills().getPassing().toFloat()),
+            RadarEntry(player.getSkills().getPhysicality().toFloat())
         )
 
         val radarDataSet = RadarDataSet(entries, "Datos")
@@ -222,5 +229,9 @@ class MainActivity : AppCompatActivity() {
         yAxis.setDrawLabels(false)
 
         binding.radarChart.invalidate()
+    }
+    override fun onDestroy() {
+        super.onDestroy()
+        unregisterReceiver(InternetHandler())
     }
 }

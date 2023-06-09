@@ -50,8 +50,8 @@ class RegisterActivity : AppCompatActivity(), PlayerFirstFragment.PlayerSendData
 
         accountType = intent.getStringExtra("account_type").toString()
 
-        player = Player()
-        scout = Scout()
+        player = Player("")
+        scout = Scout("")
     }
 
     private inner class ViewPagerAdapter(fm: FragmentManager) :
@@ -102,23 +102,24 @@ class RegisterActivity : AppCompatActivity(), PlayerFirstFragment.PlayerSendData
                                        birthday: String?, email: String?,
                                        password: String?, location: String?,
                                        firstFragConfirmed: Boolean) {
-        if(accountType == "player"){
+        if (accountType == "player") {
             firstFragChecked = firstFragConfirmed
-            player.name = name ?: ""
-            player.surname = surname ?: ""
-            player.born = birthday ?: ""
-            player.email = email ?: ""
-            player.location = location ?: ""
-            player.photos.photo0 = ""
-            player.photos.photo1 = ""
-            player.photos.photo2 = ""
-            player.photos.photo3 = ""
+            player.setName(name ?: "")
+            player.setSurname(surname ?: "")
+            player.setBorn(birthday ?: "")
+            player.setEmail(email ?: "")
+            player.setLocation(location ?: "")
+            player.getPhotos().setPhoto0("")
+            player.getPhotos().setPhoto1("")
+            player.getPhotos().setPhoto2("")
+            player.getPhotos().setPhoto3("")
 
             toSendPwd = password ?: ""
             toSendEmail = email ?: ""
-        }else{
-            Log.e("REGISTER-A" ,"SE ESTA REGISTRANDO UN OJEADOR")
+        } else {
+            Log.e("REGISTER-A", "SE ESTA REGISTRANDO UN OJEADOR")
         }
+
     }
 
     override fun playerSendDataSecondFragment(
@@ -126,19 +127,20 @@ class RegisterActivity : AppCompatActivity(), PlayerFirstFragment.PlayerSendData
         weight: Double?, description: String?,
         secondFragConfirmed: Boolean) {
 
-        if(accountType == "player"){
+        if (accountType == "player") {
             secondFragChecked = secondFragConfirmed
-            player.gender = gender ?: ""
-            player.position = position ?: ""
-            player.height = height ?: 0.0
-            player.weight = weight ?: 0.0
-            player.description = description ?: ""
-            player.rol = "player"
-            player.visibility = 1
-            player.subscription = 0
-        }else{
-            Log.e("REGISTER-A" ,"SE ESTA REGISTRANDO UN OJEADOR")
+            player.setGender(gender ?: "")
+            player.setPosition(position ?: "")
+            player.setHeight(height ?: 0.0)
+            player.setWeight(weight ?: 0.0)
+            player.setDescription(description ?: "")
+            player.setRol("player")
+            player.setVisibility(1)
+            player.setSubscription(0)
+        } else {
+            Log.e("REGISTER-A", "SE ESTA REGISTRANDO UN OJEADOR")
         }
+
     }
 
     override fun playerCheckThirdFragment() {
@@ -151,56 +153,55 @@ class RegisterActivity : AppCompatActivity(), PlayerFirstFragment.PlayerSendData
     }
 
     override fun playerSendDataThirdFragment(images: List<Bitmap>, skills: HashMap<String, Int>) {
-        if(accountType == "player"){
-            player.skills.dribbling = skills["dribbling"]!!
-            player.skills.shooting = skills["shooting"]!!
-            player.skills.defending = skills["defending"]!!
-            player.skills.speed = skills["speed"]!!
-            player.skills.passing = skills["passing"]!!
-            player.skills.physicality = skills["physicality"]!!
+        if (accountType == "player") {
+            player.getSkills().setDribbling(skills["dribbling"]!!)
+            player.getSkills().setShooting(skills["shooting"]!!)
+            player.getSkills().setDefending(skills["defending"]!!)
+            player.getSkills().setSpeed(skills["speed"]!!)
+            player.getSkills().setPassing(skills["passing"]!!)
+            player.getSkills().setPhysicality(skills["physicality"]!!)
 
-            if(signInWithGoogle){
+            if (signInWithGoogle) {
                 registerViewModel.registerUserWithGoogle(player, images)
-            }else{
-                registerViewModel.registerUser(player,toSendEmail,toSendPwd,images)
+            } else {
+                registerViewModel.registerUser(player, toSendEmail, toSendPwd, images)
             }
-
-
-        }else{
-            Log.e("REGISTER-A" ,"SE ESTA REGISTRANDO UN OJEADOR")
+        } else {
+            Log.e("REGISTER-A", "SE ESTA REGISTRANDO UN OJEADOR")
         }
     }
     override fun scoutSendDataFirstFragment(name: String?, surname: String?,
                                              birthday: String?, email: String?,
                                              password: String?, firstFragConfirmed: Boolean) {
-        if(accountType == "scout"){
+        if (accountType == "scout") {
             firstFragChecked = firstFragConfirmed
-            scout.name = name ?: ""
-            scout.surname = surname ?: ""
-            scout.born = birthday ?: ""
-            scout.email = email ?: ""
+            scout.setName(name ?: "")
+            scout.setSurname(surname ?: "")
+            scout.setBorn(birthday ?: "")
+            scout.setEmail(email ?: "")
 
-            scout.photos.photo0 = ""
-            scout.photos.photo1 = ""
-            scout.photos.photo2 = ""
-            scout.photos.photo3 = ""
+            scout.getPhotos().setPhoto0("")
+            scout.getPhotos().setPhoto1("")
+            scout.getPhotos().setPhoto2("")
+            scout.getPhotos().setPhoto3("")
 
             toSendPwd = password ?: ""
             toSendEmail = email ?: ""
-        }else{
-            Log.e("REGISTER-A" ,"SE ESTA REGISTRANDO UN PLAYER")
+        } else {
+            Log.e("REGISTER-A", "SE ESTA REGISTRANDO UN PLAYER")
         }
+
     }
 
     override fun scoutSendDataSecondFragment(team: String?,
         location: String?, secondFragConfirmed: Boolean) {
 
-        if(accountType == "scout"){
-            scout.teamID = team ?: ""
-            scout.location = location ?: ""
-            scout.visibility = 1
-        }else{
-            Log.e("REGISTER-A" ,"SE ESTA REGISTRANDO UN PLAYER")
+        if (accountType == "scout") {
+            scout.setTeamID(team ?: "")
+            scout.setLocation(location ?: "")
+            scout.setVisibility(1)
+        } else {
+            Log.e("REGISTER-A", "SE ESTA REGISTRANDO UN PLAYER")
         }
     }
 
@@ -216,7 +217,7 @@ class RegisterActivity : AppCompatActivity(), PlayerFirstFragment.PlayerSendData
     override fun scoutSendDataThirdFragment(images: List<Bitmap>, info: String?) {
         if(accountType == "scout"){
             if (info != null) {
-                scout.description = info
+                scout.setDescription(info)
             }
             if(signInWithGoogle){
                 registerViewModel.registerUserWithGoogle(scout,images)

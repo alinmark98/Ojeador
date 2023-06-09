@@ -18,12 +18,12 @@ class SubscriptionRepository {
 
     // Función para obtener las Suscripciones de un Usuario por su ID del repositorio
     fun getSubscriptionsByUserId(userId: Int): List<Subscription> {
-        return subscriptionList.filter { it.userId == userId }
+        return subscriptionList.filter { it.getUserId() == userId }
     }
 
     // Función para actualizar los datos de una Suscripción en el repositorio
     fun updateSubscription(subscription: Subscription) {
-        val index = subscriptionList.indexOfFirst { it.userId == subscription.userId }
+        val index = subscriptionList.indexOfFirst { it.getUserId() == subscription.getUserId() }
         if (index >= 0) {
             subscriptionList[index] = subscription
         }

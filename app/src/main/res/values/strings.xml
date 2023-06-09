@@ -34,6 +34,9 @@
     <string name="ojeador">Ojeador</string>
     <string name="start">Start</string>
     <string name="welcomelogo">welcomeLogo</string>
+    <string name="default_message" translatable="false">Mensaje predeterminado</string>
+    <string name="empty_fields_message" translatable="false">Los campos están vacíos.</string>
+    <string name="invalid_credentials_message" translatable="false">Usuario o contraseña incorrectos.</string>
     <string name="terms_and_conditions" translatable="false">Al pulsar Crear cuenta o iniciar sesión, acepta nuestras condiciones.</string>
     <string name="link_term_and_conditions" translatable="false"><u>Pulsa para ver condiciones</u></string>
     <!-- TODO: Remove or change this placeholder text -->

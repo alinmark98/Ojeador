@@ -2,6 +2,8 @@ package com.example.proyectofinal.activities.authentication
 
 import android.content.ContentValues.TAG
 import android.content.Intent
+import android.content.IntentFilter
+import android.net.ConnectivityManager
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
@@ -9,6 +11,7 @@ import com.example.proyectofinal.R
 import com.example.proyectofinal.activities.main.MainActivity
 import com.example.proyectofinal.databinding.ActivityHomeBinding
 import com.example.proyectofinal.api.InsertTeams
+import com.example.proyectofinal.handlers.InternetHandler
 import com.example.proyectofinal.repositories.UserRepository
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
@@ -37,13 +40,30 @@ class HomeActivity : AppCompatActivity(){
         setContentView(binding.root)
         userRepository = UserRepository()
 
+        val connectivityReceiver = InternetHandler()
+        val intentFilter = IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION)
+        registerReceiver(connectivityReceiver, intentFilter)
+
         binding.btnContinueEmail.setOnClickListener {
-            val intent = Intent(this, AuthenticationActivity::class.java)
-            startActivity(intent)
+            if (InternetHandler.isInternetAvailable(this)) {
+                val intent = Intent(this, AuthenticationActivity::class.java)
+                startActivity(intent)
+            }else{
+                val dialog = connectivityReceiver.createNoInternetDialog(this)
+                dialog.show()
+            }
+
         }
 
-        binding.btnContinueGoogle.setOnClickListener{
-            signInWithGoogle()
+        binding.btnContinueGoogle.setOnClickListener {
+            if (InternetHandler.isInternetAvailable(this)) {
+                // Hay conexión a Internet
+                signInWithGoogle()
+            }else{
+                val dialog = connectivityReceiver.createNoInternetDialog(this)
+                dialog.show()
+            }
+
         }
     }
 
@@ -83,5 +103,9 @@ class HomeActivity : AppCompatActivity(){
                 Log.e(TAG, "Google sign in failed", e)
             }
         }
+    }
+    override fun onDestroy() {
+        super.onDestroy()
+        unregisterReceiver(InternetHandler())
     }
 }

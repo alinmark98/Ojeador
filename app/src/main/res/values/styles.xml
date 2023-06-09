@@ -4,4 +4,24 @@
         <item name="android:windowEnterAnimation">@android:anim/slide_in_left</item>
         <item name="android:windowExitAnimation">@android:anim/slide_out_right</item>
     </style>
+
+    <style name="ErrorText" parent="TextAppearance.MaterialComponents.Headline6">
+        <item name="android:textColor">@color/error_color</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="ErrorButton" parent="@style/Widget.MaterialComponents.Button.TextButton">
+        <item name="android:textColor">@color/error_color</item>
+    </style>
+
+    <style name="dialog_theme" parent="Theme.MaterialComponents.Light">
+        <!-- Other theme attributes -->
+        <item name="textAppearanceHeadline6">@style/ErrorText</item>
+        <item name="buttonStyle">@style/ErrorButton</item>
+    </style>
+    <style name="Widget.MaterialComponents.Button.TextButton" parent="Widget.MaterialComponents.Button">
+        <!-- Customize the attributes as needed -->
+        <item name="android:textColor">@color/colorPrimary</item>
+        <!-- Add other attributes if necessary -->
+    </style>
 </resources>

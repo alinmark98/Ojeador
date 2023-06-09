@@ -1,8 +1,11 @@
 package com.example.proyectofinal.activities.authentication
 
 import AuthViewModel
+import CustomDialog
 import android.annotation.SuppressLint
 import android.content.Intent
+import android.content.IntentFilter
+import android.net.ConnectivityManager
 import android.os.Bundle
 import android.text.method.PasswordTransformationMethod
 import android.util.Log
@@ -12,12 +15,12 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import com.example.proyectofinal.activities.main.MainActivity
 import com.example.proyectofinal.R
-import com.example.proyectofinal.dialogs.CustomDialogFragment
 import com.example.proyectofinal.databinding.ActivityAuthenticationBinding
+import com.example.proyectofinal.handlers.InternetHandler
 import com.example.proyectofinal.repositories.UserRepository
 
 
-class AuthenticationActivity : AppCompatActivity(), CustomDialogFragment.OnDialogClickListener  {
+class AuthenticationActivity : AppCompatActivity(), CustomDialog.OnDialogClickListener  {
 
     private lateinit var binding: ActivityAuthenticationBinding
     private lateinit var authViewModel: AuthViewModel
@@ -29,6 +32,10 @@ class AuthenticationActivity : AppCompatActivity(), CustomDialogFragment.OnDialo
         binding = ActivityAuthenticationBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        val connectivityReceiver = InternetHandler()
+        val intentFilter = IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION)
+        registerReceiver(connectivityReceiver, intentFilter)
+
         userRepository = UserRepository()
 
         authViewModel = ViewModelProvider(this)[AuthViewModel::class.java]
@@ -38,17 +45,30 @@ class AuthenticationActivity : AppCompatActivity(), CustomDialogFragment.OnDialo
         eyeSelectorDrawable.setBounds(0, 0, eyeSelectorDrawable.intrinsicWidth, eyeSelectorDrawable.intrinsicHeight)
 
         binding.btnSignIn.setOnClickListener{
-            val email = binding.etUserEmail.text.toString()
-            val pwd = binding.etUserPassword.text.toString()
-            userRepository.signInWithEmail(email, pwd){ success ->
-                if(success){
-                    val intent = Intent(this@AuthenticationActivity, MainActivity::class.java)
-                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK)
-                    startActivity(intent)
+            if (InternetHandler.isInternetAvailable(this)) {
+                val email = binding.etUserEmail.text.toString()
+                val pwd = binding.etUserPassword.text.toString()
+                if(email.isNotEmpty() && pwd.isNotEmpty()){
+                    userRepository.signInWithEmail(email, pwd){ success ->
+                        if(success){
+                            val intent = Intent(this@AuthenticationActivity, MainActivity::class.java)
+                            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK)
+                            startActivity(intent)
+                        }else{
+                            // Para mostrar el diálogo con el mensaje de credenciales inválidas
+                            val invalidCredentialsDialog = CustomDialog.newInstance(CustomDialog.MESSAGE_TYPE_INVALID_CREDENTIALS)
+                            invalidCredentialsDialog.show(supportFragmentManager, "CustomDialog")
+                        }
+                    }
                 }else{
-                    val dialogFragment = CustomDialogFragment()
-                    dialogFragment.show(supportFragmentManager, "custom_dialog")
+                    // Para mostrar el diálogo con el mensaje de campos vacíos
+                    val emptyFieldsDialog = CustomDialog.newInstance(CustomDialog.MESSAGE_TYPE_EMPTY_FIELDS)
+                    emptyFieldsDialog.show(supportFragmentManager, "CustomDialog")
+
                 }
+            }else{
+                val dialog = connectivityReceiver.createNoInternetDialog(this)
+                dialog.show()
             }
         }
 
@@ -78,6 +98,11 @@ class AuthenticationActivity : AppCompatActivity(), CustomDialogFragment.OnDialo
 
     private fun navigateToSignUp() {
         authViewModel.showDialog(this)
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        unregisterReceiver(InternetHandler())
     }
 
 }

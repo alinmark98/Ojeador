@@ -1,11 +1,13 @@
 package com.example.proyectofinal.repositories
 
 import android.content.ContentValues
+import android.content.ContentValues.TAG
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.util.Log
 import com.example.proyectofinal.models.Player
 import com.example.proyectofinal.models.Scout
+import com.google.android.gms.tasks.Task
 import com.google.android.gms.tasks.Tasks
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.GoogleAuthProvider
@@ -30,8 +32,10 @@ class UserRepository {
 
         if(user is Player){
             userType = "players"
+            user.setId(docID)
         }else if (user is Scout){
             userType = "scouts"
+            user.setId(docID)
         }
 
         db.collection(userType)
@@ -429,6 +433,77 @@ class UserRepository {
         // El usuario no pertenece a ninguna colección
         return ""
     }
+
+    private fun deleteUserFirestore(userId: String, collectionName: String): Task<Void> {
+        val db = FirebaseFirestore.getInstance()
+        val collection = db.collection(collectionName)
+
+        return collection.document(userId).delete()
+    }
+
+    private fun deleteUserStorage(userId: String, collectionName: String) {
+        val db = FirebaseFirestore.getInstance()
+        val storage = FirebaseStorage.getInstance()
+
+        // Eliminar documento de Firestore
+        val collection = db.collection(collectionName)
+        collection.document(userId).delete()
+
+        // Eliminar carpeta de Storage
+        val storageReference = storage.reference.child(collectionName).child(userId)
+        storageReference.delete()
+    }
+
+    fun deleteUserAuthentication(onSuccess: () -> Unit, onFailure: (Exception) -> Unit) {
+        val user = auth.currentUser
+
+        if (user != null) {
+            user.delete()
+                .addOnSuccessListener {
+                    val userid = auth.currentUser?.uid
+                    if (userid != null) {
+                        val collection = getCollectionName(userid)
+                        if (collection != null) {
+                            deleteUserFirestore(userid, collection)
+                            deleteUserStorage(userid, collection)
+                        } else {
+                            // Manejar el caso cuando no se encuentra la colección
+                            Log.d(TAG, "No se encontró la colección para el usuario con ID: $userid")
+                        }
+                    }else {
+                        // Manejar el caso cuando no se encuentra la colección
+                        Log.d(TAG, "No se encontró el usuario con ID: $userid")
+                    }
+                    onSuccess.invoke()
+                }
+                .addOnFailureListener { exception ->
+                    onFailure.invoke(exception)
+                }
+        } else {
+            // Manejar el caso cuando el usuario actual es nulo
+            val exception = Exception("No hay usuario autenticado")
+            onFailure.invoke(exception)
+        }
+    }
+
+    private fun getCollectionName(docId: String): String? {
+        val collections = listOf("players", "scouts") // Agrega aquí los nombres de las colecciones que deseas verificar
+
+        for (collectionName in collections) {
+            val documentReference: DocumentReference = db.collection(collectionName).document(docId)
+            val documentSnapshot = documentReference.get()
+
+            if (documentSnapshot.isSuccessful) {
+                val snapshot = documentSnapshot.result
+                if (snapshot != null && snapshot.exists()) {
+                    return collectionName
+                }
+            }
+        }
+
+        return null
+    }
+
 
     fun isUserSignedOut(): Boolean {
         val currentUser = auth.currentUser

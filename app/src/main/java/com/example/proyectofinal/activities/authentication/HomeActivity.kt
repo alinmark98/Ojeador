@@ -64,10 +64,18 @@ class HomeActivity : AppCompatActivity(){
                     override fun onAuthenticationSuccess() {
                         // Acción a realizar cuando la autenticación es exitosa
                         val intent = Intent(this@HomeActivity, MainActivity::class.java)
+                        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK)
                         startActivity(intent)
-                        finish()
                     }
+                    override fun onNewUserRegistration() {
+                        // Acción a realizar cuando es un nuevo usuario
+                        val intent = Intent(this@HomeActivity, AccountSelectionActivity::class.java)
+                        intent.putExtra("signInWithGoogle", true)
+                        startActivity(intent)
+                    }
+
                     override fun onAuthenticationFailure() {
+                        // Acción a realizar cuando se produce un error
                         Log.e(TAG, "Google sign in failed")
                     }
                 })

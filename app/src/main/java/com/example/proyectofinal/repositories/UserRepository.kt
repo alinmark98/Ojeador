@@ -75,6 +75,16 @@ class UserRepository {
             }
     }
 
+    fun registerUserWithGoogle(user: Any, bitmaps: List<Bitmap>, listener: OnRegistrationCompleteListener) {
+        val firebaseUser = auth.currentUser
+        val docID = firebaseUser?.uid
+
+        if (docID != null) {
+            createUserDocument(docID,user,bitmaps)
+        }
+
+    }
+
     fun uploadPhotos(bitmaps: List<Bitmap>) {
         if (isUserAuthenticated()) {
             val storageRef = storage.reference
@@ -222,19 +232,12 @@ class UserRepository {
         onSuccess: (List<Player>) -> Unit,
         onFailure: (Exception) -> Unit
     ) {
-        val currentUserID = getCurrentUserId()
 
         playersCollection.get()
             .addOnSuccessListener { result ->
                 val players = mutableListOf<Player>()
 
                 for (document in result) {
-                    val userId = document.id
-
-                    // Omitir el usuario actual
-                    if (userId == currentUserID) {
-                        continue
-                    }
 
                     val name = document.getString("name")
                     val surname = document.getString("surname")
@@ -244,10 +247,16 @@ class UserRepository {
                     val height = document.getDouble("height")
                     val weight = document.getDouble("weight")
                     val description = document.getString("description")
+                    val visibility = document.getLong("visibility")?.toInt()
 
                     if (name != null && description != null && surname != null &&
                         born != null && location != null && position != null &&
                         height != null && weight != null) {
+
+                        // Omitir el usuario con visibilidad 0
+                        if (visibility != null && visibility == 0) {
+                            continue
+                        }
 
                         val photosData = document.get("photos") as? HashMap<*, *>
                         val photo0 = photosData?.get("photo0") as? String ?: ""
@@ -297,20 +306,12 @@ class UserRepository {
         onSuccess: (List<Scout>) -> Unit,
         onFailure: (Exception) -> Unit
     ) {
-        val currentUserID = getCurrentUserId()
 
         scoutsCollection.get()
             .addOnSuccessListener { result ->
                 val scouts = mutableListOf<Scout>()
 
                 for (document in result) {
-                    val userId = document.id
-
-                    // Omitir el usuario actual
-                    if (userId == currentUserID) {
-                        continue
-                    }
-
                     val name = document.getString("name")
                     val surname = document.getString("surname")
                     val born = document.getString("born")
@@ -318,12 +319,18 @@ class UserRepository {
                     val category = document.getString("category")
                     val description = document.getString("description")
                     val team = document.getString("teamID")
+                    val visibility = document.getLong("visibility")?.toInt()
 
                     if (name != null && description != null && surname != null &&
                         born != null && location != null && team != null && category != null) {
 
                         val photosData = document.get("photos") as? HashMap<*, *>
                         val photo0 = photosData?.get("photo0") as? String ?: ""
+
+                        // Omitir el usuario con visibilidad 0
+                        if (visibility != null && visibility == 0) {
+                            continue
+                        }
 
                         val scout = Scout(
                             name = name,
@@ -333,8 +340,7 @@ class UserRepository {
                             description = description,
                             teamID = team,
                             category = category,
-                            photos = Scout.Photos(photo0 = photo0),
-
+                            photos = Scout.Photos(photo0 = photo0)
                         )
 
                         scouts.add(scout)
@@ -353,8 +359,14 @@ class UserRepository {
         FirebaseAuth.getInstance().signInWithCredential(credential)
             .addOnCompleteListener { task ->
                 if (task.isSuccessful) {
-                    val user = FirebaseAuth.getInstance().currentUser
-                    callback.onAuthenticationSuccess()
+                    val isNewUser = task.result?.additionalUserInfo?.isNewUser ?: false
+                    if (isNewUser) {
+                        // Usuario nuevo, redirigir a la actividad de selección de cuenta
+                        callback.onNewUserRegistration()
+                    } else {
+                        // Usuario existente, iniciar sesión
+                        callback.onAuthenticationSuccess()
+                    }
                 } else {
                     // El inicio de sesión con Google falló
                     Log.e(ContentValues.TAG, "signInWithCredential:failure", task.exception)
@@ -362,6 +374,7 @@ class UserRepository {
                 }
             }
     }
+
 
     fun checkDocumentExists(parametro: String, onSuccess: (Boolean) -> Unit, onFailure: (Exception) -> Unit) {
         val playersQuery = playersCollection.whereEqualTo(FieldPath.documentId(), parametro)
@@ -429,6 +442,7 @@ class UserRepository {
     interface AuthCallback {
         fun onAuthenticationSuccess()
         fun onAuthenticationFailure()
+        fun onNewUserRegistration()
     }
 
     interface OnRegistrationCompleteListener {
@@ -436,7 +450,4 @@ class UserRepository {
         fun onRegistrationFailure(exception: Exception?)
     }
 
-    interface OnUserCollectionCheckListener {
-        fun onUserCollectionCheck(isInCollection: Boolean, collectionName: String)
-    }
 }

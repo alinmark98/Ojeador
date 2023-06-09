@@ -32,6 +32,24 @@ class RegisterViewModel : ViewModel() {
 
         })
     }
+    fun registerUserWithGoogle(user: Any, bitmaps: List<Bitmap>) {
+        // Realiza las validaciones necesarias en los datos del jugador antes de llamar al repositorio
+        Log.d("REGISTERPLAYER", "REGISTERPLAYER")
+        userRepository.registerUserWithGoogle(user, bitmaps, object : UserRepository.OnRegistrationCompleteListener {
+            override fun onRegistrationSuccess() {
+                Log.d("REGISTRO", "REGISTRO CORRECTO")
+            }
+
+            override fun onRegistrationFailure(exception: Exception?) {
+                if (exception != null) {
+                    Log.d("REGISTRO", exception.toString())
+                }else{
+                    Log.d("REGISTRO", "ERROR REGISTRO")
+                }
+            }
+
+        })
+    }
 
     fun checkEmailExists(email: String, onComplete: (Boolean) -> Unit) {
         userRepository.checkEmailExists(email, onComplete)

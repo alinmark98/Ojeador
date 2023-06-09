@@ -42,8 +42,8 @@ class AuthenticationActivity : AppCompatActivity(), CustomDialogFragment.OnDialo
             val pwd = binding.etUserPassword.text.toString()
             userRepository.signInWithEmail(email, pwd){ success ->
                 if(success){
-                    finish()
                     val intent = Intent(this@AuthenticationActivity, MainActivity::class.java)
+                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK)
                     startActivity(intent)
                 }else{
                     val dialogFragment = CustomDialogFragment()

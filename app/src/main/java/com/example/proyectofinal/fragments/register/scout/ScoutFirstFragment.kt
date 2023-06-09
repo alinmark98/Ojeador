@@ -11,6 +11,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.EditText
+import android.widget.LinearLayout
 import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.core.widget.addTextChangedListener
@@ -52,6 +53,7 @@ class ScoutFirstFragment : Fragment() {
     private lateinit var etPasswordCheck: EditText
     private val configReader = ConfigReader()
     private val apiKey = configReader.getGooglePlacesApiKey()
+    private var signInWithGoogle: Boolean? = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -91,6 +93,14 @@ class ScoutFirstFragment : Fragment() {
                 showDatePickerDialog()
             }
         }
+
+        signInWithGoogle = arguments?.getBoolean("signInWithGoogle")
+
+        if (signInWithGoogle != null && signInWithGoogle == true) {
+            val linAccInfo = view.findViewById<LinearLayout>(R.id.linAccInfo)
+            linAccInfo.visibility = View.GONE
+        }
+        Toast.makeText(requireContext(), signInWithGoogle.toString(), Toast.LENGTH_SHORT).show()
 
         etEmail.addTextChangedListener { email ->
             val emailString = email.toString().trim()
@@ -156,28 +166,42 @@ class ScoutFirstFragment : Fragment() {
 
     override fun onPause() {
         super.onPause()
-        Log.d("PAUSA", "PAUSA")
-        //!emailCheck() && passCheck()
-        if(!emptyCheck()){
-            if(emailCheckPattern()) {
-                if (passCheck()) {
-                    sendDataFromFragment?.scoutSendDataFirstFragment(etName.text.toString(),etSurname.text.toString(),
-                        etBirthdate.text.toString(),etEmail.text.toString(),etPassword.text.toString(),
-                         true)
-                }else{
-                    Toast.makeText(context, "Contraseñas no coinciden", Toast.LENGTH_SHORT).show()
-                }
+        if(signInWithGoogle == true){
+            Log.e("SCOUT-1", "ES TRUE")
+            if(!emptyCheckGoogle()){
+                sendDataFromFragment?.scoutSendDataFirstFragment(etName.text.toString(),etSurname.text.toString(),
+                    etBirthdate.text.toString(),etEmail.text.toString(),etPassword.text.toString(),
+                    true)
             }else{
-                Toast.makeText(context, "El correo no es válido", Toast.LENGTH_SHORT).show()
+                Toast.makeText(context, "Rellena todos los campos", Toast.LENGTH_SHORT).show()
             }
         }else{
-            Toast.makeText(context, "Rellena todos los campos", Toast.LENGTH_SHORT).show()
+            Log.e("SCOUT-1", "ES FALSE")
+            if(!emptyCheck()){
+                if(emailCheckPattern()) {
+                    if (passCheck()) {
+                        sendDataFromFragment?.scoutSendDataFirstFragment(etName.text.toString(),etSurname.text.toString(),
+                            etBirthdate.text.toString(),etEmail.text.toString(),etPassword.text.toString(),
+                            true)
+                    }else{
+                        Toast.makeText(context, "Contraseñas no coinciden", Toast.LENGTH_SHORT).show()
+                    }
+                }else{
+                    Toast.makeText(context, "El correo no es válido", Toast.LENGTH_SHORT).show()
+                }
+            }else{
+                Toast.makeText(context, "Rellena todos los campos", Toast.LENGTH_SHORT).show()
+            }
         }
     }
 
     private fun emptyCheck(): Boolean{
         return (etEmail.text.isEmpty() || etPassword.text.isEmpty() || etPasswordCheck.text.isEmpty() ||
                 etBirthdate.text.isEmpty() || etName.text.isEmpty() || etSurname.text.isEmpty())
+    }
+
+    private fun emptyCheckGoogle(): Boolean{
+        return (etBirthdate.text.isEmpty() || etName.text.isEmpty() || etSurname.text.isEmpty())
     }
 
     private fun passCheck(): Boolean{

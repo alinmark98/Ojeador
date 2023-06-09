@@ -13,7 +13,7 @@ data class Player(
     var weight: Double = 0.0,
     var description: String = "",
     var rol: String= "",
-    var visibility: Int = 0,
+    var visibility: Int = 1,
     var subscription: Int = 0,
     var skills: Skills = Skills(),
     var photos: Photos = Photos()

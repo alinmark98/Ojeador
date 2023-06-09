@@ -4,13 +4,11 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/black"
     tools:context=".activities.authentication.WaitingActivity">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/purple_200"
         android:gravity="center">
 
         <ProgressBar
@@ -18,7 +16,7 @@
             android:layout_width="48dp"
             android:layout_height="48dp"
             android:indeterminate="true"
-            android:indeterminateTint="@color/colorAccent"
+            android:indeterminateTint="@color/gold_home"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -30,8 +28,9 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
             android:text="Esperando verificación de correo..."
-            android:textColor="@android:color/black"
-            android:textSize="18sp"
+            android:textColor="@color/white"
+            android:textSize="20sp"
+            android:textStyle="bold"
             android:visibility="visible"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"

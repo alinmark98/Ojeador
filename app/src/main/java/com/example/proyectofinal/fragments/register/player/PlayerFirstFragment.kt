@@ -5,12 +5,15 @@ import android.app.DatePickerDialog
 import android.content.Context
 import android.content.Intent
 import android.graphics.drawable.Drawable
+import android.opengl.Visibility
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
+import android.view.View.GONE
 import android.view.ViewGroup
 import android.widget.EditText
+import android.widget.LinearLayout
 import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.core.widget.addTextChangedListener
@@ -52,6 +55,8 @@ class PlayerFirstFragment : Fragment() {
     private lateinit var etEmail: EditText
     private lateinit var etPassword: EditText
     private lateinit var etPasswordCheck: EditText
+
+    private var signInWithGoogle: Boolean? = false
     private val configReader = ConfigReader()
     private val apiKey = configReader.getGooglePlacesApiKey()
 
@@ -62,7 +67,6 @@ class PlayerFirstFragment : Fragment() {
             param2 = it.getString(ARG_PARAM2)
         }
         registerViewModel = ViewModelProvider(this)[RegisterViewModel::class.java]
-
         if (apiKey != null) {
             Places.initialize(requireContext(), apiKey)
         } else {
@@ -86,6 +90,13 @@ class PlayerFirstFragment : Fragment() {
         etEmail = view.findViewById(R.id.etEmail)
         etPassword = view.findViewById(R.id.etPassword)
         etPasswordCheck = view.findViewById(R.id.etPasswordCheck)
+
+        signInWithGoogle = arguments?.getBoolean("signInWithGoogle")
+
+        if (signInWithGoogle != null && signInWithGoogle == true) {
+            val linAccInfo = view.findViewById<LinearLayout>(R.id.linAccInfo)
+            linAccInfo.visibility = View.GONE
+        }
 
         registerViewModel.showDatePicker.observe(viewLifecycleOwner) { showDatePicker ->
             if (showDatePicker) {
@@ -166,32 +177,41 @@ class PlayerFirstFragment : Fragment() {
 
     override fun onPause() {
         super.onPause()
-        Log.d("PAUSA", "PAUSA")
-        //!emailCheck() && passCheck()
-        if(!emptyCheck()){
-            if(emailCheckPattern()) {
-                if (passCheck()) {
-                    sendDataFromFragment?.playerSendDataFirstFragment(etName.text.toString(),etSurname.text.toString(),
-                        etBirthdate.text.toString(),etEmail.text.toString(),etPassword.text.toString(),
-                        etLocation.text.toString(), true)
-                }else{
-                    Toast.makeText(context, "Contraseñas no coinciden", Toast.LENGTH_SHORT).show()
-                }
+        if(signInWithGoogle == true){
+            if(!emptyCheckGoogle()){
+                sendDataFromFragment?.playerSendDataFirstFragment(etName.text.toString(),etSurname.text.toString(),
+                    etBirthdate.text.toString(),etEmail.text.toString(),etPassword.text.toString(),
+                    etLocation.text.toString(), true)
             }else{
-                Toast.makeText(context, "El correo no es válido", Toast.LENGTH_SHORT).show()
+                Toast.makeText(context, "Rellena todos los campos", Toast.LENGTH_SHORT).show()
             }
         }else{
-            Toast.makeText(context, "Rellena todos los campos", Toast.LENGTH_SHORT).show()
+            if(!emptyCheck()){
+                if(emailCheckPattern()) {
+                    if (passCheck()) {
+                        sendDataFromFragment?.playerSendDataFirstFragment(etName.text.toString(),etSurname.text.toString(),
+                            etBirthdate.text.toString(),etEmail.text.toString(),etPassword.text.toString(),
+                            etLocation.text.toString(), true)
+                    }else{
+                        Toast.makeText(context, "Contraseñas no coinciden", Toast.LENGTH_SHORT).show()
+                    }
+                }else{
+                    Toast.makeText(context, "El correo no es válido", Toast.LENGTH_SHORT).show()
+                }
+            }else{
+                Toast.makeText(context, "Rellena todos los campos", Toast.LENGTH_SHORT).show()
+            }
         }
-
-        /*
-        Toast.makeText(context, "Check fields", Toast.LENGTH_SHORT).show()
-        Log.d("FIRST1FRAGMENT", "CAMPOS VACIO")*/
     }
 
     private fun emptyCheck(): Boolean{
         return (etEmail.text.isEmpty() || etPassword.text.isEmpty() || etPasswordCheck.text.isEmpty() ||
                 etBirthdate.text.isEmpty() || etName.text.isEmpty() || etSurname.text.isEmpty() ||
+                etLocation.text.isEmpty())
+    }
+
+    private fun emptyCheckGoogle(): Boolean{
+        return (etBirthdate.text.isEmpty() || etName.text.isEmpty() || etSurname.text.isEmpty() ||
                 etLocation.text.isEmpty())
     }
 

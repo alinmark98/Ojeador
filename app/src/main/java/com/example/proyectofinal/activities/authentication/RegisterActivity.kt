@@ -16,6 +16,7 @@ import com.example.proyectofinal.fragments.register.scout.*
 import com.example.proyectofinal.models.Player
 import com.example.proyectofinal.models.Scout
 import com.example.proyectofinal.viewmodels.RegisterViewModel
+import kotlin.math.sign
 
 
 class RegisterActivity : AppCompatActivity(), PlayerFirstFragment.PlayerSendDataFromF1,
@@ -32,6 +33,7 @@ class RegisterActivity : AppCompatActivity(), PlayerFirstFragment.PlayerSendData
     private var firstFragChecked: Boolean = false
     private var secondFragChecked: Boolean = false
     private var accountType: String = ""
+    private var signInWithGoogle: Boolean = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -39,6 +41,7 @@ class RegisterActivity : AppCompatActivity(), PlayerFirstFragment.PlayerSendData
         binding = ActivityRegisterBinding.inflate(layoutInflater)
         setContentView(binding.root)
         registerViewModel = ViewModelProvider(this)[RegisterViewModel::class.java]
+        signInWithGoogle = intent.getBooleanExtra("signInWithGoogle", false)
 
         val adapter = ViewPagerAdapter(supportFragmentManager)
         binding.viewPager.adapter = adapter
@@ -46,8 +49,6 @@ class RegisterActivity : AppCompatActivity(), PlayerFirstFragment.PlayerSendData
         val intent = intent
 
         accountType = intent.getStringExtra("account_type").toString()
-
-        Toast.makeText(this, accountType, Toast.LENGTH_SHORT).show()
 
         player = Player()
         scout = Scout()
@@ -70,7 +71,12 @@ class RegisterActivity : AppCompatActivity(), PlayerFirstFragment.PlayerSendData
 
         private fun getPlayerFragment(position: Int): Fragment {
             return when (position) {
-                0 -> PlayerFirstFragment()
+                0 ->  { val playerFirstFragment = PlayerFirstFragment()
+                        val bundle = Bundle()
+                        bundle.putBoolean("signInWithGoogle", signInWithGoogle)
+                        playerFirstFragment.arguments = bundle
+                        playerFirstFragment
+                }
                 1 -> PlayerSecondFragment()
                 2 -> PlayerThirdFragment()
                 else -> throw IllegalArgumentException("Invalid position: $position")
@@ -79,7 +85,12 @@ class RegisterActivity : AppCompatActivity(), PlayerFirstFragment.PlayerSendData
 
         private fun getScoutFragment(position: Int): Fragment {
             return when (position) {
-                0 -> ScoutFirstFragment()
+                0 -> {  val scoutFirstFragment = ScoutFirstFragment()
+                        val bundle = Bundle()
+                        bundle.putBoolean("signInWithGoogle", signInWithGoogle)
+                        scoutFirstFragment.arguments = bundle
+                        scoutFirstFragment
+                }
                 1 -> ScoutSecondFragment()
                 2 -> ScoutThirdFragment()
                 else -> throw IllegalArgumentException("Invalid position: $position")
@@ -148,7 +159,13 @@ class RegisterActivity : AppCompatActivity(), PlayerFirstFragment.PlayerSendData
             player.skills.passing = skills["passing"]!!
             player.skills.physicality = skills["physicality"]!!
 
-            registerViewModel.registerUser(player,toSendEmail,toSendPwd,images)
+            if(signInWithGoogle){
+                registerViewModel.registerUserWithGoogle(player, images)
+            }else{
+                registerViewModel.registerUser(player,toSendEmail,toSendPwd,images)
+            }
+
+
         }else{
             Log.e("REGISTER-A" ,"SE ESTA REGISTRANDO UN OJEADOR")
         }
@@ -201,7 +218,11 @@ class RegisterActivity : AppCompatActivity(), PlayerFirstFragment.PlayerSendData
             if (info != null) {
                 scout.description = info
             }
-            registerViewModel.registerUser(scout,toSendEmail,toSendPwd,images)
+            if(signInWithGoogle){
+                registerViewModel.registerUserWithGoogle(scout,images)
+            }else{
+                registerViewModel.registerUser(scout,toSendEmail,toSendPwd,images)
+            }
         }else{
             Log.e("REGISTER-A" ,"SE ESTA REGISTRANDO UN PLAYER")
         }

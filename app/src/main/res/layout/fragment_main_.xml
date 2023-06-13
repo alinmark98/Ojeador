@@ -244,66 +244,11 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"/>
 
-    <!--<View
-        android:id="@+id/view"
+    <FrameLayout
+        android:id="@+id/profileNavigationContainer"
         android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:layout_above="@id/linearLayout"
-        android:background="@color/colorAccent"/>
-
-    <LinearLayout
-        android:id="@+id/linearLayout"
-        android:layout_width="match_parent"
-        android:layout_height="60dp"
-        android:layout_alignParentBottom="true"
-        android:orientation="horizontal">
-
-        <Button
-            android:id="@+id/btn1"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:drawableTop="@drawable/fast"
-            android:background="#303030"
-            android:drawablePadding="-6dp"
-            android:paddingTop="4dp"
-            android:text="Fast"
-            android:textColor="#9F9F9F" />
-
-        <Button
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:background="#303030"
-            android:drawableTop="@drawable/eyelogo"
-            android:drawablePadding="-6dp"
-            android:paddingTop="4dp"
-            android:text="Ojeador"
-            android:textColor="#9F9F9F"/>
-
-        <Button
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:background="#303030"
-            android:drawableTop="@drawable/chat"
-            android:drawablePadding="-6dp"
-            android:paddingTop="4dp"
-            android:text="Chat"
-            android:textColor="#9F9F9F"/>
-
-        <Button
-            android:id="@+id/btnProfile"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:background="#303030"
-            android:drawableTop="@drawable/user_profile"
-            android:drawablePadding="-6dp"
-            android:paddingTop="4dp"
-            android:text="Perfil"
-            android:textColor="#9F9F9F"/>
-    </LinearLayout>-->
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true" />
 
     <FrameLayout
         android:id="@+id/bottomNavigationContainer"

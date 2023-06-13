@@ -13,7 +13,8 @@ import android.view.ViewGroup
 import android.widget.*
 import androidx.fragment.app.Fragment
 import com.example.proyectofinal.R
-import com.example.proyectofinal.activities.authentication.WaitingActivity
+import com.example.proyectofinal.activities.authentication.CheckingActivity
+import com.example.proyectofinal.services.VerificationService
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -54,7 +55,7 @@ open class PlayerThirdFragment : Fragment() {
         // Inflate the layout for this fragment
         val view = inflater.inflate(R.layout.fragment_player_third, container, false)
         val registerButton =  view.findViewById<Button>(R.id.btnRegister)
-        val intent = Intent(requireActivity(), WaitingActivity::class.java)
+        val intent = Intent(requireActivity(), CheckingActivity::class.java)
 
         imageViews[0] = view.findViewById(R.id.imageView1)
         imageViews[1] = view.findViewById(R.id.imageView2)
@@ -86,6 +87,14 @@ open class PlayerThirdFragment : Fragment() {
 
                 sendDataFromFragment?.playerCheckThirdFragment()
                 sendDataFromFragment?.playerSendDataThirdFragment(images, addSkillsToHashMap())
+
+                val sharedPreferences = requireContext().getSharedPreferences("MyPrefs", Context.MODE_PRIVATE)
+                val currentTimeMillis = System.currentTimeMillis()
+                sharedPreferences.edit().putLong("registrationTime", currentTimeMillis).apply()
+
+                val verificationIntent = Intent(requireContext(), VerificationService::class.java)
+                requireContext().startService(verificationIntent)
+
                 requireActivity().finish()
                 startActivity(intent)
             }else{

@@ -2,21 +2,31 @@ package com.example.proyectofinal.repositories
 
 import android.content.ContentValues
 import android.content.ContentValues.TAG
+import android.content.Intent
+import android.content.SharedPreferences
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import android.os.Handler
+import android.os.Looper
 import android.util.Log
 import com.example.proyectofinal.models.Player
 import com.example.proyectofinal.models.Scout
+import com.example.proyectofinal.viewmodels.AuthViewModel
 import com.google.android.gms.tasks.Task
 import com.google.android.gms.tasks.Tasks
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.GoogleAuthProvider
 import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.FieldPath
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.QuerySnapshot
 import com.google.firebase.storage.FirebaseStorage
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
+import kotlinx.coroutines.withContext
 import java.io.ByteArrayOutputStream
 
 class UserRepository {
@@ -27,6 +37,12 @@ class UserRepository {
     private val auth = FirebaseAuth.getInstance()
     private var ONE_MEGABYTE: Long = 1024 * 1024
     private var userType: String = ""
+    var authViewModel: AuthViewModel = AuthViewModel()
+
+    companion object{
+        private const val SESSION_PREFS = "sesionPrefs"
+        private const val SESSION_LOGGUED_IN_KEY = "logguedIn"
+    }
 
     private fun createUserDocument(docID: String, user: Any, bitmaps: List<Bitmap>) {
 
@@ -60,11 +76,11 @@ class UserRepository {
                     val docID = firebaseUser?.uid
 
                     if (docID != null) {
-                        signInWithEmail(email, password){ success ->
-                            if(success){
+                        signInWithEmail(email, password) { success ->
+                            if (success) {
                                 sendEmailVerification()
-                                createUserDocument(docID,user,bitmaps)
-                            }else{
+                                createUserDocument(docID, user, bitmaps)
+                            } else {
                                 Log.d("USREP-SIGNIN", "ERROR")
                             }
                         }
@@ -191,10 +207,10 @@ class UserRepository {
                 if (task.isSuccessful) {
                     Log.d(ContentValues.TAG, "signInWithEmail:success")
                     val user = auth.currentUser
-                    callback(true)
+                    callback(true) // Llama al callback con el valor de éxito como verdadero
                 } else {
                     Log.w(ContentValues.TAG, "signInWithEmail:failure", task.exception)
-                    callback(false)
+                    callback(false) // Llama al callback con el valor de éxito como falso
                 }
             }
     }
@@ -209,7 +225,19 @@ class UserRepository {
                     val emailExists = querySnapshot != null && !querySnapshot.isEmpty
                     onComplete(emailExists)
                 } else {
-                    onComplete(false) // Se produjo un error al consultar Firestore
+                    onComplete(false)
+                }
+            }
+        scoutsCollection
+            .whereEqualTo("email", email)
+            .get()
+            .addOnCompleteListener { task ->
+                if (task.isSuccessful) {
+                    val querySnapshot = task.result
+                    val emailExists = querySnapshot != null && !querySnapshot.isEmpty
+                    onComplete(emailExists)
+                } else {
+                    onComplete(false)
                 }
             }
     }
@@ -486,6 +514,10 @@ class UserRepository {
         }
     }
 
+    fun getCurrentUser(): FirebaseUser? {
+        return auth.currentUser
+    }
+
     private fun getCollectionName(docId: String): String? {
         val collections = listOf("players", "scouts") // Agrega aquí los nombres de las colecciones que deseas verificar
 
@@ -500,18 +532,7 @@ class UserRepository {
                 }
             }
         }
-
         return null
-    }
-
-
-    fun isUserSignedOut(): Boolean {
-        val currentUser = auth.currentUser
-        return currentUser == null
-    }
-
-    fun signOut() {
-        auth.signOut()
     }
 
     interface AuthCallback {

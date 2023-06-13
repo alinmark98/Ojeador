@@ -1,36 +1,37 @@
 package com.example.proyectofinal.activities.authentication
 
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.os.CountDownTimer
 import android.util.Log
 import android.view.View
-import android.widget.ProgressBar
-import android.widget.Toast
 import android.view.animation.AnimationUtils
+import android.widget.ProgressBar
 import android.widget.TextView
-import androidx.lifecycle.Observer
+import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
-import com.example.proyectofinal.activities.main.MainActivity
 import com.example.proyectofinal.R
+import com.example.proyectofinal.activities.main.MainActivity
 import com.example.proyectofinal.repositories.UserRepository
+import com.example.proyectofinal.services.VerificationService
 import com.example.proyectofinal.viewmodels.WaitingViewModel
 
-class WaitingActivity : AppCompatActivity() {
+class CheckingActivity : AppCompatActivity() {
 
     private lateinit var viewModel: WaitingViewModel
     private lateinit var userRepository: UserRepository
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_waiting)
+        setContentView(R.layout.activity_checking)
 
         viewModel = ViewModelProvider(this)[WaitingViewModel::class.java]
         userRepository = UserRepository()
 
         val progressBar: ProgressBar = findViewById(R.id.progressBar)
         val txtCounter: TextView = findViewById(R.id.txtCounter)
+
+        startService(Intent(this, VerificationService::class.java))
 
         val rotation = AnimationUtils.loadAnimation(this, R.anim.rotate)
         progressBar.startAnimation(rotation)
@@ -73,4 +74,6 @@ class WaitingActivity : AppCompatActivity() {
         startActivity(intent)
         finish()
     }
+
+
 }

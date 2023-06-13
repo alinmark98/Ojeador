@@ -10,7 +10,6 @@ import android.util.Log
 import com.example.proyectofinal.R
 import com.example.proyectofinal.activities.main.MainActivity
 import com.example.proyectofinal.databinding.ActivityHomeBinding
-import com.example.proyectofinal.api.InsertTeams
 import com.example.proyectofinal.handlers.InternetHandler
 import com.example.proyectofinal.repositories.UserRepository
 import com.google.android.gms.auth.api.signin.GoogleSignIn
@@ -22,7 +21,7 @@ class HomeActivity : AppCompatActivity(){
 
     private lateinit var binding: ActivityHomeBinding
     private lateinit var userRepository: UserRepository
-    private lateinit var tm: InsertTeams
+    private lateinit var internetHandler: InternetHandler
 
     private val googleSignInClient: GoogleSignInClient by lazy {
         val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
@@ -36,23 +35,24 @@ class HomeActivity : AppCompatActivity(){
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        userRepository = UserRepository()
+        checkSession()
+
         binding = ActivityHomeBinding.inflate(layoutInflater)
         setContentView(binding.root)
         userRepository = UserRepository()
 
-        val connectivityReceiver = InternetHandler()
-        val intentFilter = IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION)
-        registerReceiver(connectivityReceiver, intentFilter)
+        internetHandler = InternetHandler()
+        registerReceiver(internetHandler, IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION))
 
         binding.btnContinueEmail.setOnClickListener {
             if (InternetHandler.isInternetAvailable(this)) {
                 val intent = Intent(this, AuthenticationActivity::class.java)
                 startActivity(intent)
             }else{
-                val dialog = connectivityReceiver.createNoInternetDialog(this)
+                val dialog = internetHandler.createNoInternetDialog(this)
                 dialog.show()
             }
-
         }
 
         binding.btnContinueGoogle.setOnClickListener {
@@ -60,10 +60,20 @@ class HomeActivity : AppCompatActivity(){
                 // Hay conexión a Internet
                 signInWithGoogle()
             }else{
-                val dialog = connectivityReceiver.createNoInternetDialog(this)
+                val dialog = internetHandler.createNoInternetDialog(this)
                 dialog.show()
             }
 
+        }
+    }
+
+    private fun checkSession(){
+        val currentUser = userRepository.getCurrentUser()
+        if (currentUser != null) {
+            // Hay una sesión iniciada, navegar a la pantalla de inicio
+            val intent = Intent(this, MainActivity::class.java)
+            startActivity(intent)
+            finish()
         }
     }
 
@@ -106,6 +116,6 @@ class HomeActivity : AppCompatActivity(){
     }
     override fun onDestroy() {
         super.onDestroy()
-        unregisterReceiver(InternetHandler())
+        unregisterReceiver(internetHandler)
     }
 }

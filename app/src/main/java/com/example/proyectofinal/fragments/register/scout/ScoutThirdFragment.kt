@@ -13,7 +13,8 @@ import android.view.ViewGroup
 import android.widget.*
 import androidx.fragment.app.Fragment
 import com.example.proyectofinal.R
-import com.example.proyectofinal.activities.authentication.WaitingActivity
+import com.example.proyectofinal.activities.authentication.CheckingActivity
+import com.example.proyectofinal.services.VerificationService
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -53,7 +54,7 @@ open class ScoutThirdFragment : Fragment() {
         // Inflate the layout for this fragment
         val view = inflater.inflate(R.layout.fragment_scout_third, container, false)
         val registerButton =  view.findViewById<Button>(R.id.btnRegister)
-        val intent = Intent(requireActivity(), WaitingActivity::class.java)
+        val intent = Intent(requireActivity(), CheckingActivity::class.java)
 
         etAddInfo = view.findViewById(R.id.etDescription)
 
@@ -80,6 +81,14 @@ open class ScoutThirdFragment : Fragment() {
 
                 sendDataFromFragment?.scoutCheckThirdFragment()
                 sendDataFromFragment?.scoutSendDataThirdFragment(images,etAddInfo.text.toString())
+
+                val sharedPreferences = requireContext().getSharedPreferences("MyPrefs", Context.MODE_PRIVATE)
+                val currentTimeMillis = System.currentTimeMillis()
+                sharedPreferences.edit().putLong("registrationTime", currentTimeMillis).apply()
+
+                val verificationIntent = Intent(requireContext(), VerificationService::class.java)
+                requireContext().startService(verificationIntent)
+
                 requireActivity().finish()
                 startActivity(intent)
             }else{

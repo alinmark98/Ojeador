@@ -10,4 +10,6 @@
     <color name="gold_home">#F0C44C</color>
     <color name="blue_home">#073763</color>
     <color name="error_color">#FF0000</color>
+    <color name="button_pressed">#FF0000</color>
+    <color name="button_normal">#00FF00</color>
 </resources>

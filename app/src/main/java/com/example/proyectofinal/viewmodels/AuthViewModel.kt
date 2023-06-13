@@ -1,3 +1,5 @@
+package com.example.proyectofinal.viewmodels
+
 import android.app.Activity
 import android.content.ContentValues
 import android.content.Context
@@ -17,8 +19,6 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 
 class AuthViewModel : ViewModel() {
-
-    private var auth: FirebaseAuth = FirebaseAuth.getInstance()
 
     private val _signInSuccess = MutableLiveData<Boolean>()
     val signInSuccess: LiveData<Boolean>

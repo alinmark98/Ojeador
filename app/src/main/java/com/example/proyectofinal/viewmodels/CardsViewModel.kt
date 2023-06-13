@@ -11,12 +11,18 @@ import com.example.proyectofinal.repositories.UserRepository
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import java.util.concurrent.ExecutorService
+import java.util.concurrent.Executors
+import java.util.concurrent.Future
 
 class CardsViewModel : ViewModel() {
     private val userRepository = UserRepository()
 
     private val _imageLiveData: MutableLiveData<Bitmap> = MutableLiveData()
     val imageLiveData: LiveData<Bitmap> = _imageLiveData
+
+    private val _isLoading = MutableLiveData<Boolean>()
+    val isLoading: LiveData<Boolean> get() = _isLoading
 
     private var currentIndex = 0
     private val users = mutableListOf<Any>()
@@ -35,47 +41,116 @@ class CardsViewModel : ViewModel() {
         }
     }
 
-    private suspend fun fetchUsers() {
+    /*private suspend fun fetchUsers() {
         val userType = userRepository.checkUserCollection()
 
         if (userType == "players") {
-            userRepository.fetchScoutsUsers(
-                onSuccess = { scouts ->
-                    this.users.clear()
-                    this.users.addAll(scouts)
-                    Log.e("CRD-VIEW", "SCOUTS")
+            Thread {
+                try {
+                    userRepository.fetchScoutsUsers(
+                        onSuccess = { scouts ->
+                            this.users.clear()
+                            this.users.addAll(scouts)
+                            Log.e("CRD-VIEW", "SCOUTS")
 
-                    if (this.users.isNotEmpty()) {
-                        val currentUser = this.users[currentIndex]
-                        if (currentUser is Scout) {
-                            _currentScout.value = currentUser
+                            if (this.users.isNotEmpty()) {
+                                val currentUser = this.users[currentIndex]
+                                if (currentUser is Scout) {
+                                    _currentScout.value = currentUser
+                                }
+                            }
+                        },
+                        onFailure = { exception ->
+                            Log.e("HOME-A", exception.toString())
                         }
-                    }
-                },
-                onFailure = { exception ->
-                    Log.e("HOME-A", exception.toString())
+                    )
+                } catch (e: Exception) {
+                    Log.e( "MAIN", e.toString())
                 }
-            )
+            }.start()
+
         } else if (userType == "scouts") {
-            userRepository.fetchPlayerUsers(
-                onSuccess = { players ->
-                    this.users.clear()
-                    this.users.addAll(players)
-                    Log.e("CRD-VIEW", "PLAYERS")
+            Thread {
+                try {
+                    userRepository.fetchPlayerUsers(
+                        onSuccess = { players ->
+                            this.users.clear()
+                            this.users.addAll(players)
+                            Log.e("CRD-VIEW", "PLAYERS")
 
-                    if (this.users.isNotEmpty()) {
-                        val currentUser = this.users[currentIndex]
-                        if (currentUser is Player) {
-                            _currentPlayer.value = currentUser
+                            if (this.users.isNotEmpty()) {
+                                val currentUser = this.users[currentIndex]
+                                if (currentUser is Player) {
+                                    _currentPlayer.value = currentUser
+                                }
+                            }
+                        },
+                        onFailure = { exception ->
+                            Log.e("HOME-A", exception.toString())
                         }
-                    }
-                },
-                onFailure = { exception ->
-                    Log.e("HOME-A", exception.toString())
+                    )
+                } catch (e: Exception) {
+                    Log.e( "MAIN", e.toString())
                 }
-            )
+            }.start()
         }
+    }*/
+    private suspend fun fetchUsers() {
+        val userType = userRepository.checkUserCollection()
+        val executorService: ExecutorService = Executors.newSingleThreadExecutor()
+        _isLoading.value = true
+
+        val future: Future<*> = executorService.submit {
+            try {
+                if (userType == "players") {
+                    userRepository.fetchScoutsUsers(
+                        onSuccess = { scouts ->
+                            this.users.clear()
+                            this.users.addAll(scouts)
+                            Log.e("CRD-VIEW", "SCOUTS")
+
+                            if (this.users.isNotEmpty()) {
+                                val currentUser = this.users[currentIndex]
+                                if (currentUser is Scout) {
+                                    _currentScout.postValue(currentUser)
+                                }
+                            }
+                            _isLoading.value = false
+                        },
+                        onFailure = { exception ->
+                            Log.e("HOME-A", exception.toString())
+                            _isLoading.value = false
+                        }
+                    )
+                } else if (userType == "scouts") {
+                    userRepository.fetchPlayerUsers(
+                        onSuccess = { players ->
+                            this.users.clear()
+                            this.users.addAll(players)
+                            Log.e("CRD-VIEW", "PLAYERS")
+
+                            if (this.users.isNotEmpty()) {
+                                val currentUser = this.users[currentIndex]
+                                if (currentUser is Player) {
+                                    _currentPlayer.postValue(currentUser)
+                                }
+                            }
+                            _isLoading.value = false
+                        },
+                        onFailure = { exception ->
+                            Log.e("HOME-A", exception.toString())
+                            _isLoading.value = false
+                        }
+                    )
+                }
+            } catch (e: Exception) {
+                Log.e("MAIN", e.toString())
+            }
+        }
+
+        executorService.shutdown()
     }
+
 
     fun imageHandler(imagePath: String) {
         userRepository.downloadProfileImages(

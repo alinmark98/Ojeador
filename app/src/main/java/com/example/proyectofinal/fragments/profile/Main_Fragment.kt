@@ -1,22 +1,24 @@
-package com.example.proyectofinal.activities.main
+package com.example.proyectofinal.fragments.profile
 
 import android.annotation.SuppressLint
 import android.graphics.Color
 import android.graphics.Typeface
 import android.os.Bundle
 import android.util.Log
-import android.view.*
+import androidx.fragment.app.Fragment
+import android.view.LayoutInflater
+import android.view.MotionEvent
+import android.view.View
+import android.view.ViewGroup
 import android.view.animation.Animation
 import android.view.animation.AnimationUtils
 import android.widget.Toast
-import androidx.appcompat.app.AppCompatActivity
-import androidx.fragment.app.Fragment
+import androidx.cardview.widget.CardView
 import androidx.lifecycle.ViewModelProvider
 import com.example.proyectofinal.R
 import com.example.proyectofinal.databinding.ActivityMainBinding
+import com.example.proyectofinal.databinding.FragmentMainBinding
 import com.example.proyectofinal.fragments.menu.Menu_Bottons_Fragment
-import com.example.proyectofinal.fragments.profile.Main_Fragment
-import com.example.proyectofinal.fragments.profile.Profile_Fragment
 import com.example.proyectofinal.models.Player
 import com.example.proyectofinal.viewmodels.CardsViewModel
 import com.github.mikephil.charting.components.AxisBase
@@ -31,38 +33,60 @@ import com.google.android.gms.ads.AdRequest
 import com.google.android.gms.ads.AdView
 import com.google.android.gms.ads.MobileAds
 
+// TODO: Rename parameter arguments, choose names that match
+// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
+private const val ARG_PARAM1 = "param1"
+private const val ARG_PARAM2 = "param2"
 
-class MainActivity : AppCompatActivity(), Menu_Bottons_Fragment.OnButtonClickListener {
-
+/**
+ * A simple [Fragment] subclass.
+ * Use the [Main_Fragment.newInstance] factory method to
+ * create an instance of this fragment.
+ */
+class Main_Fragment : Fragment() {
+    // TODO: Rename and change types of parameters
+    private var param1: String? = null
+    private var param2: String? = null
     private lateinit var viewModel: CardsViewModel
-    private lateinit var binding: ActivityMainBinding
+    private lateinit var binding: FragmentMainBinding
     private var isCardViewExpanded = false
     private lateinit var mAdView : AdView
+    private lateinit var cardView : CardView
 
     private var x1 = 0F
     private var x2 = 0F
     private val MIN_DISTANCE = 150
 
-    @SuppressLint("ClickableViewAccessibility", "SetTextI18n")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        arguments?.let {
+            param1 = it.getString(ARG_PARAM1)
+            param2 = it.getString(ARG_PARAM2)
+        }
 
-        binding = ActivityMainBinding.inflate(layoutInflater)
-        setContentView(binding.root)
-        showLoadingIndicator()
+        binding = FragmentMainBinding.inflate(layoutInflater)
+        val rootView = binding.root
+    }
 
-        MobileAds.initialize(this) {
+    @SuppressLint("ClickableViewAccessibility")
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        val view = inflater.inflate(R.layout.fragment_main_, container, false)
+
+        MobileAds.initialize(requireContext()) {
             Log.e("MOBILEADS", "SUCCESFULL")
         }
 
-        mAdView = findViewById(R.id.adView)
+        cardView = view.findViewById(R.id.cardView)
+        mAdView = view.findViewById(R.id.adView)
         val adRequest = AdRequest.Builder().build()
         mAdView.loadAd(adRequest)
 
         viewModel = ViewModelProvider(this)[CardsViewModel::class.java]
 
-        binding.cardView.setOnTouchListener { view, event ->
+        cardView.setOnTouchListener { view, event ->
             if (!isCardViewExpanded) {
                 handleTouchEvent(event)
             }
@@ -79,10 +103,10 @@ class MainActivity : AppCompatActivity(), Menu_Bottons_Fragment.OnButtonClickLis
             }
         }
 
-        viewModel.currentPlayer.observe(this) { player ->
+        viewModel.currentPlayer.observe(requireActivity()) { player ->
             viewModel.imageHandler(player.getPhotos().getPhoto0())
 
-            viewModel.imageLiveData.observe(this) { bitmap ->
+            viewModel.imageLiveData.observe(requireActivity()) { bitmap ->
                 binding.imageView.setImageBitmap(bitmap)
             }
 
@@ -94,10 +118,10 @@ class MainActivity : AppCompatActivity(), Menu_Bottons_Fragment.OnButtonClickLis
             binding.dataHeight.text = player.getHeight().toString()
         }
 
-        viewModel.currentScout.observe(this) { scout ->
+        viewModel.currentScout.observe(viewLifecycleOwner) { scout ->
             viewModel.imageHandler(scout.getPhotos().getPhoto0())
 
-            viewModel.imageLiveData.observe(this) { bitmap ->
+            viewModel.imageLiveData.observe(viewLifecycleOwner) { bitmap ->
                 binding.imageView.setImageBitmap(bitmap)
             }
             binding.dataUserName.text = scout.getName() + " " + scout.getSurname()
@@ -105,7 +129,7 @@ class MainActivity : AppCompatActivity(), Menu_Bottons_Fragment.OnButtonClickLis
             binding.dataAge.text = scout.getBorn()
         }
 
-        viewModel.isLoading.observe(this) { isLoading ->
+        viewModel.isLoading.observe(viewLifecycleOwner) { isLoading ->
             if (isLoading) {
                 showLoadingIndicator()
             } else {
@@ -113,18 +137,9 @@ class MainActivity : AppCompatActivity(), Menu_Bottons_Fragment.OnButtonClickLis
             }
         }
 
-        val bottomNavigationFragment = Menu_Bottons_Fragment()
-        supportFragmentManager.beginTransaction()
-            .add(R.id.bottomNavigationContainer, bottomNavigationFragment)
-            .commit()
-    }
 
-    private fun replaceFragment(fragment: Fragment) {
-        supportFragmentManager.beginTransaction()
-            .replace(R.id.bottomNavigationContainer, fragment)
-            .commit()
+        return view
     }
-
     private fun expandCardView() {
         isCardViewExpanded = true
         showElements()
@@ -174,15 +189,14 @@ class MainActivity : AppCompatActivity(), Menu_Bottons_Fragment.OnButtonClickLis
     }
 
     private fun handleSwipeRight() {
-        val animOut = AnimationUtils.loadAnimation(this@MainActivity, R.anim.slide_out_right)
+        val animOut = AnimationUtils.loadAnimation(requireContext(), R.anim.slide_out_right)
         binding.cardView.startAnimation(animOut)
-        Toast.makeText(this, "Deslizo hacia la derecha", Toast.LENGTH_SHORT).show()
 
         animOut.setAnimationListener(object : Animation.AnimationListener {
             override fun onAnimationStart(animation: Animation?) {}
             override fun onAnimationEnd(animation: Animation?) {
                 viewModel.onSwipeRight()
-                val animIn = AnimationUtils.loadAnimation(this@MainActivity, R.anim.slide_in_left)
+                val animIn = AnimationUtils.loadAnimation(requireContext(), R.anim.slide_in_left)
                 binding.cardView.startAnimation(animIn)
             }
             override fun onAnimationRepeat(animation: Animation?) {}
@@ -190,15 +204,14 @@ class MainActivity : AppCompatActivity(), Menu_Bottons_Fragment.OnButtonClickLis
     }
 
     private fun handleSwipeLeft() {
-        val animOut = AnimationUtils.loadAnimation(this@MainActivity, R.anim.slide_out_left)
+        val animOut = AnimationUtils.loadAnimation(requireContext(), R.anim.slide_out_left)
         binding.cardView.startAnimation(animOut)
-        Toast.makeText(this, "Deslizo hacia la izquierda", Toast.LENGTH_SHORT).show()
 
         animOut.setAnimationListener(object : Animation.AnimationListener {
             override fun onAnimationStart(animation: Animation?) {}
             override fun onAnimationEnd(animation: Animation?) {
                 viewModel.onSwipeLeft()
-                val animIn = AnimationUtils.loadAnimation(this@MainActivity, R.anim.slide_in_right)
+                val animIn = AnimationUtils.loadAnimation(requireContext(), R.anim.slide_in_right)
                 binding.cardView.startAnimation(animIn)
             }
             override fun onAnimationRepeat(animation: Animation?) {}
@@ -260,31 +273,23 @@ class MainActivity : AppCompatActivity(), Menu_Bottons_Fragment.OnButtonClickLis
         binding.linearPrincipal.visibility = View.VISIBLE
     }
 
-    override fun onButtonClick(buttonId: Int) {
-        // Maneja el clic del botón en la actividad principal
-        val fragmentManager = supportFragmentManager
-        val fragmentTransaction = fragmentManager.beginTransaction()
-
-        // Ocultar fragmento actual antes de mostrar uno nuevo
-        val currentFragment = fragmentManager.findFragmentById(R.id.bottomNavigationContainer)
-
-        when (buttonId) {
-            R.id.button1 -> {
-                replaceFragment(Main_Fragment())
-                Toast.makeText(this, "FUNCA BTN1", Toast.LENGTH_SHORT).show()
+    companion object {
+        /**
+         * Use this factory method to create a new instance of
+         * this fragment using the provided parameters.
+         *
+         * @param param1 Parameter 1.
+         * @param param2 Parameter 2.
+         * @return A new instance of fragment Main_Fragment.
+         */
+        // TODO: Rename and change types and number of parameters
+        @JvmStatic
+        fun newInstance(param1: String, param2: String) =
+            Main_Fragment().apply {
+                arguments = Bundle().apply {
+                    putString(ARG_PARAM1, param1)
+                    putString(ARG_PARAM2, param2)
+                }
             }
-            R.id.button2 -> {
-                Toast.makeText(this, "HOLA", Toast.LENGTH_SHORT).show()
-            }
-            R.id.button3 -> {
-
-            }
-            R.id.button4 -> {
-                replaceFragment(Profile_Fragment())
-                binding.linearPrincipal.visibility = View.GONE
-            }
-
-        }
-        fragmentTransaction.commit()
     }
 }
